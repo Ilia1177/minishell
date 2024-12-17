@@ -16,7 +16,7 @@
    
 ```mermaid
    flowchart TB
-    A[Main C0] --> B[git pull remote
+    A{{Main C0}} --> B[git pull remote
 Main C1]
     B -->|git branch new-feature| C[new-feature C0]
     subgraph new-feature
@@ -26,8 +26,10 @@ C1]
     D --> |git checkout main|E
     subgraph main
     B ---->E[Main C1]
-    E --> |git pull remote-friend| F[Main C3]
-    F --> | git merge new-feature| G[Main C4]
+    E --> |git pull remote-friend| F[Main C2]
+    F --> | git merge new-feature| G[Main C3]
+    G ==> |git push my-remote| H{{Main C3}}
+    H -..- |git branch -d new-feature| I{{Ready for new granch}}
     end
     
 ```
