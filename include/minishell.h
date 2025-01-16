@@ -6,14 +6,14 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/16 18:39:41 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/16 19:31:53 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include "libft.h"
+# include "libft.h"
 
 typedef enum e_type
 {
