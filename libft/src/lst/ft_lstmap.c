@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstmap.c                                        :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 17:45:23 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/16 17:42:42 by jhervoch         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:34:32 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_token	*ft_lstmap(t_token *lst, void *(*f)(char **), void (*del)(char **))
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	t_token	*new_list;
-	t_token	*iterator;
-	t_token	*elem;
-	char	**content;
+	t_list	*new_list;
+	t_list	*iterator;
+	t_list	*elem;
+	void	*content;
 
 	if (!lst || !f || !del)
 		return (NULL);

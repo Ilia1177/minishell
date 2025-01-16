@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:31:22 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/16 17:41:14 by jhervoch         ###   ########.fr       */
+/*   Updated: 2024/10/16 16:42:02 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstclear(t_token **lst, void (*del)(char**))
+void	ft_lstclear(t_list **lst, void (*del)(void*))
 {
-	t_token	*previous;
-	t_token	*current;
+	t_list	*previous;
+	t_list	*current;
 
 	if (!lst || !del)
 		return ;

@@ -6,7 +6,7 @@
 #    By: jhervoch <jhervoch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/23 14:19:41 by jhervoch          #+#    #+#              #
-#    Updated: 2025/01/16 18:24:48 by npolack          ###   ########.fr        #
+#    Updated: 2025/01/16 19:00:02 by npolack          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ CFLAGS		:=	-Wall -Wextra -Werror
 RM			:=	rm -f
 NAME		:=	libft.a
 
-INC_DIR 	:= ./includes/ ../include/
+INC_DIR 	:= ./includes/
 SRCS_DIR	:= ./src/
 CPPFLAGS 	:= $(addprefix -I, $(INC_DIR))
 

@@ -6,14 +6,13 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 19:23:22 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/16 18:37:47 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/16 19:00:51 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 
-# include <minishell.h>
 # include <stdlib.h>
 # include <limits.h>
 # include <unistd.h>
@@ -76,14 +75,14 @@ typedef struct s_token
 	struct s_token *next;
 }	t_token;
 
-t_token		*ft_lstnew(char **content);
-void		ft_lstadd_front(t_token **lst, t_token *new);
-int			ft_lstsize(t_token *lst);
-t_token		*ft_lstlast(t_token *lst);
-void		ft_lstadd_back(t_token **lst, t_token *new);
-void		ft_lstdelone(t_token *lst, void (*del)(char**));
-void		ft_lstclear(t_token **lst, void (*del)(char**));
-void		ft_lstiter(t_token *lst, void (*f)(char **));
-t_token		*ft_lstmap(t_token *lst, void *(*f)(char **), void (*del)(char **));
+t_list		*ft_lstnew(void *content);
+void		ft_lstadd_front(t_list **lst, t_list *new);
+int			ft_lstsize(t_list *lst);
+t_list		*ft_lstlast(t_list *lst);
+void		ft_lstadd_back(t_list **lst, t_list *new);
+void		ft_lstdelone(t_list *lst, void (*del)(void*));
+void		ft_lstclear(t_list **lst, void (*del)(void*));
+void		ft_lstiter(t_list *lst, void (*f)(void *));
+t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 #endif
