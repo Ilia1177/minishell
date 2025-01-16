@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstiter.c                                       :+:      :+:    :+:   */
+/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 17:24:36 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/16 17:40:43 by jhervoch         ###   ########.fr       */
+/*   Updated: 2024/10/16 10:57:08 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstiter(t_token *lst, void (*f)(char **))
+void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-	t_token	*iterator;
+	t_list	*iterator;
 
 	if (!lst || !f)
 		return ;

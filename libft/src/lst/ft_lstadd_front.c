@@ -6,13 +6,13 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:39:34 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/16 17:27:07 by jhervoch         ###   ########.fr       */
+/*   Updated: 2024/10/16 16:43:27 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_front(t_token **lst, t_token *new)
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
 	if (lst && new)
 	{
