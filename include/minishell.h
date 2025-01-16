@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/16 19:31:53 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/17 00:22:40 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 typedef enum e_type
 {
@@ -32,18 +35,30 @@ typedef enum e_type
 
 typedef struct s_token
 {
-	char **content;
-	t_type	type;
-	int		error;
-	struct s_token *next;
+	char			**content;
+	t_type			type;
+	int				error;
+	struct s_token	*next;
 }	t_token;
 
 typedef struct s_bintree
 {
-	char **content;
-	t_type type;
-	struct s_bintree *left;
-	struct s_bintree *right;
+	char				**content;
+	t_type				type;
+	struct s_bintree	*left;
+	struct s_bintree	*right;
 } t_bintree;
 
+//binary_tree
+t_bintree *build_tree(t_token *start);
+void	free_tree(t_bintree *root);
+
+//tokenize
+//
+t_token	*tokenize(char *prompt);
+t_token *make_token(char *str, t_type type);
+
+// DEBUG
+void	args_print(char **list);
+void	print_tree(t_bintree *root);
 #endif
