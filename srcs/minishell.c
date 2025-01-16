@@ -6,13 +6,17 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/16 16:21:47 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/16 18:07:06 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	main(int ac, char **argv, char **envp)
 {
+	(void)ac;
+	(void)argv;
+	(void)envp;
 
+	ft_printf("coucou\n");
 }

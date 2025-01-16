@@ -6,16 +6,16 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/16 17:47:46 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/16 18:47:25 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 t_bintree *build_tree(t_token *start)
 {
 	t_bintree	*root;
-	t_bintree	*save_root;
+	t_bintree	*old_root;
 	t_token		*current_token;
 
 	if (!start)
@@ -24,9 +24,12 @@ t_bintree *build_tree(t_token *start)
 	while (current_token)
 	{
 		root = malloc(sizeof(t_bintree));
-		root->content = dup_content(current_token);
-		move_token = move_token->next;
-		save_root = root;
+		root->content = current_token;
+		root->left = old_root;
+		old_root = root;
+		root->left = NULL;
+		root->right = NULL;
+		current_token = current_token->next;
 	}	
 	return (root);
 }
