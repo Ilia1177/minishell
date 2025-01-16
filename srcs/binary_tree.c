@@ -1,27 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   binary_tree.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
+/*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
 /*   Updated: 2025/01/16 17:47:46 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "../include/minishell.h"
 
-typedef struct s_bintree
+t_bintree *build_tree(t_token *start)
 {
-	char **content;
-	enum type;
-	t_bintree *left;
-	t_bintree *right;
-} t_bintree;
+	t_bintree	*root;
+	t_bintree	*save_root;
+	t_token		*current_token;
 
-
-
-
-#endif
+	if (!start)
+		return (-1);
+	current_token = start;
+	while (current_token)
+	{
+		root = malloc(sizeof(t_bintree));
+		root->content = dup_content(current_token);
+		move_token = move_token->next;
+		save_root = root;
+	}	
+	return (root);
+}
