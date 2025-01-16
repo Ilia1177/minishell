@@ -6,12 +6,14 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/16 17:38:45 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/16 18:39:41 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+#include "libft.h"
 
 typedef enum e_type
 {
@@ -36,5 +38,12 @@ typedef struct s_token
 	struct s_token *next;
 }	t_token;
 
+typedef struct s_bintree
+{
+	char **content;
+	t_type type;
+	struct s_bintree *left;
+	struct s_bintree *right;
+} t_bintree;
 
 #endif

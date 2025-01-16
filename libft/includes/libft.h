@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 19:23:22 by jhervoch          #+#    #+#             */
-/*   Updated: 2024/12/05 10:54:53 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/16 19:03:47 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void		ft_putendl_fd(char *s, int fd);
 void		ft_putnbr_fd(int n, int fd);
 
 /*BONUS*/
+
 typedef struct s_list
 {
 	void			*content;

@@ -1,22 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   binary_tree.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/16 18:07:06 by npolack          ###   ########.fr       */
+/*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
+/*   Updated: 2025/01/16 18:47:25 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int ac, char **argv, char **envp)
+t_bintree *build_tree(t_token *start)
 {
-	(void)ac;
-	(void)argv;
-	(void)envp;
+	t_bintree	*root;
+	t_bintree	*old_root;
+	t_token		*current_token;
 
-	ft_printf("coucou\n");
+	if (!start)
+		return (-1);
+	current_token = start;
+	while (current_token)
+	{
+		root = malloc(sizeof(t_bintree));
+		root->content = current_token;
+		root->left = old_root;
+		old_root = root;
+		root->left = NULL;
+		root->right = NULL;
+		current_token = current_token->next;
+	}	
+	return (root);
 }
