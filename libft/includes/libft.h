@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 19:23:22 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/16 19:00:51 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/16 19:03:47 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,11 @@ void		ft_putnbr_fd(int n, int fd);
 
 /*BONUS*/
 
-typedef struct s_token
+typedef struct s_list
 {
-	char **content;
-	t_type	type;
-	int		error;
-	struct s_token *next;
-}	t_token;
+	void			*content;
+	struct s_list	*next;
+}	t_list;
 
 t_list		*ft_lstnew(void *content);
 void		ft_lstadd_front(t_list **lst, t_list *new);
