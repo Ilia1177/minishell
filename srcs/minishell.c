@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/17 16:55:30 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/17 20:31:56 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ int	main(int ac, char **argv, char **envp)
 	char		*user_input;
 	t_bintree	*tree;
 	t_token		*list;
-	char		*prompt;
+	//char		*prompt;
 
 	(void)argv;
 	(void)ac;
 	(void)envp;
 	user_input = NULL;
-	prompt = "MINISHELL/is/listening/to/you >";
+	//prompt = "MINISHELL/is/listening/to/you >";
 	//user_input = listen_to_user(prompt); // get the user prompt into a str
 	
 
