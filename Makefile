@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/17 00:21:37 by npolack          ###   ########.fr        #
+#    Updated: 2025/01/17 20:24:56 by ilia             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,20 +15,23 @@ NAME = bin/minishell
 OS := $(shell uname)
 
 ifeq ($(OS), Linux)
-	CC		= cc
-	READLINE = sudo apt-get install libreadline-dev
+	CC			= cc
+	READLINE 	= sudo apt-get install libreadline-dev
+	RLLIB		= -L./usr/lib/x86_64-linux-gnu/ -lreadline
+	INCLUDE		= -I./include -I./libft/includes -I./libft/ -I./usr/lib/
 else
-	CC		= clang
-	READLINE = brew install readline
+	CC			= clang
+	READLINE 	= brew install readline
+	#RLLIB		= -L./usr/local/Cellar/readline/8.2.13/lib/ -L./usr/local/opt/readline -lreadline
+	RLLIB		= -I./usr/local/opt/readline -lreadline
+	INCLUDE		=  -I./include -I./libft/includes -I./libft/ 
 endif
 
 
-INCLUDE		= -I./include -I./libft/includes -I./libft/ -I./usr/lib/
 LIBFT		= ./libft/libft.a
 SRCS_DIR	= srcs
 OBJS_DIR	= objs
 C_FLAGS		= -Wall -Wextra -Werror -g
-RLLIB		= -L./usr/lib/x86_64-linux-gnu/ -lreadline
 
 SRCS		=	minishell.c\
 				binary_tree.c\
