@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 19:33:49 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/20 19:41:42 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ int	main(int ac, char **argv, char **envp)
 	printf("%d\n", CMD);
 	prompt = "MINISHELL/is/listening/to/you >";
 	data.user_input = listen_to_user(prompt);
-	//data.list = tokenize(data.user_input);
-	data.list = make_token("C");
-	data.list->type = CMD;
-	data.list->next = make_token("|");
-	data.list->next->type = PIPE;
-	data.list->next->next = make_token("C");
-	data.list->next->next->type = CMD;
+	data.list = tokenize(data.user_input);
+//	data.list = make_token("C");
+//	data.list->type = CMD;
+//	data.list->next = make_token("|");
+//	data.list->next->type = PIPE;
+//	data.list->next->next = make_token("C");
+//	data.list->next->next->type = CMD;
 	print_list(data.list);
 	data.tree = build_tree(&data.list, CMD);
 	//execute_tree(tree, envp); // execute tree (not ready)

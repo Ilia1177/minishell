@@ -38,7 +38,7 @@ void print_tree(t_bintree *tree, int space) {
 }
 void	print_list(t_token *list)
 {
-	printf("list = ");
+	printf("list = \n");
 	while(list)
 	{
 		printf("input = %s, type = %d\n", list->input, list->type);

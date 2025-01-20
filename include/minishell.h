@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 19:17:30 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/20 19:56:16 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef enum e_mem_type
 
 typedef struct s_cmd
 {
-	char	**arg;
+	char	**args;
 	int		error;
 	char	*in;
 	char	*out;
