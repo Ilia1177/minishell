@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/18 10:43:31 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/19 13:48:47 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_bintree
 } t_bintree;
 
 //binary_tree.c
-t_bintree *build_tree(t_token *start, t_type priority);
+t_bintree *build_tree(t_token **start, t_type priority);
 void	free_tree(t_bintree *root);
 void	free_leaf(t_bintree *leaf);
 

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/18 10:49:20 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/20 11:44:23 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ t_bintree	*make_node(t_bintree *left, t_bintree *right ,t_token *token)
 	t_bintree *root;
 
 	root = malloc(sizeof(t_bintree));
+	printf("make token %p with %s\n", root, token->content[0]);
 	root->type = token->type;
 	root->content = token->content;// do not free t_token content
 	root->left = left;
@@ -62,57 +63,90 @@ t_bintree	*make_little_tree(t_token *head, t_bintree *root)
 		token =  token->next;
 	}
 }
+
 */
 //echo world > file && cat file | echo FAR >> file && cat file | grep FAR
 // C || C | C | C && C || C
 // build the binary tree from t_token *list (DO NOT FREE the t_token content)
-t_bintree	*build_tree(t_token *current_token, t_type type)
+t_bintree	*build_tree(t_token **head, t_type type)
 {
+	t_token		*current_token;
 	t_bintree	*new_root;
 	t_bintree	*old_root;
 
+	current_token = *head;
 	if (!current_token)
 		return (NULL);
 	old_root = NULL;
-	printf("tree_construct :\n");
+	printf("Build tree from token %s\n", current_token->content[0]);
 	while (current_token)
 	{
-		printf("Actual_token = ");
+		printf("current_token = ");
 		print_args(current_token->content);
 		printf("\n");
-		if (current_token->type != CMD)
-			if (current_token->type != type)
-				break ;
+		if (type != CMD)
+		{
+			if (current_token->type == PIPE)
+			{
+				if (type == PIPE || type == OPERATOR)
+				{
+					printf("exit from the tree->>%s\n", new_root->content[0]);
+					*head = current_token;
+					break ;
+				} 
+			}
+			if (current_token->type == OPERATOR)
+			{
+				if (type == OPERATOR)
+				{
+					printf("exit from the tree->>%s\n", new_root->content[0]);
+					*head = current_token;
+					break ;
+				} 
+			}
+
+		}
 		if (current_token->type == CMD)
 		{
-			new_root = make_node(NULL, NULL, current_token);;
+			new_root = make_node(NULL, NULL, current_token);
 			old_root = new_root;
 			current_token = current_token->next;
 		}
 		else if (current_token->type == OPERATOR)
 		{
+
 			new_root = make_node(NULL, NULL, current_token);
 			new_root->left = old_root;
-			new_root->right = build_tree(current_token->next, OPERATOR); // 1
-			old_root = new_root;
+			printf("\"%s\"->left : %s\n",new_root->content[0], new_root->left->content[0]);
 			current_token = current_token->next;
+			printf("Attempt : \"%s\"->right :%s\n", new_root->content[0], current_token->content[0]);
+			new_root->right = build_tree(&current_token, OPERATOR); // 2	
+			printf("DONE : \"%s\"->right :%s\n", new_root->content[0], new_root->right->content[0]);
+			if (!current_token->next)
+				return (new_root);
+			old_root = new_root;
 		}
 		else if (current_token->type == PIPE)
 		{
 			new_root = make_node(NULL, NULL, current_token);
 			new_root->left = old_root;
-			new_root->right = build_tree(current_token->next, PIPE); // 2
-			old_root = new_root;
+			printf("\"%s\"->left : %s\n",new_root->content[0], new_root->left->content[0]);
 			current_token = current_token->next;
+			printf("Attempt : \"%s\"->right :%s\n", new_root->content[0], current_token->content[0]);
+			new_root->right = build_tree(&current_token, PIPE); // 2	
+			printf("DONE : \"%s\"->right :%s\n",new_root->content[0], new_root->right->content[0]);
+			if (!current_token->next)
+				return (new_root);
+			old_root = new_root;
 		}
-	//	else if (current_token->type == OUT_RDIR)
-	//	{
-	//		old_root->left = current_leaf;
-	//		current_token = current_token->next;
-	//	}
+//		else if (current_token->type == OUT_RDIR)
+//		{
+//			old_root->left = current_leaf;
+//			current_token = current_token->next;
+//		}
 	}
-	printf("end_of_construction\n");
-	print_args(new_root->content);
+	print_tree(new_root);
+	printf("end_of_construction! Actual returned root is : %s\n", new_root->content[0]);
 	return (new_root);
 }
 

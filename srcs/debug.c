@@ -2,18 +2,18 @@
 
 void	print_tree(t_bintree *root)
 {
-	printf("tree = ");
 	if (!root)
 		return ;
 	if (root->left)
 		print_tree(root->left);
-	if (root->right)
-		print_tree(root->right);
 	if (root->content)
 	{
 		print_args(root->content);
-		printf("\n");
+		printf(" / ");
 	}
+	if (root->right)
+		print_tree(root->right);
+
 }
 
 void	print_list(t_token *list)

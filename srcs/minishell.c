@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/18 10:44:41 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/20 10:46:15 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,35 @@ int	main(int ac, char **argv, char **envp)
 	
 
 	// echo "world" >> test | cat -n test | < test grep world | wc -l && cat test
+//	list = make_token("C1", CMD);		 
+//	list->next = make_token("||", OPERATOR);		 
+//	list->next->next = make_token("C2", CMD);		 
+//	list->next->next->next = make_token("|", PIPE);		 
+//	list->next->next->next->next = make_token("C3", CMD);		 
+//	list->next->next->next->next->next = make_token("|", PIPE);		 
+//	list->next->next->next->next->next->next = make_token("C4", CMD);		 
+//	list->next->next->next->next->next->next->next = make_token("&&", OPERATOR);
+//	list->next->next->next->next->next->next->next->next = make_token("C5", CMD);
+//	list->next->next->next->next->next->next->next->next->next = make_token("||", OPERATOR);
+//	list->next->next->next->next->next->next->next->next->next->next = make_token("C6", CMD);
+
 	list = make_token("C1", CMD);		 
-	list->next = make_token("||", OPERATOR);		 
+	list->next = make_token("|a", OPERATOR);		 
 	list->next->next = make_token("C2", CMD);		 
-	list->next->next->next = make_token("|", PIPE);		 
+	list->next->next->next = make_token("||", PIPE);		 
 	list->next->next->next->next = make_token("C3", CMD);		 
-	list->next->next->next->next->next = make_token("|", PIPE);		 
+	list->next->next->next->next->next = make_token("|c", PIPE);		 
 	list->next->next->next->next->next->next = make_token("C4", CMD);		 
-	list->next->next->next->next->next->next->next = make_token("&&", OPERATOR);
+	list->next->next->next->next->next->next->next = make_token("||", OPERATOR);
 	list->next->next->next->next->next->next->next->next = make_token("C5", CMD);
-	list->next->next->next->next->next->next->next->next->next = make_token("||", OPERATOR);
+	list->next->next->next->next->next->next->next->next->next = make_token("|e", PIPE);
 	list->next->next->next->next->next->next->next->next->next->next = make_token("C6", CMD);
+	list->next->next->next->next->next->next->next->next->next->next->next = NULL;
 
 	print_list(list);
 	//list = tokenize(user_input); // make the token (ONLY with '|')
-	tree = build_tree(list, CMD); // make the tree from t_token *list
-	//execute_tree(tree, envp); // execute tree (not ready)
+	tree = build_tree(&list, CMD); // make the tree from t_token *list
 	print_tree(tree); // print the tree for debug
 	free(user_input);
-	// free t_token
 	free_tree(tree);
 }
