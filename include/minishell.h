@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 19:13:29 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/20 19:17:30 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-typedef struct s_data
-{
-	char		**envp;
-	char		*user_input;
-	int			status;
-	t_bintree	*tree;
-	t_token		*list;
-} t_data;
+
 
 typedef enum e_type
 {
@@ -76,6 +69,14 @@ typedef struct s_bintree
 	struct s_bintree	*right;
 } t_bintree;
 
+typedef struct s_data
+{
+	char		**envp;
+	char		*user_input;
+	int			status;
+	t_bintree	*tree;
+	t_token		*list;
+} t_data;
 
 //binary_tree.c
 t_bintree *build_tree(t_token **start, t_type priority);

@@ -8,8 +8,8 @@ void	print_tree(t_bintree *root)
 		print_tree(root->left);
 	if (root->content)
 	{
-		print_args(root->content);
-		printf(" / ");
+		printf("%s ", root->content[0]);
+		//print_args(root->content);
 	}
 	if (root->right)
 		print_tree(root->right);
@@ -37,4 +37,3 @@ void	print_args(char **args)
 		i++;
 	}
 }
-
