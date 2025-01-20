@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 14:58:08 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/20 16:23:49 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ t_bintree	*make_little_tree(t_token *head, t_bintree *root)
 //echo world > file && cat file | echo FAR >> file && cat file | grep FAR
 // C || C | C | C && C || C
 // build the binary tree from t_token *list (DO NOT FREE the t_token content)
+
 t_bintree	*build_tree(t_token **head, t_type type)
 {
 	t_token		*current_token;

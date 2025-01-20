@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 14:22:20 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/20 16:24:12 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 typedef enum e_type
 {
 	CMD, 
-	PIPE, // |
-	OPERATOR, // &&  || ()
-	EXPAND, // EXPAND = VAR ?
-	VAR // VAR = EXPAND ?
+	PIPE, 
+	OPERATOR,
+	EXPAND, 
+	VAR 
 }	t_type;
 
 typedef struct s_token
