@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/20 13:51:32 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/01/20 16:57:47 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,25 +15,29 @@ NAME = bin/minishell
 OS := $(shell uname)
 
 ifeq ($(OS), Linux)
-	CC		= cc
-	READLINE = sudo apt-get install libreadline-dev
+	CC			= cc
+	READLINE 	= sudo apt-get install libreadline-dev
+	RLLIB		= -L./usr/lib/x86_64-linux-gnu/ -lreadline
+	INCLUDE		= -I./include -I./libft/includes -I./libft/ -I./usr/lib/
 else
-	CC		= clang
-	READLINE = brew install readline
+	CC			= clang
+	READLINE 	= brew install readline
+	#RLLIB		= -L./usr/local/Cellar/readline/8.2.13/lib/ -L./usr/local/opt/readline -lreadline
+	RLLIB		= -I./usr/local/opt/readline -lreadline
+	INCLUDE		=  -I./include -I./libft/includes -I./libft/ 
 endif
 
 
-INCLUDE		= -I./include -I./libft/includes -I./libft/ -I./usr/lib/
 LIBFT		= ./libft/libft.a
 SRCS_DIR	= srcs
 OBJS_DIR	= objs
 C_FLAGS		= -Wall -Wextra -Werror -g
-RLLIB		= -L./usr/lib/x86_64-linux-gnu/ -lreadline
 
 SRCS		=	minishell.c\
 				binary_tree.c\
 				tokenize.c\
-				token_lst.c
+				token_lst.c\
+				debug.c\
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS		= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)

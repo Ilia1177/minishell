@@ -6,31 +6,19 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 15:19:29 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/20 17:01:24 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // get user prompt
-char *listen_to_user(char *user_cmd)
+char	*listen_to_user(char *user_cmd)
 {
 	char	*prompt;
+
 	prompt = readline(user_cmd);
 	return (prompt);
-}
-
-// print **arguments for DEBUG
-void	args_print(char **args)
-{
-	int	i;
-
-	i = 0;
-	while (args[i])
-	{
-		printf("%s ", args[i]);
-		i++;
-	}
 }
 
 int	main(int ac, char **argv, char **envp)
@@ -42,10 +30,15 @@ int	main(int ac, char **argv, char **envp)
 	int			nb_word;
 	int			i;
 	char **tabstr;
+	//char		*prompt;
 
 	(void)argv;
 	(void)ac;
 	(void)envp;
+	user_input = NULL;
+	//prompt = "MINISHELL/is/listening/to/you >";
+	//user_input = listen_to_user(prompt); // get the user prompt into a str
+	
 
 	prompt = "MINISHELL/is/listening/to/you >";
 	user_input = listen_to_user(prompt); // get the user prompt into a str
@@ -66,4 +59,11 @@ int	main(int ac, char **argv, char **envp)
 	// free t_token
 	// free tree
 
+	// echo "world" >> test | cat -n test | < test grep world | wc -l && cat test
+	print_list(list);
+	//list = tokenize(user_input); // make the token (ONLY with '|')
+	tree = build_tree(&list, CMD); // make the tree from t_token *list
+	print_tree(tree); // print the tree for debug
+	free(user_input);
+	free_tree(tree);
 }

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 16:23:37 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/20 16:58:37 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,11 @@
 
 typedef enum e_type
 {
-	CMD,
-	PIPE,
+	CMD, 
+	PIPE, 
 	OPERATOR,
-	EXPAND,
-	IN_RDIR,
-	OUT_RDIR,
-	OUT_ARDIR,
-	HDOC,
-	OUT_FILE,
-	IN_FILE,
-	VAR
+	EXPAND, 
+	VAR 
 }	t_type;
 
 typedef enum e_mem_type
@@ -54,25 +48,31 @@ typedef struct s_token
 
 typedef struct s_bintree
 {
-	char				**content;
+	int					stdfd[3]; // standar input(0)/output(1)/tmp_fd(2)
+	int					pipefd[2]; // pipefd
+	char				**content; // Malloc
 	t_type				type;
 	struct s_bintree	*left;
 	struct s_bintree	*right;
 } t_bintree;
 
 
-//binary_tree
-t_bintree *build_tree(t_token *start);
+//binary_tree.c
+t_bintree *build_tree(t_token **start, t_type priority);
 void	free_tree(t_bintree *root);
+void	free_leaf(t_bintree *leaf);
 
-//tokenize
-//
+//tokenize.c
 t_token	*tokenize(char *prompt);
 t_token *make_token(char *str, t_type type);
 int	ft_nbword(const char *s);
 char	**ft_split_token(char const *s);
 
-// DEBUG
-void	args_print(char **list);
+//exec.c -> DOES NOT COMPILE (not included in makefile)
+int	execute_tree(t_bintree *root, char **envp);
+
+// DEBUG FUNCTION
+void	print_list(t_token *list);
+void	print_args(char **list);
 void	print_tree(t_bintree *root);
 #endif
