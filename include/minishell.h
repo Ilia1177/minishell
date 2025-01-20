@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/19 13:48:47 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/20 14:22:20 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,6 @@ typedef enum e_type
 	PIPE, // |
 	OPERATOR, // &&  || ()
 	EXPAND, // EXPAND = VAR ?
-	IN_RDIR, // <
-	OUT_RDIR, // >
-	OUT_ARDIR, // >> (pas forcement necessaire)
-	HDOC,
-	OUT_FILE,
-	IN_FILE,
 	VAR // VAR = EXPAND ?
 }	t_type;
 

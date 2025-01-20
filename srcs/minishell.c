@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 10:46:15 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/20 14:19:22 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,21 @@ int	main(int ac, char **argv, char **envp)
 //	list->next->next->next->next->next->next->next->next->next->next = make_token("C6", CMD);
 
 	list = make_token("C1", CMD);		 
-	list->next = make_token("|a", OPERATOR);		 
-	list->next->next = make_token("C2", CMD);		 
-	list->next->next->next = make_token("||", PIPE);		 
-	list->next->next->next->next = make_token("C3", CMD);		 
-	list->next->next->next->next->next = make_token("|c", PIPE);		 
-	list->next->next->next->next->next->next = make_token("C4", CMD);		 
-	list->next->next->next->next->next->next->next = make_token("||", OPERATOR);
-	list->next->next->next->next->next->next->next->next = make_token("C5", CMD);
-	list->next->next->next->next->next->next->next->next->next = make_token("|e", PIPE);
-	list->next->next->next->next->next->next->next->next->next->next = make_token("C6", CMD);
-	list->next->next->next->next->next->next->next->next->next->next->next = NULL;
+	list->next = make_token("|a", PIPE);		 
+	list->next->next = make_token("(", OPERATOR); 
+	list->next->next->next = make_token("C", CMD); 
+	list->next->next->next->next = make_token("||", OPERATOR);		 
+	list->next->next->next->next->next = make_token("C", CMD);		 
+	list->next->next->next->next->next->next = make_token(")", OPERATOR);		 
+	list->next->next->next->next->next->next->next = make_token("|", PIPE);
+	list->next->next->next->next->next->next->next->next = make_token("(", OPERATOR);
+	list->next->next->next->next->next->next->next->next->next = make_token("C5", CMD);
+	list->next->next->next->next->next->next->next->next->next->next = make_token("||", OPERATOR);
+	list->next->next->next->next->next->next->next->next->next->next->next = make_token("C6", CMD);
+	list->next->next->next->next->next->next->next->next->next->next->next->next = make_token(")", OPERATOR);
+	list->next->next->next->next->next->next->next->next->next->next->next->next->next = make_token("&&", OPERATOR);
+	list->next->next->next->next->next->next->next->next->next->next->next->next->next->next = make_token("C", CMD);
+	list->next->next->next->next->next->next->next->next->next->next->next->next->next->next->next = NULL;
 
 	print_list(list);
 	//list = tokenize(user_input); // make the token (ONLY with '|')

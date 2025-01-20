@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 11:44:23 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/20 14:58:08 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,26 +84,42 @@ t_bintree	*build_tree(t_token **head, t_type type)
 		printf("current_token = ");
 		print_args(current_token->content);
 		printf("\n");
-		if (type != CMD)
+		if (!ft_strcmp(current_token->content[0], "("))
 		{
-			if (current_token->type == PIPE)
+			current_token = current_token->next;
+			continue ;
+		}
+		if (!ft_strcmp(current_token->content[0], ")"))
+		{
+			current_token = current_token->next;
+			*head = current_token;
+			break ;
+		}
+		if (type != CMD) // || !ft_strcmp(current_token->content[0], ")"))
+		{
+			if (current_token->type != CMD)// ||  !ft_strcmp(current_token->content[0], ")"))
 			{
-				if (type == PIPE || type == OPERATOR)
-				{
-					printf("exit from the tree->>%s\n", new_root->content[0]);
-					*head = current_token;
-					break ;
-				} 
+				*head = current_token;
+				break ;
 			}
-			if (current_token->type == OPERATOR)
-			{
-				if (type == OPERATOR)
-				{
-					printf("exit from the tree->>%s\n", new_root->content[0]);
-					*head = current_token;
-					break ;
-				} 
-			}
+//			if (current_token->type == PIPE)
+//			{
+//				if (type == PIPE || type == OPERATOR)
+//				{
+//					printf("exit from the tree->>%s\n", new_root->content[0]);
+//					*head = current_token;
+//					break ;
+//				} 
+//			}
+//			if (current_token->type == OPERATOR)
+//			{
+//				if (!ft_strcmp(current_token->content[0], ")") || type == OPERATOR || type == PIPE)
+//				{
+//					printf("exit from the tree->>%s\n", new_root->content[0]);
+//					*head = current_token;
+//					break ;
+//				} 
+//			}
 
 		}
 		if (current_token->type == CMD)
@@ -114,7 +130,14 @@ t_bintree	*build_tree(t_token **head, t_type type)
 		}
 		else if (current_token->type == OPERATOR)
 		{
-
+			if (!ft_strcmp(current_token->content[0], "("))
+			{
+				printf("PARENTHESE !!\n");
+				current_token = current_token->next; // add this line in the if statement
+				type = CMD;	
+			}
+			else
+			{
 			new_root = make_node(NULL, NULL, current_token);
 			new_root->left = old_root;
 			printf("\"%s\"->left : %s\n",new_root->content[0], new_root->left->content[0]);
@@ -125,6 +148,7 @@ t_bintree	*build_tree(t_token **head, t_type type)
 			if (!current_token->next)
 				return (new_root);
 			old_root = new_root;
+			}
 		}
 		else if (current_token->type == PIPE)
 		{
@@ -139,13 +163,8 @@ t_bintree	*build_tree(t_token **head, t_type type)
 				return (new_root);
 			old_root = new_root;
 		}
-//		else if (current_token->type == OUT_RDIR)
-//		{
-//			old_root->left = current_leaf;
-//			current_token = current_token->next;
-//		}
 	}
-	print_tree(new_root);
+	//print_tree(new_root);
 	printf("end_of_construction! Actual returned root is : %s\n", new_root->content[0]);
 	return (new_root);
 }
