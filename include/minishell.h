@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 18:06:13 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:05:06 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,15 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+typedef struct s_data
+{
+	char		**envp;
+	char		*user_input;
+	int			status;
+	t_bintree	*tree;
+	t_token		*list;
+} t_data;
 
 typedef enum e_type
 {
