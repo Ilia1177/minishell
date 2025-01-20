@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/20 16:57:47 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/01/20 17:21:10 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SRCS		=	minishell.c\
 				tokenize.c\
 				token_lst.c\
 				debug.c\
+				parsing.c\
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS		= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
