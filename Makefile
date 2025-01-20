@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/17 00:21:37 by npolack          ###   ########.fr        #
+#    Updated: 2025/01/20 13:51:32 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,7 @@ RLLIB		= -L./usr/lib/x86_64-linux-gnu/ -lreadline
 SRCS		=	minishell.c\
 				binary_tree.c\
 				tokenize.c\
+				token_lst.c
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS		= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)

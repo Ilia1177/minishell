@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/17 00:20:24 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/20 16:17:37 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_bintree	*build_tree(t_token *start)
 		return (NULL);
 	current_token = start;
 	old_root = NULL;
-	while (current_token)
+	while (current_token)/// current_token->next
 	{
 		root = malloc(sizeof(t_bintree));
 		root->content = current_token->content;// do not free t_token content
