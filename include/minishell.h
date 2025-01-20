@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 16:24:12 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/20 18:06:13 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,37 @@ typedef enum e_type
 	CMD, 
 	PIPE, 
 	OPERATOR,
-	EXPAND, 
-	VAR 
+	EXPAND 
 }	t_type;
+
+typedef enum e_mem_type
+{
+	PTR,
+	LST,
+	D_TAB,
+	S_TAB,
+	TREE
+}	t_mem_type;
+
+typedef struct s_cmd
+{
+	char	**arg;
+	int		error;
+	char	*in;
+	char	*out;
+	int		pipe_in;
+	int		pipe_out;
+}	t_cmd;
 
 typedef struct s_token
 {
-	char			**content;
+	//char			**content;
+	char			*input;
 	t_type			type;
-	int				error;
+	t_cmd			*cmd;
+	//char			*in;
+	//char			*out;
+	//int				error;
 	struct s_token	*next;
 }	t_token;
 
@@ -45,6 +67,7 @@ typedef struct s_bintree
 	struct s_bintree	*right;
 } t_bintree;
 
+
 //binary_tree.c
 t_bintree *build_tree(t_token **start, t_type priority);
 void	free_tree(t_bintree *root);
@@ -52,7 +75,9 @@ void	free_leaf(t_bintree *leaf);
 
 //tokenize.c
 t_token	*tokenize(char *prompt);
-t_token *make_token(char *str, t_type type);
+t_token *make_token(char *str);
+int	ft_nbword(const char *s);
+char	**ft_split_token(char const *s);
 
 //exec.c -> DOES NOT COMPILE (not included in makefile)
 int	execute_tree(t_bintree *root, char **envp);
@@ -61,4 +86,10 @@ int	execute_tree(t_bintree *root, char **envp);
 void	print_list(t_token *list);
 void	print_args(char **list);
 void	print_tree(t_bintree *root);
+
+//parsing.c
+
+void	ft_lstiter_token(t_token *lst, void (*f)(char *));
+void	type_token(t_token *token);
+
 #endif

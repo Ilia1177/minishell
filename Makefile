@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/17 20:45:38 by ilia             ###   ########.fr        #
+#    Updated: 2025/01/20 17:21:10 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,9 @@ C_FLAGS		= -Wall -Wextra -Werror -g
 SRCS		=	minishell.c\
 				binary_tree.c\
 				tokenize.c\
+				token_lst.c\
 				debug.c\
+				parsing.c\
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS		= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
