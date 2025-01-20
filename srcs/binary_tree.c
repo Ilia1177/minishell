@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 18:31:12 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/20 18:44:55 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ t_bintree	*make_node(t_bintree *left, t_bintree *right ,t_token *token)
 	t_bintree *root;
 
 	root = malloc(sizeof(t_bintree));
-	printf("make token %p with %s\n", root, token->content[0]);
+	printf("make token %p with %s\n", root, token->input);
 	root->type = token->type;
-	root->content = token->content;// do not free t_token content
+	root->content = malloc(sizeof (char *) * 2);
+	root->content[0] = ft_strdup(token->input);// do not free t_token conten
+	root->content[1] = NULL;
 	root->left = left;
 	root->right = right;
 	return (root);
@@ -38,12 +40,12 @@ t_bintree	*build_tree(t_token **head, t_type type)
 	old_root = NULL;
 	while (current_token)
 	{
-		if (!ft_strcmp(current_token->content[0], "("))
+		if (!ft_strcmp(current_token->input, "("))
 		{
 			current_token = current_token->next;
 			continue ;
 		}
-		if (!ft_strcmp(current_token->content[0], ")"))
+		if (!ft_strcmp(current_token->input, ")"))
 		{
 			current_token = current_token->next;
 			*head = current_token;

@@ -19,12 +19,11 @@ void	print_tree(t_bintree *root)
 void	print_list(t_token *list)
 {
 	printf("list = ");
-	while (list)
+	while(list)
 	{
-		print_args(list->content);
+		printf("input = %s, type = %d\n", list->input, list->type);
 		list = list->next;
 	}
-	printf("\n");
 }
 // print **arguments for DEBUG
 void	print_args(char **args)
