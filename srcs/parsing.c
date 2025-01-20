@@ -6,13 +6,13 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/20 18:06:38 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:01:40 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_lstiter_token(t_token *lst, void (*f)(char *))
+void	ft_lstiter_token(t_token *lst, void (*f)(t_token *))
 {
 	t_token	*iterator;
 
@@ -21,11 +21,10 @@ void	ft_lstiter_token(t_token *lst, void (*f)(char *))
 	iterator = lst;
 	while (iterator)
 	{
-		(*f)(iterator->input);
+		(*f)(iterator);
 		iterator = iterator->next;
 	}
 }
-
 
 void	type_token(t_token *token)
 {
@@ -40,4 +39,3 @@ void	type_token(t_token *token)
 	else
 		token->type = CMD;
 }
-
