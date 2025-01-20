@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 18:07:46 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/20 18:55:24 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,6 @@ t_token	*tokenize(char *prompt)
 		current_token = make_token(tokens[i]);
 		previous_token->next = current_token;
 	}
-	//ft_lstiter_token(head, &type_token);
+	ft_lstiter_token(head, &type_token);
 	return (head);
 }
