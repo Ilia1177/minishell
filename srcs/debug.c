@@ -25,17 +25,17 @@ void print_tree(t_bintree *tree, int space)
     int spacing = 5;
     space += spacing;
 
-    // Print the left subtree
-    print_tree(tree->left, space);
+    // Print the right subtree first
+    print_tree(tree->right, space);
 
     // Print the current node with indentation
     printf("\n");
     for (int i = spacing; i < space; i++)
         printf(" ");
     printf("(%s)\n", tree->content[0]);
+    // Print the left subtree
+    print_tree(tree->left, space);
 
-    // Print the right subtree first
-    print_tree(tree->right, space);
 }
 
 void	print_list(t_token *list)

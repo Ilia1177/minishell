@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 21:24:02 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/21 14:58:52 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@
 
 typedef enum e_type
 {
-	CMD, 
-	PIPE, 
-	OPERATOR,
-	EXPAND 
+	CMD = 0, 
+	PIPE = 1, 
+	OPERATOR = 2,
+	EXPAND = 3
 }	t_type;
 
 typedef enum e_mem_type
