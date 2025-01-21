@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/21 14:29:45 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/21 15:32:27 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,13 @@ typedef enum e_mem_type
 	S_TAB,
 	TREE
 }	t_mem_type;
+
+typedef struct s_mem
+{
+	void 			*elem;
+	t_mem_type		type;
+	struct s_mem	*next;
+}	t_mem;
 
 typedef struct s_cmd
 {
