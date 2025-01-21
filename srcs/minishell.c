@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/21 12:17:58 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/21 18:51:05 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int	main(int ac, char **argv, char **envp)
 //	data.list->next->type = PIPE;
 //	data.list->next->next = make_token("C");
 //	data.list->next->next->type = CMD;
+	data.tree = build_tree(&data.list, 0);
 	print_list(data.list);
-	data.tree = build_tree(&data.list, CMD);
 	//execute_tree(tree, envp); // execute tree (not ready)
 	print_tree(data.tree, 0); // print the tree for debug
 	free(data.user_input);

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/21 16:17:56 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/21 18:48:53 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 typedef enum e_type
 {
 	CMD = 0, 
-	PIPE = 1, 
-	OPERATOR = 2,
+	PIPE = 2, 
+	OPERATOR = 1,
 	EXPAND = 3
 }	t_type;
 
@@ -89,7 +89,7 @@ typedef struct s_data
 } t_data;
 
 //binary_tree.c
-t_bintree *build_tree(t_token **start, t_type priority);
+t_bintree *build_tree(t_token **start, int priority);
 void	free_tree(t_bintree *root);
 void	free_leaf(t_bintree *leaf);
 
