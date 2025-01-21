@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/21 15:32:27 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:17:56 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,18 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# define IN 0
+# define OUT 1
+# define TMP 2
 
 
 
 typedef enum e_type
 {
-	CMD, 
-	PIPE, 
-	OPERATOR,
-	EXPAND 
+	CMD = 0, 
+	PIPE = 1, 
+	OPERATOR = 2,
+	EXPAND = 3
 }	t_type;
 
 typedef enum e_mem_type
@@ -102,7 +105,7 @@ int	execute_tree(t_bintree *root, char **envp);
 // DEBUG FUNCTION
 void	print_list(t_token *list);
 void	print_args(char **list);
-void	print_tree(t_bintree *root);
+void	print_tree(t_bintree *root, int space);
 
 //parsing.c
 void	ft_lstiter_token(t_token *lst, void (*f)(t_token *));

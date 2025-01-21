@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 19:41:42 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/21 12:17:58 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	main(int ac, char **argv, char **envp)
 	print_list(data.list);
 	data.tree = build_tree(&data.list, CMD);
 	//execute_tree(tree, envp); // execute tree (not ready)
-	print_tree(data.tree); // print the tree for debug
+	print_tree(data.tree, 0); // print the tree for debug
 	free(data.user_input);
 	free_tree(data.tree);
 	// free t_token

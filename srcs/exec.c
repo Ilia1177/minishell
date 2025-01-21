@@ -6,20 +6,32 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 18:27:25 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/20 21:08:30 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	exec_cmd(t_bintree *leaf, char **envp)
+int	exec_cmd(t_bintree *node, t_data *data)
 {
 	int pid;
+	int exit_status;
 
+	// REDIR !!
+	// if node->cmd->in
 	pid = fork();
 	if (!pid)
 	{
-		execve(leaf->content[0]
+		// access()
+		execve(node->cmd->args[0], node->cmd->args, data->envp);
+		//big_free()
+	}
+	else
+	{
+		waitpid(-1, &exit_status, NULL);
+		data->status = WEXITSTATUS(exit_status);
+	}
+	return (exit_status);
 }
 
 int	pipe_operation()
@@ -31,28 +43,40 @@ int	pipe_operation()
 	
 }
 
-int	make_operation(t_bintree *root, char **envp)
+int	make_operation(t_bintree *node, t_data *data)
 {
-	if (ft_strcmp(root->content[0], "|"))
-		pipe_operation();
-	else if (ft_strcmp(root->content[0], "||")
-		or_operation();
-	else if (ft_strcmp(root->content[0], "&&"))
-		and_operation();
+	int	exit_status;
+
+	else if (ft_strcmp(node->content[0], "||"))
+	{
+		if (!data->status)
+			return (127);
+		else
+			return (0);
+	}
+	else if (ft_strcmp(node->content[0], "&&"))
+		return (0);
 }
 
-int	execute_tree(t_bintree *root, char **envp)
+int	execute_tree(t_bintree *node, t_data *data)
 {
-	if (root->left)
-		execute_tree(root->left);
+	int	exit_status;
+	int	pid;
 
-	if (root->type = OPERATOR);
-		make_operation(root);
-	else if (root->type = CMD)
-		exec_cmd(root);
+	if (node->type = PIPE)
+	{
+		dup2(stdfd[0], 0);
+		exit_status = pipe_operation();
+	}
+	if (node->left)
+		exit_status = execute_tree(node->left);
 
+	if (node->type = OPERATOR)
+		exit_status = make_operation(node, data);
+	else if (node->type = CMD)
+		exit_status = exec_cmd(node, data);
 
-	if (root->right)
-		execute_tree(root->right);
-
+	if (!exit_status && node->right)
+		execute_tree(node->right);
+	return (exit_status);
 }
