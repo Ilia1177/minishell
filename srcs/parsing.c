@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/20 20:04:22 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/21 09:55:18 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ void	type_token(t_token *token)
 		token->type = OPERATOR;
 	else if (!ft_strcmp(token->input, "$"))
 		token->type = EXPAND;
+	else if (!ft_strcmp(token->input, "("))
+		token->type = OPERATOR;
+	else if (!ft_strcmp(token->input, ")"))
+		token->type = OPERATOR;
 	else
 		token->type = CMD;
 }
