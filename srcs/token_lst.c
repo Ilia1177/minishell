@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/20 21:19:27 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/21 11:15:41 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,22 @@ static int	ft_issep(char c)
 	return (0);
 }
 
+/* count nb of word. A word could be a command and a operator
+ * the tmp var allow to check if the separator does not chane*/
 int	ft_nbword(const char *s)
 {
-	int	nb_word;
-	int	i;
+	int		nb_word;
+	int		i;
+	char	tmp;
 
 	i = 0;
 	nb_word = 0;
 	while (s[i] != '\0')
 	{
+		tmp = s[i];
 		if (ft_issep(s[i]))
 			nb_word++;
-		while (s[i] && ft_issep(s[i]))
+		while (s[i] && ft_issep(s[i]) && s[i]== tmp)
 				++i;
 		if (s[i] && !ft_issep(s[i]))
 			nb_word++;
@@ -49,10 +53,12 @@ int	ft_nbword(const char *s)
 static size_t	ft_wordlen(const char *s)
 {
 	size_t	strlen;
+	char	tmp;
 
 	strlen = 0;
+	tmp = s[0];
 	if (ft_issep(s[strlen]))
-		while (s[strlen] && ft_issep(s[strlen]))
+		while (s[strlen] && ft_issep(s[strlen]) && s[strlen] == tmp)
 			strlen++;
 	else
 		while (s[strlen] && !ft_issep(s[strlen]))
