@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/20 17:21:10 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/01/21 14:31:17 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,8 @@ C_FLAGS		= -Wall -Wextra -Werror -g
 SRCS		=	minishell.c\
 				binary_tree.c\
 				tokenize.c\
-				token_lst.c\
+				token_tab.c\
+				token_utils.c\
 				debug.c\
 				parsing.c\
 

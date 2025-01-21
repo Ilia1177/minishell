@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token_lst.c                                        :+:      :+:    :+:   */
+/*   token_tab.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/21 11:15:41 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/21 16:08:33 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ft_issep(char c)
+static void	ft_skip_quote(const char *s, int *index)
 {
-	const char *sep = "|&()";
+	int	i;
 
-	while (*sep)
+	i = 0;
+	while (s[i] && !ft_isquote(s[i]))
 	{
-		if (*sep == c)
-			return (1);
-		sep++;
+		++i;
+		*index += 1;
 	}
-	return (0);
 }
 
 /* count nb of word. A word could be a command and a operator
@@ -31,38 +30,50 @@ int	ft_nbword(const char *s)
 {
 	int		nb_word;
 	int		i;
-	char	tmp;
+	char	tmp_sep;
 
 	i = 0;
 	nb_word = 0;
 	while (s[i] != '\0')
 	{
-		tmp = s[i];
+		tmp_sep = s[i];
+		if (ft_isquote(s[i]))
+			ft_skip_quote(&s[i], &i);
 		if (ft_issep(s[i]))
 			nb_word++;
-		while (s[i] && ft_issep(s[i]) && s[i]== tmp)
-				++i;
+		while (s[i] && ft_issep(s[i]) && s[i] == tmp_sep)
+			++i;
 		if (s[i] && !ft_issep(s[i]))
 			nb_word++;
 		while (s[i] && !ft_issep(s[i]))
+		{
 			++i;
+			if (ft_isquote(s[i]) && s[++i])
+				ft_skip_quote(&s[i], &i);
+		}
 	}
 	return (nb_word);
 }
 
 static size_t	ft_wordlen(const char *s)
 {
-	size_t	strlen;
-	char	tmp;
+	int		strlen;
+	char	tmp_sep;
 
 	strlen = 0;
-	tmp = s[0];
+	tmp_sep = s[0];
 	if (ft_issep(s[strlen]))
-		while (s[strlen] && ft_issep(s[strlen]) && s[strlen] == tmp)
+		while (s[strlen] && ft_issep(s[strlen]) && s[strlen] == tmp_sep)
 			strlen++;
 	else
+	{
 		while (s[strlen] && !ft_issep(s[strlen]))
+		{
+			if (ft_isquote(s[strlen]) && s[++strlen])
+				ft_skip_quote(&s[strlen], &strlen);
 			strlen++;
+		}
+	}
 	return (strlen);
 }
 

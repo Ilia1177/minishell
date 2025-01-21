@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/21 14:58:52 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/21 16:06:43 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,12 @@ void	print_args(char **list);
 void	print_tree(t_bintree *root, int space);
 
 //parsing.c
-
 void	ft_lstiter_token(t_token *lst, void (*f)(t_token *));
 void	type_token(t_token *token);
+
+//token_utils.c
+int	ft_issep(char c);
+int	ft_isquote(char c);
+
 
 #endif
