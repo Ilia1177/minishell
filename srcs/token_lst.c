@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/20 15:17:21 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/20 21:19:27 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	ft_issep(char c)
 {
-	const char *sep = "|&";
+	const char *sep = "|&()";
 
 	while (*sep)
 	{

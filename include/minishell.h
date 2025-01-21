@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 19:56:16 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/20 21:24:02 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# define IN 0
+# define OUT 1
+# define TMP 2
 
 
 
@@ -95,7 +98,7 @@ int	execute_tree(t_bintree *root, char **envp);
 // DEBUG FUNCTION
 void	print_list(t_token *list);
 void	print_args(char **list);
-void	print_tree(t_bintree *root);
+void	print_tree(t_bintree *root, int space);
 
 //parsing.c
 
