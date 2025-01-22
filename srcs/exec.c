@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/20 21:08:30 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/22 03:33:24 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,6 @@ int	exec_cmd(t_bintree *node, t_data *data)
 	return (exit_status);
 }
 
-int	pipe_operation()
-{
-	int	pid;
-
-	pid = fork();
-	if (!pid)
-	
-}
 
 int	make_operation(t_bintree *node, t_data *data)
 {
@@ -57,26 +49,50 @@ int	make_operation(t_bintree *node, t_data *data)
 	else if (ft_strcmp(node->content[0], "&&"))
 		return (0);
 }
-
-int	execute_tree(t_bintree *node, t_data *data)
+int	execute_tree(t_data *data)
+{
+	dup2(tree->stdfd[0], 0);
+	dup2(tree->stdfd[1], 1);
+	execute_node(data->tree);
+}
+int	connect_node(t_bintree *a, t_bintree *b)
+{
+	dup2(a->stdfd[0], b->stdfd[0]);
+	dup2(a->stdfd[1], b->stdfd[1]);
+	return(0);
+}
+int	pipe_operation(t_bintree *a, t_bintree *b)
+{
+	pipe(a->stdfd[IN], b->pipefd[IN]);
+	pipe(a->stdfd[OUT], b->pipefd[OUT]);
+}
+int	execute_node(t_bintree *node, t_data *data)
 {
 	int	exit_status;
 	int	pid;
 
-	if (node->type = PIPE)
-	{
-		dup2(stdfd[0], 0);
-		exit_status = pipe_operation();
-	}
-	if (node->left)
-		exit_status = execute_tree(node->left);
 
+	if (node->left)
+	{
+		connect_node(node, node->left);
+		if (node->type = PIPE)
+			pipe_operation(node);
+		exit_status = execute_node(node->left);
+	}
 	if (node->type = OPERATOR)
+	{
 		exit_status = make_operation(node, data);
+		if (!exit_status && node->right)
+		{
+			connect_node(node, node->right);
+			exit_status = execute_node(node->right);
+		}
+
+	}
 	else if (node->type = CMD)
 		exit_status = exec_cmd(node, data);
 
 	if (!exit_status && node->right)
-		execute_tree(node->right);
+		execute_node(node->right);
 	return (exit_status);
 }
