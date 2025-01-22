@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/21 18:48:53 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/22 21:57:04 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@
 # define OUT 1
 # define TMP 2
 
-
-
 typedef enum e_type
 {
 	CMD = 0, 
@@ -36,13 +34,12 @@ typedef enum e_mem_type
 	PTR,
 	LST,
 	D_TAB,
-	S_TAB,
 	TREE
 }	t_mem_type;
 
 typedef struct s_mem
 {
-	void 			*elem;
+	void			*elem;
 	t_mem_type		type;
 	struct s_mem	*next;
 }	t_mem;
@@ -77,7 +74,7 @@ typedef struct s_bintree
 	t_type				type;
 	struct s_bintree	*left;
 	struct s_bintree	*right;
-} t_bintree;
+}	t_bintree;
 
 typedef struct s_data
 {
@@ -85,35 +82,52 @@ typedef struct s_data
 	char		*user_input;
 	int			status;
 	t_bintree	*tree;
-	t_token		*list;
-} t_data;
+	//t_token		*list;
+	t_token		*token_list;
+	t_mem		*mem_list;
+}	t_data;
 
 //binary_tree.c
+<<<<<<< HEAD
 t_bintree *build_tree(t_token **start, int priority);
 void	free_tree(t_bintree *root);
 void	free_leaf(t_bintree *leaf);
+=======
+t_bintree	*build_tree(t_token **start, t_type priority);
+void		free_tree(t_bintree *root);
+void		free_leaf(t_bintree *leaf);
+>>>>>>> main
 
 //tokenize.c
-t_token	*tokenize(char *prompt);
-t_token *make_token(char *str);
-int	ft_nbword(const char *s);
-char	**ft_split_token(char const *s);
+t_token		*tokenize(char *prompt);
+t_token		*make_token(char *str);
+int			ft_nbword(const char *s);
+char		**ft_split_token(char const *s);
 
 //exec.c -> DOES NOT COMPILE (not included in makefile)
-int	execute_tree(t_bintree *root, char **envp);
+int			execute_tree(t_bintree *root, char **envp);
 
 // DEBUG FUNCTION
-void	print_list(t_token *list);
-void	print_args(char **list);
-void	print_tree(t_bintree *root, int space);
+void		print_list(t_token *list);
+void		print_args(char **list);
+void		print_tree(t_bintree *root, int space);
 
 //parsing.c
-void	ft_lstiter_token(t_token *lst, void (*f)(t_token *));
-void	type_token(t_token *token);
+void		ft_lstiter_token(t_token *lst, void (*f)(t_token *));
+void		type_token(t_token *token);
 
 //token_utils.c
-int	ft_issep(char c);
-int	ft_isquote(char c);
+int			ft_issep(char c);
+int			ft_isquote(char c);
 
+//lst_utils.c
+void		ft_lstadd_front_mem(t_mem **lst, t_mem *new);
+t_mem		*ft_lstnew_mem(void *elem, t_mem_type type);
+void		ft_lstdelone_token(t_token *lst, void (*del)(void*));
+void		ft_lstclear_token(t_token **lst, void (*del)(void*));
+
+//cleanup.c
+void		free_elem(void *elem, t_mem_type mem);
+void		free_tabstr(char **tabstr);
 
 #endif

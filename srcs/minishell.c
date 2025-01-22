@@ -6,46 +6,45 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/21 18:51:05 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/22 22:00:35 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // get user prompt
-char	*listen_to_user(char *user_cmd)
+char	*listen_to_user(char *prompt)
 {
-	char	*prompt;
+	char	*input;
 
-	prompt = readline(user_cmd);
-	return (prompt);
+	input = readline(prompt);
+	return (input);
 }
 
 int	main(int ac, char **argv, char **envp)
 {
 	char		*prompt;
 	t_data		data;
+	t_token		*cpy;
 
 	(void)argv;
 	(void)ac;
 	data.envp = envp;
 
 	printf("%d\n", CMD);
-	prompt = "MINISHELL/is/listening/to/you >";
-	data.user_input = listen_to_user(prompt);
-	data.list = tokenize(data.user_input);
-//	data.list = make_token("C");
-//	data.list->type = CMD;
-//	data.list->next = make_token("|");
-//	data.list->next->type = PIPE;
-//	data.list->next->next = make_token("C");
-//	data.list->next->next->type = CMD;
-	data.tree = build_tree(&data.list, 0);
-	print_list(data.list);
-	//execute_tree(tree, envp); // execute tree (not ready)
-	print_tree(data.tree, 0); // print the tree for debug
-	free(data.user_input);
-	free_tree(data.tree);
-	// free t_token
-	// free tree
+	while (1)
+	{
+		prompt = "MINISHELL/is/listening/to/you >";
+		data.user_input = listen_to_user(prompt);
+		data.token_list = tokenize(data.user_input);
+		cpy = data.token_list;
+		print_list(data.token_list);
+		data.tree = build_tree(&cpy, CMD);
+		//execute_tree(tree, envp); // execute tree (not ready)
+		print_tree(data.tree, 0); // print the tree for debug
+		print_list(data.token_list);
+		free(data.user_input);
+		free_tree(data.tree);
+		free_elem(data.token_list, LST);
+	}
 }
