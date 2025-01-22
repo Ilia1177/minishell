@@ -6,9 +6,14 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/21 15:20:25 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/01/21 17:28:07 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+# COLORS
+RESET = \033[0;39m
+CYAN = \e[5;36m
+COLOR = \e[38;5;206m
 
 NAME = bin/minishell
 
@@ -38,12 +43,23 @@ SRCS		=	minishell.c\
 				tokenize.c\
 				token_tab.c\
 				token_utils.c\
+				lst_utils.c\
 				debug.c\
 				parsing.c\
 				cleanup.c\
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS		= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
+
+msg				:
+	@echo "$(COLOR)"
+	@echo "███    ███ ██ ███    ██ ██ ███████ ██   ██ ███████ ██      ██"
+	@echo "████  ████ ██ ████   ██ ██ ██      ██   ██ ██      ██      ██"
+	@echo "██ ████ ██ ██ ██ ██  ██ ██ ███████ ███████ █████   ██      ██"
+	@echo "██  ██  ██ ██ ██  ██ ██ ██      ██ ██   ██ ██      ██      ██"
+	@echo "██      ██ ██ ██   ████ ██ ███████ ██   ██ ███████ ███████ ███████"
+	@echo "$(RESET)"
+	@make all --no-print-directory
 
 all				: $(NAME) 
 
@@ -69,3 +85,4 @@ fclean			: clean
 re				: fclean all
 
 .PHONY			: all clean fclean re bonus
+
