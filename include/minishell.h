@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/22 21:57:04 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/22 22:05:21 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,15 +88,9 @@ typedef struct s_data
 }	t_data;
 
 //binary_tree.c
-<<<<<<< HEAD
-t_bintree *build_tree(t_token **start, int priority);
-void	free_tree(t_bintree *root);
-void	free_leaf(t_bintree *leaf);
-=======
-t_bintree	*build_tree(t_token **start, t_type priority);
+t_bintree	*build_tree(t_token **start, int priority);
 void		free_tree(t_bintree *root);
 void		free_leaf(t_bintree *leaf);
->>>>>>> main
 
 //tokenize.c
 t_token		*tokenize(char *prompt);
