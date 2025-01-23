@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/22 22:00:35 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/23 20:32:18 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,23 @@ int	main(int ac, char **argv, char **envp)
 	(void)ac;
 	data.envp = envp;
 
-	printf("%d\n", CMD);
+	prompt = "MINISHELL/is/listening/to/you >";
 	while (1)
 	{
-		prompt = "MINISHELL/is/listening/to/you >";
 		data.user_input = listen_to_user(prompt);
 		data.token_list = tokenize(data.user_input);
 		cpy = data.token_list;
+		printf("----------- List of token is : -\n\n\n");
 		print_list(data.token_list);
+
+		printf("----------- DEBUG TREE ---------\n\n\n");
 		data.tree = build_tree(&cpy, CMD);
-		//execute_tree(tree, envp); // execute tree (not ready)
 		print_tree(data.tree, 0); // print the tree for debug
-		print_list(data.token_list);
+		printf("----------- EXECUTION ----------\n\n\n");
+		execute_tree(&data); 
 		free(data.user_input);
 		free_tree(data.tree);
 		free_elem(data.token_list, LST);
+		free_tabstr(data.paths);
 	}
 }

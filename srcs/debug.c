@@ -40,10 +40,13 @@ void print_tree(t_bintree *tree, int space)
 
 void	print_list(t_token *list)
 {
-	printf("list = \n");
+	int	i;
+
+	i = 0;
+	printf("--------- list : \n");
 	while(list)
 	{
-		printf("input = %s, type = %d\n", list->input, list->type);
+		printf("input %d = %s, type = %d\n", i++, list->input, list->type);
 		list = list->next;
 	}
 }

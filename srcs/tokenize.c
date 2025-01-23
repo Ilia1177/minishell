@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/21 19:50:50 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/23 00:35:30 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ t_token	*make_token(char *str)
 	t_token	*token;
 
 	token = malloc(sizeof(t_token));
-	//token->content = ft_split(str, ' '); // build **args from str
 	token->input = ft_strdup(str); // build **args from str
 	token->type = 0;
 	token->next = NULL;

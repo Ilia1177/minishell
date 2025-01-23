@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/22 22:05:21 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/23 17:57:02 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "libft.h"
 # include <stdio.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # define IN 0
@@ -71,6 +72,9 @@ typedef struct s_bintree
 	int					stdfd[3]; // standar input(0)/output(1)/tmp_fd(2)
 	int					pipefd[2]; // pipefd
 	char				**content; // Malloc
+	char				*input;
+	char				*rdir_out;
+	char				*rdir_in;
 	t_type				type;
 	struct s_bintree	*left;
 	struct s_bintree	*right;
@@ -78,6 +82,7 @@ typedef struct s_bintree
 
 typedef struct s_data
 {
+	char		**paths;
 	char		**envp;
 	char		*user_input;
 	int			status;
@@ -99,7 +104,12 @@ int			ft_nbword(const char *s);
 char		**ft_split_token(char const *s);
 
 //exec.c -> DOES NOT COMPILE (not included in makefile)
-int			execute_tree(t_bintree *root, char **envp);
+int			execute_tree(t_data *data);
+int	connect_node(t_bintree *a, t_bintree *b);
+int	execute_node(t_bintree *node, t_data *data);
+int			build_cmd(t_bintree *node, t_data  *data);
+char		*get_full_path(char **paths, char *str);
+char		**get_paths(char **env);
 
 // DEBUG FUNCTION
 void		print_list(t_token *list);
