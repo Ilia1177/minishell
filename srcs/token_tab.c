@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/21 16:08:33 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/23 17:33:45 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_nbword(const char *s)
 
 	i = 0;
 	nb_word = 0;
-	while (s[i] != '\0')
+	while (s[i])
 	{
 		tmp_sep = s[i];
 		if (ft_isquote(s[i]))
@@ -100,7 +100,7 @@ char	**ft_split_token(char const *s)
 	if (!str)
 		return (NULL);
 	i = 0;
-	while (*s != '\0' && i < nb_word)
+	while (*s && i < nb_word)
 	{
 		str[i] = (char *) ft_calloc(ft_wordlen(s) + 1, sizeof(char));
 		if (!str[i])

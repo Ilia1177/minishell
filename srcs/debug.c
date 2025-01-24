@@ -43,10 +43,17 @@ void	print_list(t_token *list)
 	printf("list = \n");
 	while(list)
 	{
-		printf("input = %s, type = %d\n", list->input, list->type);
+		printf("input = %s, type = %d", list->input, list->type);
+		if (list->type == CMD)
+		{
+			printf (" args:");
+			print_args(list->cmd->args);
+			printf ("\n");
+		}
 		list = list->next;
 	}
 }
+
 
 // print **arguments for DEBUG
 void	print_args(char **args)
@@ -56,7 +63,7 @@ void	print_args(char **args)
 	i = 0;
 	while (args[i])
 	{
-		printf("%s ", args[i]);
+		printf("|\t%s ", args[i]);
 		i++;
 	}
 }

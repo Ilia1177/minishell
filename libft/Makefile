@@ -6,7 +6,7 @@
 #    By: jhervoch <jhervoch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/23 14:19:41 by jhervoch          #+#    #+#              #
-#    Updated: 2025/01/16 19:02:09 by npolack          ###   ########.fr        #
+#    Updated: 2025/01/23 17:24:19 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ SRCS		+= 	$(addprefix $(SRCS_DIR)convert/ft_,atoi atoier atol itoa)
 SRCS		+= 	$(addprefix $(SRCS_DIR)lst/ft_,lstadd_back lstadd_front lstclear lstdelone lstiter	\
 			   	lstlast lstmap lstnew lstsize)
 #MEM
-SRCS		+= 	$(addprefix $(SRCS_DIR)mem/ft_,bzero calloc memchr memcmp memmove memset)
+SRCS		+= 	$(addprefix $(SRCS_DIR)mem/ft_,bzero calloc memchr memcmp memmove memset memcpy)
 #PRINTF
 SRCS		+= 	$(addprefix $(SRCS_DIR)printf/ft_,printf putcounthex_fd putcountunbr_fd putcountcstr					\
 				putcountnbr_fd putcountptr)
