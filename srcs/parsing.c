@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/21 11:14:56 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/24 12:34:42 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,22 @@ void	ft_lstiter_token(t_token *lst, void (*f)(t_token *))
 	}
 }
 
+void	split_args(t_token *token)
+{
+	t_cmd	*cmd;
+
+	cmd = malloc (sizeof(t_cmd));
+	if (!cmd)
+		return ;
+	cmd->args = NULL;
+	if (token->type == CMD)
+	{
+		cmd->args = ft_split(token->input, ' ');
+		token->cmd = cmd;
+		printf("%s", token->cmd->args[0]);
+	}
+}
+
 void	type_token(t_token *token)
 {
 	if (!ft_strcmp(token->input, "|"))
@@ -42,4 +58,15 @@ void	type_token(t_token *token)
 		token->type = OPERATOR;
 	else
 		token->type = CMD;
+}
+
+int 	syntax_error(char *str)
+{
+	if (ft_strcmp(str, "&|") || ft_strcmp(str, "|&&") || ft_strcmp(str, "|||")
+		|| ft_strcmp(str, "|||") || str[0] == '|' || str[0] == '&')
+	{
+		printf("minishell: syntax error near unexpected token\n");
+		return (1);
+	}
+	return (0);
 }

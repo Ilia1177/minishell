@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/23 17:57:02 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/24 12:35:20 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "libft.h"
 # include <stdio.h>
 # include <fcntl.h>
+#include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # define IN 0
@@ -99,7 +100,7 @@ void		free_leaf(t_bintree *leaf);
 
 //tokenize.c
 t_token		*tokenize(char *prompt);
-t_token		*make_token(char *str);
+t_token		*make_token(char *str, t_type type);
 int			ft_nbword(const char *s);
 char		**ft_split_token(char const *s);
 
@@ -119,6 +120,8 @@ void		print_tree(t_bintree *root, int space);
 //parsing.c
 void		ft_lstiter_token(t_token *lst, void (*f)(t_token *));
 void		type_token(t_token *token);
+void		split_args(t_token *token);
+int 		syntax_error(char *str);
 
 //token_utils.c
 int			ft_issep(char c);
@@ -129,6 +132,8 @@ void		ft_lstadd_front_mem(t_mem **lst, t_mem *new);
 t_mem		*ft_lstnew_mem(void *elem, t_mem_type type);
 void		ft_lstdelone_token(t_token *lst, void (*del)(void*));
 void		ft_lstclear_token(t_token **lst, void (*del)(void*));
+void		ft_lst_split_dup(t_token **lst, int (*f)(), char *cmp);
+int			ft_count_dup(char *s1 , char *s2 , char *dup);
 
 //cleanup.c
 void		free_elem(void *elem, t_mem_type mem);

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/24 11:02:41 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/24 13:56:49 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,19 +46,22 @@ int	main(int ac, char **argv, char **envp)
 		if (!data.user_input)
 			quit(&data);
 		data.token_list = tokenize(data.user_input);
-		cpy = data.token_list;
-		printf("----------- List of token is : -\n");
-		print_list(data.token_list);
-		printf("----------- DEBUG TREE ---------\n");
-		data.tree = build_tree(&cpy, CMD);
-		print_tree(data.tree, 0); // print the tree for debug
-		print_list(data.token_list);
-		printf("----------- EXECUTION ----------\n");
-		execute_tree(&data); 
-		free(data.user_input);
-		free_tree(data.tree);
-		free_elem(data.token_list, LST);
-		free_tabstr(data.paths);
+		if (!syntax_error(data.user_input))
+		{
+			cpy = data.token_list;
+			printf("----------- List of token is : -\n\n\n");
+			print_list(data.token_list);
+
+			printf("----------- DEBUG TREE ---------\n\n\n");
+			data.tree = build_tree(&cpy, CMD);
+			print_tree(data.tree, 0); // print the tree for debug
+			printf("----------- EXECUTION ----------\n\n\n");
+			execute_tree(&data); 
+			free(data.user_input);
+			free_tree(data.tree);
+			free_tabstr(data.paths);
+			free_elem(data.token_list, LST);
+		}
 	}
 }
 
