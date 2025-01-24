@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/23 20:30:30 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/23 22:58:32 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,21 @@ int	redir(t_bintree *node)
 	return (0);
 }
 
+int	child_process(t_bintree *node, t_data *data)
+{
+	free(data->user_input);
+	free_tree(data->tree);
+	free_elem(data->token_list, LST);
+	free_tabstr(data->paths);
+	dup2(node->stdfd[IN], 0);
+	dup2(node->stdfd[OUT], 1);
+	close(node->stdfd[IN]);
+	close(node->stdfd[OUT]);
+	execve(node->content[0], node->content, data->envp);
+	perror("minishell is warning you");
+	exit(-1);
+}
+
 int	exec_cmd(t_bintree *node, t_data *data)
 {
 	int pid;
@@ -46,15 +61,7 @@ int	exec_cmd(t_bintree *node, t_data *data)
 		return (127); // if dont find the command with access
 	}
 	if (!pid)
-	{
-		dup2(node->stdfd[IN], 0);
-		dup2(node->stdfd[OUT], 1);
-		close(node->stdfd[IN]);
-		close(node->stdfd[OUT]);
-		execve(node->content[0], node->content, data->envp);
-		perror("minishell is warning you");
-		exit(-1);
-	}
+		child_process(node, data);
 	close(node->stdfd[IN]);
 	close(node->stdfd[OUT]);
 	waitpid(-1, &exit_status, 0);

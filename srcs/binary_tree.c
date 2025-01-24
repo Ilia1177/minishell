@@ -6,25 +6,53 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/23 18:11:47 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/24 00:20:44 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token *token)
+t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 {
 	t_bintree	*root;
+	t_token		*current_token;
 
+	current_token = *token;
 	root = malloc(sizeof(t_bintree));
-	printf("make node %p with token %s\n", root, token->input);
-	root->type = token->type;
-	root->content = ft_split(token->input, ' ');
+	//printf("make node %p with token %s\n", root, current_token->input);
+	root->type = current_token->type;
+	root->content = ft_split(current_token->input, ' ');
 	root->rdir_out = NULL;
 	root->rdir_in = NULL;
 	root->left = left;
 	root->right = right;
+	current_token = current_token->next;
+	*token = current_token;
 	return (root);
+}
+
+int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
+{
+	t_token		*current_token;
+	t_bintree	*new_root;
+
+	current_token = *token;
+	if (!ft_strcmp(current_token->input, "("))
+	{
+		current_token = current_token->next;
+		new_root = build_tree(&current_token, 0);
+		*root = new_root;
+		*old_root = new_root;
+		*token = current_token;
+		return (1);
+	}
+	else if (!ft_strcmp(current_token->input, ")"))
+	{
+		current_token = current_token->next;
+		*token = current_token;
+		return (-1);
+	}
+	return (0);
 }
 
 t_bintree	*build_tree(t_token **head, int priority)
@@ -38,35 +66,22 @@ t_bintree	*build_tree(t_token **head, int priority)
 		return (NULL);
 	while (current_token)
 	{
-		if (!ft_strcmp(current_token->input, "("))
-		{
-			current_token = current_token->next;
-			new_root = build_tree(&current_token, 0);
-			old_root = new_root;
+		if (handle_parenthesis(&current_token, &new_root, &old_root) == 1)
 			continue ;
-		}
-		else if (!ft_strcmp(current_token->input, ")"))
-		{
-			current_token = current_token->next;
+		else if (handle_parenthesis(&current_token, &new_root, &old_root) == -1)
 			break ;
-		}
 		else if (current_token->type == PIPE && priority == PIPE)
 			break ;	
 		else if (current_token->type == OPERATOR && priority >= OPERATOR)
 			break ;
 		else if (current_token->type == CMD)
-		{
-			new_root = make_node(NULL, NULL, current_token);
-			current_token = current_token->next;
-			old_root = new_root;
-		}
+			new_root = make_node(NULL, NULL, &current_token);
 		else
 		{
-			new_root = make_node(old_root, NULL, current_token);
-			current_token = current_token->next;
+			new_root = make_node(old_root, NULL, &current_token);
 			new_root->right = build_tree(&current_token, (int)new_root->type);
-			old_root = new_root;
 		}
+		old_root = new_root;
 	}
 	*head = current_token; 
 	return (new_root);

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/23 00:35:30 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/24 10:03:21 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ t_token	*tokenize(char *input)
 	char	**tokens;
 	int		i;
 
+	if (!input)
+		return(NULL);
 	tokens = ft_split_token(input);
 	i = 0;
 	head = make_token(tokens[i]);

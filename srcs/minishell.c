@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/23 20:32:18 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/24 11:02:41 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,15 @@ char	*listen_to_user(char *prompt)
 	char	*input;
 
 	input = readline(prompt);
+	add_history(input);
 	return (input);
+}
+
+int	quit(t_data *data)
+{
+	(void)data;
+	//rl_clear_line();
+	exit(0);
 }
 
 int	main(int ac, char **argv, char **envp)
@@ -31,19 +39,21 @@ int	main(int ac, char **argv, char **envp)
 	(void)ac;
 	data.envp = envp;
 
-	prompt = "MINISHELL/is/listening/to/you >";
+	prompt = "MINISHELL/is/listening/to/you>";
 	while (1)
 	{
 		data.user_input = listen_to_user(prompt);
+		if (!data.user_input)
+			quit(&data);
 		data.token_list = tokenize(data.user_input);
 		cpy = data.token_list;
-		printf("----------- List of token is : -\n\n\n");
+		printf("----------- List of token is : -\n");
 		print_list(data.token_list);
-
-		printf("----------- DEBUG TREE ---------\n\n\n");
+		printf("----------- DEBUG TREE ---------\n");
 		data.tree = build_tree(&cpy, CMD);
 		print_tree(data.tree, 0); // print the tree for debug
-		printf("----------- EXECUTION ----------\n\n\n");
+		print_list(data.token_list);
+		printf("----------- EXECUTION ----------\n");
 		execute_tree(&data); 
 		free(data.user_input);
 		free_tree(data.tree);
@@ -51,3 +61,5 @@ int	main(int ac, char **argv, char **envp)
 		free_tabstr(data.paths);
 	}
 }
+
+
