@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/24 09:43:34 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/24 12:34:42 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,15 @@ void	type_token(t_token *token)
 		token->type = OPERATOR;
 	else
 		token->type = CMD;
+}
+
+int 	syntax_error(char *str)
+{
+	if (ft_strcmp(str, "&|") || ft_strcmp(str, "|&&") || ft_strcmp(str, "|||")
+		|| ft_strcmp(str, "|||") || str[0] == '|' || str[0] == '&')
+	{
+		printf("minishell: syntax error near unexpected token\n");
+		return (1);
+	}
+	return (0);
 }

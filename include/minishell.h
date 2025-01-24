@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/24 11:27:45 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/24 12:35:20 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "libft.h"
 # include <stdio.h>
 # include <fcntl.h>
+#include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # define IN 0
@@ -120,6 +121,7 @@ void		print_tree(t_bintree *root, int space);
 void		ft_lstiter_token(t_token *lst, void (*f)(t_token *));
 void		type_token(t_token *token);
 void		split_args(t_token *token);
+int 		syntax_error(char *str);
 
 //token_utils.c
 int			ft_issep(char c);
