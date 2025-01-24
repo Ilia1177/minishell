@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/23 18:47:02 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/24 11:27:45 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "libft.h"
 # include <stdio.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # define IN 0
@@ -23,9 +24,9 @@
 
 typedef enum e_type
 {
-	CMD = 0,
-	PIPE = 1,
-	OPERATOR = 2,
+	CMD = 0, 
+	PIPE = 2, 
+	OPERATOR = 1,
 	EXPAND = 3
 }	t_type;
 
@@ -71,6 +72,9 @@ typedef struct s_bintree
 	int					stdfd[3]; // standar input(0)/output(1)/tmp_fd(2)
 	int					pipefd[2]; // pipefd
 	char				**content; // Malloc
+	char				*input;
+	char				*rdir_out;
+	char				*rdir_in;
 	t_type				type;
 	struct s_bintree	*left;
 	struct s_bintree	*right;
@@ -78,6 +82,7 @@ typedef struct s_bintree
 
 typedef struct s_data
 {
+	char		**paths;
 	char		**envp;
 	char		*user_input;
 	int			status;
@@ -88,7 +93,7 @@ typedef struct s_data
 }	t_data;
 
 //binary_tree.c
-t_bintree	*build_tree(t_token **start, t_type priority);
+t_bintree	*build_tree(t_token **start, int priority);
 void		free_tree(t_bintree *root);
 void		free_leaf(t_bintree *leaf);
 
@@ -99,7 +104,12 @@ int			ft_nbword(const char *s);
 char		**ft_split_token(char const *s);
 
 //exec.c -> DOES NOT COMPILE (not included in makefile)
-int			execute_tree(t_bintree *root, char **envp);
+int			execute_tree(t_data *data);
+int	connect_node(t_bintree *a, t_bintree *b);
+int	execute_node(t_bintree *node, t_data *data);
+int			build_cmd(t_bintree *node, t_data  *data);
+char		*get_full_path(char **paths, char *str);
+char		**get_paths(char **env);
 
 // DEBUG FUNCTION
 void		print_list(t_token *list);
