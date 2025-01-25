@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/24 00:20:44 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/25 00:04:43 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 	t_bintree	*new_root;
 
 	current_token = *token;
+	if (!current_token)
+		return (-1);
 	if (!ft_strcmp(current_token->input, "("))
 	{
 		current_token = current_token->next;
@@ -87,6 +89,34 @@ t_bintree	*build_tree(t_token **head, int priority)
 	return (new_root);
 }
 
+int	is_fd_open(int fd)
+{
+    char buffer[1];
+
+    if (read(fd, buffer, 0) == -1)
+   	{
+        if (errno == EBADF)
+            return 0; // FD is closed or invalid
+    }
+    return 1; // FD is open
+}
+
+void	close_all_fd(t_bintree *root)
+{
+	if (root->left)
+		close_all_fd(root->left);
+	if (root->right)
+		close_all_fd(root->right);
+	if (is_fd_open(root->stdfd[IN]))
+		close(root->stdfd[IN]);
+	if (is_fd_open(root->stdfd[OUT]))
+		close(root->stdfd[OUT]);
+	if (is_fd_open(root->pipefd[IN]))
+		close(root->pipefd[IN]);
+	if (is_fd_open(root->pipefd[OUT]))
+		close(root->pipefd[OUT]);
+}
+
 void	free_leaf(t_bintree *leaf)
 {
 	int	i;
@@ -107,6 +137,7 @@ void	free_tree(t_bintree *root)
 	if (root->right)
 		free_tree(root->right);
 	free_leaf(root);
+	return ;
 }
 /*
 

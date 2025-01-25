@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/24 12:35:20 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/25 00:16:29 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 
 # include "libft.h"
 # include <stdio.h>
+# include <signal.h>
 # include <fcntl.h>
-#include <sys/wait.h>
+# include <sys/wait.h>
+# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # define IN 0
@@ -93,10 +95,28 @@ typedef struct s_data
 	t_mem		*mem_list;
 }	t_data;
 
+//global variable
+int			signal_caught;
+
+//main.c
+void	init_shell(t_data *data);
+void	free_minishell(t_data *data);
+char	*listen_to_user(char *prompt);
+int		run_shell(t_data *data);
+
+
+
 //binary_tree.c
 t_bintree	*build_tree(t_token **start, int priority);
 void		free_tree(t_bintree *root);
 void		free_leaf(t_bintree *leaf);
+void		close_all_fd(t_bintree *root);
+
+//signals.c
+int			register_signals(void);
+void		handle_signals(int sig, siginfo_t *info, void *ctx);
+int			listen_to_signal(t_data *data);
+
 
 //tokenize.c
 t_token		*tokenize(char *prompt);
@@ -104,7 +124,7 @@ t_token		*make_token(char *str, t_type type);
 int			ft_nbword(const char *s);
 char		**ft_split_token(char const *s);
 
-//exec.c -> DOES NOT COMPILE (not included in makefile)
+//exec.c 
 int			execute_tree(t_data *data);
 int	connect_node(t_bintree *a, t_bintree *b);
 int	execute_node(t_bintree *node, t_data *data);

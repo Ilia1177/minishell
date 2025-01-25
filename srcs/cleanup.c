@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/22 09:38:03 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/25 00:02:06 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,3 +39,5 @@ void	free_elem(void *elem, t_mem_type mem)
 	else if (mem == LST)
 		ft_lstclear_token(&lst, &free);
 }
+
+

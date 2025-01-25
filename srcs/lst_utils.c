@@ -59,7 +59,7 @@ void	ft_lstclear_token(t_token **lst, void (*del)(void*))
 	*lst = NULL;
 }
 
-void	ft_lst_split_dup(t_token **lst, int (*f)(), char *cmp)
+void	ft_lst_split_dup(t_token **lst, int (*f)(char *, char *, char *), char *cmp)
 {
 	t_token	*current;
 	t_token	*new;

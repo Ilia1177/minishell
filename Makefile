@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/22 23:21:18 by ilia             ###   ########.fr        #
+#    Updated: 2025/01/24 22:59:36 by ilia             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ ifeq ($(OS), Linux)
 	RLLIB		= -L./usr/lib/x86_64-linux-gnu/ -lreadline
 	INCLUDE		= -I./include -I./libft/includes -I./libft/ -I./usr/lib/
 else
-	CC			= clang
+	CC			= cc
 	READLINE 	= brew install readline
 	#RLLIB		= -L./usr/local/Cellar/readline/8.2.13/lib/ -L./usr/local/opt/readline -lreadline
 	RLLIB		= -I./usr/local/opt/readline -lreadline
@@ -49,6 +49,7 @@ SRCS		=	minishell.c\
 				cleanup.c\
 				exec_utils.c\
 				exec.c\
+				signals.c\
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS		= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)

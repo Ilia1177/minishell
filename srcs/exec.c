@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/23 22:58:32 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/24 15:02:39 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,19 +105,27 @@ int	make_pipe(t_bintree *node, t_data *data)
 	return (exit_status);
 }
 
+void	connect_stdio(t_bintree *a, t_bintree *b)
+{
+	b->stdfd[IN] = dup(a->stdfd[IN]);
+	b->stdfd[OUT] = dup(a->stdfd[OUT]);
+}
+
 int	make_operation(t_bintree *node, t_data *data)
 {
 	int	exit_status;
 
-	node->left->stdfd[IN] = dup(node->stdfd[IN]);
-	node->left->stdfd[OUT] = dup(node->stdfd[OUT]);
+	connect_stdio(node, node->left);
+//	node->left->stdfd[IN] = dup(node->stdfd[IN]);
+//	node->left->stdfd[OUT] = dup(node->stdfd[OUT]);
 	exit_status = execute_node(node->left, data);
 	if (!ft_strcmp(node->content[0], "||"))
 	{	
 		if (exit_status && node->right)
 		{
-			node->right->stdfd[IN] = dup(node->stdfd[IN]);
-			node->right->stdfd[OUT] = dup(node->stdfd[OUT]);
+			connect_stdio(node, node->right);
+		//	node->right->stdfd[IN] = dup(node->stdfd[IN]);
+		//	node->right->stdfd[OUT] = dup(node->stdfd[OUT]);
 			close(node->stdfd[IN]);
 			close(node->stdfd[OUT]);
 			exit_status = execute_node(node->right, data);
@@ -131,8 +139,9 @@ int	make_operation(t_bintree *node, t_data *data)
 	}
 	else if (node->right)
 	{
-		node->right->stdfd[IN] = dup(node->stdfd[IN]);
-		node->right->stdfd[OUT] = dup(node->stdfd[OUT]);
+		connect_stdio(node, node->right);
+		//node->right->stdfd[IN] = dup(node->stdfd[IN]);
+	//	node->right->stdfd[OUT] = dup(node->stdfd[OUT]);
 		exit_status = execute_node(node->right, data);
 	}
 	return (exit_status);
