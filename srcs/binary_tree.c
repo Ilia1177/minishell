@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/25 00:04:43 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/25 17:05:26 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 
 	current_token = *token;
 	root = malloc(sizeof(t_bintree));
-	//printf("make node %p with token %s\n", root, current_token->input);
 	root->type = current_token->type;
 	root->content = ft_split(current_token->input, ' ');
+	if (current_token->type == CMD)
+		root->cmd = current_token->cmd;
 	root->rdir_out = NULL;
 	root->rdir_in = NULL;
 	root->left = left;
@@ -59,91 +60,37 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 
 t_bintree	*build_tree(t_token **head, int priority)
 {
-	t_token		*current_token;
+	t_token		*curr;
 	t_bintree	*new_root;
 	t_bintree	*old_root;
 
-	current_token = *head;
-	if (!current_token)
+	curr = *head;
+	if (!curr)
 		return (NULL);
-	while (current_token)
+	while (curr)
 	{
-		if (handle_parenthesis(&current_token, &new_root, &old_root) == 1)
+		if (handle_parenthesis(&curr, &new_root, &old_root) == 1)
 			continue ;
-		else if (handle_parenthesis(&current_token, &new_root, &old_root) == -1)
+		else if (handle_parenthesis(&curr, &new_root, &old_root) == -1)
 			break ;
-		else if (current_token->type == PIPE && priority == PIPE)
-			break ;	
-		else if (current_token->type == OPERATOR && priority >= OPERATOR)
+		else if (curr->type == PIPE && priority == PIPE)
 			break ;
-		else if (current_token->type == CMD)
-			new_root = make_node(NULL, NULL, &current_token);
+		else if (curr->type == OPERATOR && priority >= OPERATOR)
+			break ;
+		else if (curr->type == CMD)
+			new_root = make_node(NULL, NULL, &curr);
 		else
 		{
-			new_root = make_node(old_root, NULL, &current_token);
-			new_root->right = build_tree(&current_token, (int)new_root->type);
+			new_root = make_node(old_root, NULL, &curr);
+			new_root->right = build_tree(&curr, (int)new_root->type);
 		}
 		old_root = new_root;
 	}
-	*head = current_token; 
+	*head = curr;
 	return (new_root);
 }
 
-int	is_fd_open(int fd)
-{
-    char buffer[1];
-
-    if (read(fd, buffer, 0) == -1)
-   	{
-        if (errno == EBADF)
-            return 0; // FD is closed or invalid
-    }
-    return 1; // FD is open
-}
-
-void	close_all_fd(t_bintree *root)
-{
-	if (root->left)
-		close_all_fd(root->left);
-	if (root->right)
-		close_all_fd(root->right);
-	if (is_fd_open(root->stdfd[IN]))
-		close(root->stdfd[IN]);
-	if (is_fd_open(root->stdfd[OUT]))
-		close(root->stdfd[OUT]);
-	if (is_fd_open(root->pipefd[IN]))
-		close(root->pipefd[IN]);
-	if (is_fd_open(root->pipefd[OUT]))
-		close(root->pipefd[OUT]);
-}
-
-void	free_leaf(t_bintree *leaf)
-{
-	int	i;
-
-	i = -1;
-	while (leaf->content[++i])
-		free(leaf->content[i]);
-	free(leaf->content[i]);
-	free(leaf->content);
-	free(leaf);
-}
-
-// free the all tree
-void	free_tree(t_bintree *root)
-{
-	if (root->left)
-		free_tree(root->left);
-	if (root->right)
-		free_tree(root->right);
-	free_leaf(root);
-	return ;
-}
 /*
-
-
-
-
 t_bintree	*build_tree(t_token **head, int priority)
 {
 	t_token		*current_token;

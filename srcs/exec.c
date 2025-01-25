@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/24 15:02:39 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/25 18:22:12 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,17 @@ int	redir(t_bintree *node)
 	return (0);
 }
 
-int	child_process(t_bintree *node, t_data *data)
+void	child_process(t_bintree *node, t_data *data)
 {
-	free(data->user_input);
-	free_tree(data->tree);
-	free_elem(data->token_list, LST);
-	free_tabstr(data->paths);
+	//char	**args;
+
+	//free_minishell(data);
+	//args = tab_dup(node->cmd->args);	
 	dup2(node->stdfd[IN], 0);
 	dup2(node->stdfd[OUT], 1);
 	close(node->stdfd[IN]);
 	close(node->stdfd[OUT]);
-	execve(node->content[0], node->content, data->envp);
+	execve(node->cmd->args[0], node->cmd->args, data->envp);
 	perror("minishell is warning you");
 	exit(-1);
 }
@@ -53,6 +53,8 @@ int	exec_cmd(t_bintree *node, t_data *data)
 	int exit_status;
 
 	redir(node);
+//	if (is_builtin(node->cmd))
+//		return (builtin(node->cmd));
 	if (!build_cmd(node, data))
 		pid = fork();
 	else
@@ -116,16 +118,12 @@ int	make_operation(t_bintree *node, t_data *data)
 	int	exit_status;
 
 	connect_stdio(node, node->left);
-//	node->left->stdfd[IN] = dup(node->stdfd[IN]);
-//	node->left->stdfd[OUT] = dup(node->stdfd[OUT]);
 	exit_status = execute_node(node->left, data);
 	if (!ft_strcmp(node->content[0], "||"))
 	{	
 		if (exit_status && node->right)
 		{
 			connect_stdio(node, node->right);
-		//	node->right->stdfd[IN] = dup(node->stdfd[IN]);
-		//	node->right->stdfd[OUT] = dup(node->stdfd[OUT]);
 			close(node->stdfd[IN]);
 			close(node->stdfd[OUT]);
 			exit_status = execute_node(node->right, data);
@@ -140,8 +138,6 @@ int	make_operation(t_bintree *node, t_data *data)
 	else if (node->right)
 	{
 		connect_stdio(node, node->right);
-		//node->right->stdfd[IN] = dup(node->stdfd[IN]);
-	//	node->right->stdfd[OUT] = dup(node->stdfd[OUT]);
 		exit_status = execute_node(node->right, data);
 	}
 	return (exit_status);

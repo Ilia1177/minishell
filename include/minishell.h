@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/25 00:16:29 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/25 19:05:10 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@
 
 typedef enum e_type
 {
-	CMD = 0, 
-	PIPE = 2, 
-	OPERATOR = 1,
-	EXPAND = 3
+	CMD,
+	OPERATOR,
+	PIPE,
+	EXPAND
 }	t_type;
 
 typedef enum e_mem_type
@@ -75,6 +75,7 @@ typedef struct s_bintree
 	int					stdfd[3]; // standar input(0)/output(1)/tmp_fd(2)
 	int					pipefd[2]; // pipefd
 	char				**content; // Malloc
+	t_cmd				*cmd;
 	char				*input;
 	char				*rdir_out;
 	char				*rdir_in;
@@ -85,6 +86,7 @@ typedef struct s_bintree
 
 typedef struct s_data
 {
+	char		*prompt;
 	char		**paths;
 	char		**envp;
 	char		*user_input;
@@ -96,15 +98,13 @@ typedef struct s_data
 }	t_data;
 
 //global variable
-int			signal_caught;
+extern int	signal_caught;
 
 //main.c
-void	init_shell(t_data *data);
-void	free_minishell(t_data *data);
-char	*listen_to_user(char *prompt);
-int		run_shell(t_data *data);
-
-
+void		init_shell(t_data *data);
+void		free_minishell(t_data *data);
+char		*listen_to_user(char *prompt);
+int			run_shell(t_data *data);
 
 //binary_tree.c
 t_bintree	*build_tree(t_token **start, int priority);
@@ -132,6 +132,8 @@ int			build_cmd(t_bintree *node, t_data  *data);
 char		*get_full_path(char **paths, char *str);
 char		**get_paths(char **env);
 
+//exec_utils.c
+char	**tab_dup(char **tab);
 // DEBUG FUNCTION
 void		print_list(t_token *list);
 void		print_args(char **list);
@@ -158,5 +160,4 @@ int			ft_count_dup(char *s1 , char *s2 , char *dup);
 //cleanup.c
 void		free_elem(void *elem, t_mem_type mem);
 void		free_tabstr(char **tabstr);
-
 #endif
