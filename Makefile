@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/24 22:59:36 by ilia             ###   ########.fr        #
+#    Updated: 2025/01/26 16:27:00 by npolack          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,15 +21,12 @@ OS := $(shell uname)
 
 ifeq ($(OS), Linux)
 	CC			= cc
-	READLINE 	= sudo apt-get install libreadline-dev
 	RLLIB		= -L./usr/lib/x86_64-linux-gnu/ -lreadline
 	INCLUDE		= -I./include -I./libft/includes -I./libft/ -I./usr/lib/
 else
 	CC			= cc
-	READLINE 	= brew install readline
-	#RLLIB		= -L./usr/local/Cellar/readline/8.2.13/lib/ -L./usr/local/opt/readline -lreadline
-	RLLIB		= -I./usr/local/opt/readline -lreadline
-	INCLUDE		=  -I./include -I./libft/includes -I./libft/ 
+	RLLIB		= -L/usr/local/opt/readline/lib -lreadline -lhistory
+	INCLUDE		= -I/usr/local/opt/readline/include -I./include -I./libft/includes -I./libft/ 
 endif
 
 
