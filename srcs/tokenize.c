@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 16:04:50 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:12:11 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	true_wordlen(char *str)
 	int	len;
 
 	len = 0;
-	while (str[len] && !is_space(str[len]))
+	while (str[len] && !is_space(str[len]) && !ft_issep(str[len]))
 		len++;
 	return (len);
 }

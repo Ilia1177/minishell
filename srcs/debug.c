@@ -16,7 +16,7 @@ void print_tree(t_bintree *tree, int space)
     printf("\n");
     for (int i = spacing; i < space; i++)
         printf(" ");
-    printf("(%s)\n", tree->content[0]);
+    printf("(%s)\n", tree->input);
     // Print the left subtree
     print_tree(tree->left, space);
 }

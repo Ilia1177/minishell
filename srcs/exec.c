@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/25 18:22:12 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/27 14:41:51 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,20 @@ int	redir(t_bintree *node)
 {
 	int	fd_in;
 	int	fd_out;
-
-	if (node->rdir_out)
+	
+	//heredoc ??
+	if (node->out_rdir || node->append)
 	{
-		fd_out = open(node->rdir_out, O_CREAT | O_WRONLY | O_APPEND, 0777);
+		if (node->append)
+			fd_out = open(node->append, O_CREAT | O_WRONLY | O_APPEND, 0777);
+		else
+			fd_out = open(node->out_rdir, O_CREAT | O_WRONLY | O_TRUNC, 0777);
 		dup2(fd_out, node->stdfd[OUT]);
 		close(fd_out);
 	}
-	if (node->rdir_in)
+	if (node->in_rdir)
 	{
-		fd_in = open(node->rdir_in, O_RDONLY, 0777);
+		fd_in = open(node->in_rdir, O_RDONLY, 0777);
 		dup2(fd_in, node->stdfd[IN]);
 		close(fd_in);
 	}
@@ -34,17 +38,13 @@ int	redir(t_bintree *node)
 
 void	child_process(t_bintree *node, t_data *data)
 {
-	//char	**args;
-
-	//free_minishell(data);
-	//args = tab_dup(node->cmd->args);	
 	dup2(node->stdfd[IN], 0);
 	dup2(node->stdfd[OUT], 1);
 	close(node->stdfd[IN]);
 	close(node->stdfd[OUT]);
 	execve(node->cmd->args[0], node->cmd->args, data->envp);
 	perror("minishell is warning you");
-	exit(-1);
+	exit(127);
 }
 
 int	exec_cmd(t_bintree *node, t_data *data)
@@ -68,7 +68,7 @@ int	exec_cmd(t_bintree *node, t_data *data)
 	close(node->stdfd[OUT]);
 	waitpid(-1, &exit_status, 0);
 	data->status = WEXITSTATUS(exit_status);
-	printf("Exit status of %s is %d\n", node->content[0], exit_status);
+	printf("Exit status of %s is %d\n", node->input, exit_status);
 	return (exit_status);
 }
 
@@ -119,7 +119,7 @@ int	make_operation(t_bintree *node, t_data *data)
 
 	connect_stdio(node, node->left);
 	exit_status = execute_node(node->left, data);
-	if (!ft_strcmp(node->content[0], "||"))
+	if (!ft_strcmp(node->input, "||"))
 	{	
 		if (exit_status && node->right)
 		{

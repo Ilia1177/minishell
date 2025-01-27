@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/01/25 15:26:00 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/27 13:29:03 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ char	**tab_dup(char **tab)
 	i = 0;
 	while (tab[i])
 		i++;
-	new = malloc(sizeof(char *) * i + 1);
+	new = malloc(sizeof(char *) * (i + 1));
 	i = 0;
 	while (tab[i])
 	{
 		new[i] = ft_strdup(tab[i]);
 		i++;
 	}
-	tab[i] = NULL;
+	new[i] = NULL;
 	return (new);
 }
 
@@ -83,20 +83,28 @@ char	*get_full_path(char **paths, char *str)
 	return (NULL);
 }
 
+t_cmd	*cmddup(t_cmd *cmd)
+{
+	t_cmd	*new;
+
+	new = malloc(sizeof(t_cmd));
+	new->args = tab_dup(cmd->args);
+	return (new);
+}
+
 int	build_cmd(t_bintree *node, t_data *data)
 {
 	char 	*cmd_name;
 	
-//	cmd_name = node->content[0];
-//	node->content[0] = get_full_path(data->paths, cmd_name);
-//	free(cmd_name);
 	cmd_name = node->cmd->args[0];
 	node->cmd->args[0] = get_full_path(data->paths, cmd_name);
-	free(cmd_name);
-	if (!node->content[0])
+	if (!node->cmd->args[0])
 	{
 		data->status = 127;
-		return (-1);
+		node->cmd->args[0] = cmd_name;
+		return (127);
 	}
+	else
+		free(cmd_name);
 	return (0);
 }

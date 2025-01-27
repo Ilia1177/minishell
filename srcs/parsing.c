@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/27 15:55:01 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:11:12 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ void	split_args(t_token *token)
 {
 	t_cmd	*cmd;
 
-	cmd = malloc (sizeof(t_cmd));
-	if (!cmd)
-		return ;
-	cmd->args = NULL;
 	if (token->type == CMD)
 	{
+		cmd = malloc (sizeof(t_cmd));
+		if (!cmd)
+			return ;
+		cmd->args = NULL;
 		cmd->args = ft_split(token->input, ' ');
 		token->cmd = cmd;
 	}

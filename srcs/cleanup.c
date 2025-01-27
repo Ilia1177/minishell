@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/27 11:09:48 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 14:38:19 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,17 @@ void	free_minishell(t_data *data)
 	free(data->user_input);
 	//close_all_fd(data->tree);			output error in valgrind (not a good idea ?)
 	free_tree(data->tree);
-	free_tabstr(data->paths);
 	free_elem(data->token_list, LST);
-	//rl_clear_history(); 				//doesnt work, dont know why (why??)
+	free_elem(data->paths, D_TAB);
 }
 
 void	free_tabstr(char **tabstr)
 {
 	size_t	i;
 
-	i = 0;
-	if (!*tabstr)
+	if (!tabstr || !*tabstr)
 		return ;
+	i = 0;
 	while (tabstr[i])
 	{
 		free (tabstr[i]);
@@ -42,6 +41,8 @@ void	free_elem(void *elem, t_mem_type mem)
 {
 	t_token	*lst;
 
+	if (!elem)
+		return ;
 	lst = elem;
 	if (mem == PTR)
 		free(elem);
@@ -61,10 +62,12 @@ void	free_leaf(t_bintree *leaf)
 	if (!leaf)
 		return ;
 	i = -1;
-	while (leaf->content[++i])
-		free(leaf->content[i]);
-	free(leaf->content[i]);
-	free(leaf->content);
+	free(leaf->input);
+	free(leaf->in_rdir);
+	free(leaf->out_rdir);
+	free(leaf->append);
+	free(leaf->heredoc);
+	free_cmd(leaf->cmd);
 	free(leaf);
 }
 
@@ -91,6 +94,14 @@ int	is_fd_open(int fd)
 			return (0);
 	}
 	return (1);
+}
+
+void	free_cmd(t_cmd *cmd)
+{
+	if (!cmd)
+		return ;
+	free_tabstr(cmd->args);
+	free(cmd);
 }
 
 void	close_all_fd(t_bintree *root)
