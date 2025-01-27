@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/27 10:23:33 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/01/27 11:42:47 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,14 +70,14 @@ msg				:
 
 all				: $(NAME) 
 
-jm: fclean $(OBJS) $(MINISHELL_JM_OBJ) $(LIBFT)
+jm: $(OBJS) $(MINISHELL_JM_OBJ) $(LIBFT)
 	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) $^ -o $@
+	$(CC) $(C_FLAGS) $(INCLUDE) $^ $(RLLIB) -o $@
 	@echo "Compiled with minishell-jm.c"
 
 nil:fclean $(OBJS) $(MINISHELL_NIL_OBJ) $(LIBFT)
 	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) $^ -o $@
+	$(CC) $(C_FLAGS) $(INCLUDE) $^ $(RLLIB) -o $@
 	@echo "Compiled with minishell-nil.c"
 
 $(OBJS_DIR)/%.o	: $(SRCS_DIR)/%.c 
@@ -89,7 +89,6 @@ $(MINISHELL_OBJ) : $(MINISHELL_SRC)
 	$(CC) $(C_FLAGS) $(INCLUDE) -c $< -o $@
 
 $(MINISHELL_JM_OBJ) : $(MINISHELL_JM_SRC)
-	@mkdir -p $(OBJS_DIR)
 	$(CC) $(C_FLAGS) $(INCLUDE) -c $< -o $@
 
 $(MINISHELL_NIL_OBJ) : $(MINISHELL_NIL_SRC)

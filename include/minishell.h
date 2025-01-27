@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/26 22:55:16 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/27 13:12:32 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,9 @@ int 		syntax_error(char *str);
 int			ft_issep(char c);
 int			ft_isquote(char c);
 int			is_space(char c);
+
+//token_tab.c
+void		ft_skip_quote(const char *s, int *index);
 
 //lst_utils.c
 void		ft_lstadd_front_mem(t_mem **lst, t_mem *new);

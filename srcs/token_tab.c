@@ -6,26 +6,33 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/23 17:33:45 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:03:01 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	ft_skip_quote(const char *s, int *index)
+/* allows you to take into account what is between quote
+ * one bloc between same quote */
+void	ft_skip_quote(const char *s, int *index)
 {
-	int	i;
+	int		i;
+	char	quote;
 
 	i = 0;
-	while (s[i] && !ft_isquote(s[i]))
+	quote = s[i];
+	++i;
+	*index += 1;
+	while (s[i] && s[i] != quote)
 	{
 		++i;
 		*index += 1;
 	}
+	if (s[i] && s[i] == quote)
+		*index += 1;
 }
 
 /* count nb of word. A word could be a command and a operator
- * the tmp var allow to check if the separator does not chane*/
+ * the tmp var allow to check if the separator does not change*/
 int	ft_nbword(const char *s)
 {
 	int		nb_word;
@@ -48,13 +55,17 @@ int	ft_nbword(const char *s)
 		while (s[i] && !ft_issep(s[i]))
 		{
 			++i;
-			if (ft_isquote(s[i]) && s[++i])
+			if (ft_isquote(s[i]))
 				ft_skip_quote(&s[i], &i);
 		}
 	}
 	return (nb_word);
 }
 
+/* calculate the size of a word
+ * a word could be : 
+ * ---a command with args
+ * ---a group of identical operators*/
 static size_t	ft_wordlen(const char *s)
 {
 	int		strlen;
@@ -71,7 +82,8 @@ static size_t	ft_wordlen(const char *s)
 		{
 			if (ft_isquote(s[strlen]) && s[++strlen])
 				ft_skip_quote(&s[strlen], &strlen);
-			strlen++;
+			if (s[strlen])
+				strlen++;
 		}
 	}
 	return (strlen);
@@ -86,7 +98,11 @@ static void	ft_free_bugsplit(char **str, int i)
 	}
 	free(str);
 }
-
+/* this function split the input of the user
+ * in token with coud be ;
+ * --a command
+ * --a operator
+ * --a paremthesis*/
 char	**ft_split_token(char const *s)
 {
 	int		i;

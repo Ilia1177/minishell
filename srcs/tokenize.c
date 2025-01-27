@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 10:45:01 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 16:04:50 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,10 @@ t_token	*tokenize(char *input)
 	int		i;
 
 	if (!input)
-		return(NULL);
+		return (NULL);
 	tokens = ft_split_token(input);
 	print_args(tokens);
+	printf("\n");
 	i = 0;
 	head = make_token(tokens[i], CMD);
 	current_token = head;

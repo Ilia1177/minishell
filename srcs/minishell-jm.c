@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   minishell-jm.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/25 19:47:13 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/27 16:03:43 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	run_shell(t_data *data)
 			free(tmp);
 		}
 		data->user_input = listen_to_user(data->prompt);
+		syntax_error(data->user_input);
 		if (!data->user_input || !ft_strcmp(data->user_input, ""))	// doesnt work either...
 		{
 			free(data->user_input);
@@ -57,16 +58,17 @@ int	run_shell(t_data *data)
 			ft_putendl_fd("exit", 2);
 			exit(0);
 		}
-		printf("\n\n----------- List of token is : -");
+		//printf("\n\n----------- List of token is : -");
 		data->token_list = tokenize(data->user_input);
+		
 		print_list(data->token_list);
-		printf("\n\n----------- DEBUG TREE ---------");
+		//printf("\n\n----------- DEBUG TREE ---------");
 		cpy = data->token_list;
 		data->tree = build_tree(&cpy, CMD);
-		print_tree(data->tree, 0); // print the tree for debug
-		printf("\n\n----------- EXECUTION ----------");
-		execute_tree(data); 
-		free_minishell(data);
+		//print_tree(data->tree, 0); // print the tree for debug
+		//printf("\n\n----------- EXECUTION ----------");
+		//execute_tree(data); 
+		//free_minishell(data);
 		init_shell(data);
 	}
 }
