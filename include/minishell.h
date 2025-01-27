@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 18:47:02 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 20:55:56 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define MINISHELL_H
 
 # include "libft.h"
+# include "get_next_line.h"
+# include "ft_printf.h"
 # include <stdio.h>
 # include <signal.h>
 # include <fcntl.h>
@@ -175,4 +177,8 @@ void		free_cmd(t_cmd *cmd);
 
 // Builtins
 int			change_dir(t_data *data, char *path);
+
+//heredoc.c
+void	get_here_doc(char *lim);
+char	*get_expand(char **env, char *str);
 #endif

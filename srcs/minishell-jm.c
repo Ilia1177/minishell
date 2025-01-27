@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 17:06:03 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 20:58:07 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	run_shell(t_data *data)
 		if (!data->user_input || !ft_strcmp(data->user_input, ""))	// doesnt work either...
 		{
 			free(data->user_input);
+			/* if (ft_strnstr(data->user_input,"<<", ft_strlen(data->user_input))) */
+			/* 	get_here_doc("end"); */
 			free(data->prompt);
 			ft_putendl_fd("exit", 2);
 			exit(0);

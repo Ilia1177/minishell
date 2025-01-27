@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 16:12:11 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 21:03:47 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	get_redir(t_token *token)
 	{
 		if (!ft_strncmp(str, "<<", 2))
 			//str += catch_heredoc(token, str);
-			token->heredoc = ft_strdup("oui");
+			token->heredoc = ft_strdup("heredoc");
 		else if (!ft_strncmp(str, ">>", 2))
 			str += catch_append(token, str);
 	   	else if (!ft_strncmp(str, "<", 1) || !ft_strncmp(str, ">", 1))
