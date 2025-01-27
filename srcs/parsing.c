@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/27 19:00:31 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 19:28:52 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,12 @@ void	split_args(t_token *token)
 	t_cmd	*cmd;
 	int		nb_args;
 	int		i;
+	char *input;
+
 
 	if (token->type == CMD)
 	{
+		input = token->input;
 		i = 0;
 		cmd = malloc (sizeof(t_cmd));
 		if (!cmd)
@@ -81,18 +84,18 @@ void	split_args(t_token *token)
 			return ;
 		//cmd->args = NULL;
 		printf("args: %d", nb_args);
-		while (*token->input && i < nb_args)
+		while (*input && i < nb_args)
 		{
-			while (*token->input && is_space(*token->input) && !ft_isquote(*token->input))
-				token->input++;
-			cmd->args[i] = ft_calloc(arg_len(token->input)+1, sizeof(char));
+			while (*input && is_space(*input) && !ft_isquote(*input))
+				input++;
+			cmd->args[i] = ft_calloc(arg_len(input)+1, sizeof(char));
 			if (!cmd->args[i])
 			{
 				ft_free_bugsplit(cmd->args, i -1);
 				return ; 
 			}
-			ft_strlcpy(cmd->args[i], token->input, arg_len(token->input)+1);
-			token->input += arg_len(token->input);
+			ft_strlcpy(cmd->args[i], input, arg_len(input)+1);
+			input += arg_len(input);
 			i++;
 		}
 		/* cmd->args = ft_split(token->input, ' '); */
