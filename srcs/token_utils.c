@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:26:02 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/21 14:29:26 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/26 23:00:11 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ int	ft_issep(char c)
 			return (1);
 		sep++;
 	}
+	return (0);
+}
+
+int	is_space(char c)
+{
+		if ((c >= 9 && c <= 13) || c == ' ')
+		return (1);
 	return (0);
 }
 

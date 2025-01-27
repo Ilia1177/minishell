@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/25 14:53:58 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/27 00:36:10 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	split_args(t_token *token)
 	{
 		cmd->args = ft_split(token->input, ' ');
 		token->cmd = cmd;
-		printf("%s", token->cmd->args[0]);
 	}
 }
 

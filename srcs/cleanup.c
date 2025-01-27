@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/25 19:45:20 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/27 11:09:48 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	free_minishell(t_data *data)
 	free_tree(data->tree);
 	free_tabstr(data->paths);
 	free_elem(data->token_list, LST);
-	rl_clear_history(); 				//doesnt work, dont know why (why??)
+	//rl_clear_history(); 				//doesnt work, dont know why (why??)
 }
 
 void	free_tabstr(char **tabstr)

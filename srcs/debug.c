@@ -26,10 +26,9 @@ void	print_list(t_token *list)
 	int	i;
 
 	i = 0;
-	printf("list = \n");
 	while(list)
 	{
-		printf("input %d = %6s, type = %d", i++, list->input, list->type);
+		printf("TOKEN nº%d : input = %6s, type = %d", i++, list->input, list->type);
 		if (list->type == CMD)
 		{
 			printf (", args = ");
@@ -38,6 +37,7 @@ void	print_list(t_token *list)
 		}
 		else
 			printf("\n");
+		printf("in_rdir = %6s, out_rdir = %6s, append = %6s, heredoc = %6s\n\n", list->in_rdir, list->out_rdir, list->append, list->heredoc);
 		list = list->next;
 	}
 }
