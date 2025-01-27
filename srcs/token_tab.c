@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/27 16:03:01 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:46:40 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,14 @@ int	ft_nbword(const char *s)
 		{
 			++i;
 			if (ft_isquote(s[i]))
+			{
 				ft_skip_quote(&s[i], &i);
+				/* if (s[i]) */
+				/* 	i++; */
+			}
 		}
 	}
+
 	return (nb_word);
 }
 
@@ -80,7 +85,7 @@ static size_t	ft_wordlen(const char *s)
 	{
 		while (s[strlen] && !ft_issep(s[strlen]))
 		{
-			if (ft_isquote(s[strlen]) && s[++strlen])
+			if (ft_isquote(s[strlen]))
 				ft_skip_quote(&s[strlen], &strlen);
 			if (s[strlen])
 				strlen++;
@@ -89,7 +94,7 @@ static size_t	ft_wordlen(const char *s)
 	return (strlen);
 }
 
-static void	ft_free_bugsplit(char **str, int i)
+void	ft_free_bugsplit(char **str, int i)
 {
 	while (i >= 0)
 	{
@@ -99,7 +104,7 @@ static void	ft_free_bugsplit(char **str, int i)
 	free(str);
 }
 /* this function split the input of the user
- * in token with coud be ;
+ * in token which could be ;
  * --a command
  * --a operator
  * --a paremthesis*/
@@ -108,6 +113,7 @@ char	**ft_split_token(char const *s)
 	int		i;
 	char	**str;
 	int		nb_word;
+	int 	world_len;
 
 	if (!s)
 		return (NULL);
@@ -118,6 +124,7 @@ char	**ft_split_token(char const *s)
 	i = 0;
 	while (*s && i < nb_word)
 	{
+		world_len = ft_wordlen(s);
 		str[i] = (char *) ft_calloc(ft_wordlen(s) + 1, sizeof(char));
 		if (!str[i])
 		{

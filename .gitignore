@@ -4,3 +4,6 @@
 *.nfs*
 minishell
 libft/libft.a
+infile*
+out*
+jm

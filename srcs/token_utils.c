@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:26:02 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/27 16:04:17 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 17:39:08 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,14 @@ int	ft_isquote(char c)
 		quote++;
 	}
 	return (0);
+}
+
+int	ft_len_until_quote(char *str)
+{
+	int	strlen;
+
+	strlen = 0;
+	while (str[strlen] && !ft_isquote(str[strlen]))
+		strlen++;
+	return (strlen);
 }

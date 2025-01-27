@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 15:35:57 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/27 17:37:33 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,21 @@ int	run_shell(t_data *data)
 			ft_putendl_fd("exit", 2);
 			exit(0);
 		}
-		printf("\n\n----------- List of tokens is :\n");
-		data->token_list = tokenize(data->user_input);
-		print_list(data->token_list);
-		printf("\n\n----------- DEBUG TREE --------\n");
-		cpy = data->token_list;
-		data->tree = build_tree(&cpy, CMD);
-		print_tree(data->tree, 0); // print the tree for debug
-		printf("\n\n----------- EXECUTION ---------\n");
-		execute_tree(data); 
-		printf("\n\n----- AFTER EXECUTION ---------\n");
-		print_tree(data->tree, 0);
-		free_minishell(data);
+		if (!syntax_error(data->user_input))
+		{
+			printf("\n\n----------- List of tokens is :\n");
+			data->token_list = tokenize(data->user_input);
+			print_list(data->token_list);
+			printf("\n\n----------- DEBUG TREE --------\n");
+			cpy = data->token_list;
+			data->tree = build_tree(&cpy, CMD);
+			print_tree(data->tree, 0); // print the tree for debug
+			printf("\n\n----------- EXECUTION ---------\n");
+			execute_tree(data); 
+			printf("\n\n----- AFTER EXECUTION ---------\n");
+			print_tree(data->tree, 0);
+			free_minishell(data);
+		}
 		init_shell(data);
 	}
 }

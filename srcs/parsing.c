@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/27 16:11:12 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 19:00:31 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,76 @@ void	ft_lstiter_token(t_token *lst, void (*f)(t_token *))
 	}
 }
 
+int arg_len(char *str)
+{
+	int len;
+
+	len = 0;
+	while (str[len] && !is_space(str[len]))
+	{
+		if (ft_isquote(str[len]))
+			ft_skip_quote(&str[len], &len);
+		if (str[len])
+			len++;
+	}
+	return (len);
+}
+
+int ft_nb_args(const char *s)
+{
+	int	nb_args;
+	int	i;
+
+	nb_args = 0;
+	i = 0;
+
+	while (s[i])
+	{
+		if (i == 0 && !is_space(s[i]))
+			nb_args++;
+		else if (!is_space(s[i]) && is_space(s[i - 1]))
+			nb_args++;
+		while (ft_isquote(s[i]))
+			ft_skip_quote(&s[i], &i);
+		if (s[i])
+			i++;
+	}
+	return (nb_args);
+}
+
 void	split_args(t_token *token)
 {
 	t_cmd	*cmd;
+	int		nb_args;
+	int		i;
 
 	if (token->type == CMD)
 	{
+		i = 0;
 		cmd = malloc (sizeof(t_cmd));
 		if (!cmd)
 			return ;
-		cmd->args = NULL;
-		cmd->args = ft_split(token->input, ' ');
+		nb_args = ft_nb_args(token->input);
+		cmd->args = ft_calloc(nb_args + 1, sizeof(char *));
+		if (!cmd->args)
+			return ;
+		//cmd->args = NULL;
+		printf("args: %d", nb_args);
+		while (*token->input && i < nb_args)
+		{
+			while (*token->input && is_space(*token->input) && !ft_isquote(*token->input))
+				token->input++;
+			cmd->args[i] = ft_calloc(arg_len(token->input)+1, sizeof(char));
+			if (!cmd->args[i])
+			{
+				ft_free_bugsplit(cmd->args, i -1);
+				return ; 
+			}
+			ft_strlcpy(cmd->args[i], token->input, arg_len(token->input)+1);
+			token->input += arg_len(token->input);
+			i++;
+		}
+		/* cmd->args = ft_split(token->input, ' '); */
 		token->cmd = cmd;
 	}
 }
@@ -49,8 +108,6 @@ void	type_token(t_token *token)
 		token->type = OPERATOR;
 	else if (!ft_strcmp(token->input, "&&"))
 		token->type = OPERATOR;
-	else if (!ft_strcmp(token->input, "$"))
-		token->type = EXPAND;
 	else if (!ft_strcmp(token->input, "("))
 		token->type = OPERATOR;
 	else if (!ft_strcmp(token->input, ")"))
@@ -80,16 +137,6 @@ static int check_closing_quote(char *str)
 			str++;
 	}
 	return (close);
-}
-
-int	ft_len_until_quote(char *str)
-{
-	int	strlen;
-
-	strlen = 0;
-	while (str[strlen] && !ft_isquote(str[strlen]))
-		strlen++;
-	return (strlen);
 }
 
 int	syntax_error(char *str)

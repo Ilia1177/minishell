@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 16:47:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/27 14:36:58 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/27 17:43:37 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,11 @@ void	ft_lst_split_dup(t_token **lst, int (*f)(char *, char *, char *), char *cmp
 	}
 }
 
-int ft_count_dup(char *s1 , char *s2 , char *dup)
+int	ft_count_dup(char *s1 , char *s2 , char *dup)
 {
 	int	i;
 	int	j;
 	int	count;
-
 
 	count = 0;
 	i = 0;

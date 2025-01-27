@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 16:10:09 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 18:47:02 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ typedef enum e_type
 	CMD,
 	OPERATOR,
 	PIPE,
-	EXPAND
 }	t_type;
 
 typedef enum e_mem_type
@@ -116,29 +115,28 @@ int			register_signals(void);
 void		handle_signals(int sig, siginfo_t *info, void *ctx);
 int			listen_to_signal(t_data *data);
 
-
 //tokenize.c
 t_token		*tokenize(char *prompt);
 t_token		*make_token(char *str, t_type type);
 int			ft_nbword(const char *s);
 char		**ft_split_token(char const *s);
 
-void	get_redir(t_token *token);
-int	true_wordlen(char *str);
-int	catch_rdir(t_token *token, char *str);
-int	catch_append(t_token *token, char *str);
-int	catch_heredoc(t_token *token, char *str);
+void		get_redir(t_token *token);
+int			true_wordlen(char *str);
+int			catch_rdir(t_token *token, char *str);
+int			catch_append(t_token *token, char *str);
+int			catch_heredoc(t_token *token, char *str);
 //exec.c 
 int			execute_tree(t_data *data);
-int	connect_node(t_bintree *a, t_bintree *b);
-int	execute_node(t_bintree *node, t_data *data);
+int			connect_node(t_bintree *a, t_bintree *b);
+int			execute_node(t_bintree *node, t_data *data);
 
 //exec_utils.c
 char		**get_paths(char **env);
 char		*get_full_path(char **paths, char *str);
-int			build_cmd(t_bintree *node, t_data  *data);
-char	**tab_dup(char **tab);
-t_cmd	*cmddup(t_cmd *cmd);
+int			build_cmd(t_bintree *node, t_data *data);
+char		**tab_dup(char **tab);
+t_cmd		*cmddup(t_cmd *cmd);
 
 // DEBUG FUNCTION
 void		print_list(t_token *list);
@@ -149,15 +147,18 @@ void		print_tree(t_bintree *root, int space);
 void		ft_lstiter_token(t_token *lst, void (*f)(t_token *));
 void		type_token(t_token *token);
 void		split_args(t_token *token);
-int 		syntax_error(char *str);
+int			syntax_error(char *str);
 
 //token_utils.c
 int			ft_issep(char c);
 int			ft_isquote(char c);
 int			is_space(char c);
+int			ft_len_until_quote(char *str);
 
 //token_tab.c
 void		ft_skip_quote(const char *s, int *index);
+int			ft_nbword(const char *s);
+void		ft_free_bugsplit(char **str, int i);
 
 //lst_utils.c
 void		ft_lstadd_front_mem(t_mem **lst, t_mem *new);
@@ -165,13 +166,13 @@ t_mem		*ft_lstnew_mem(void *elem, t_mem_type type);
 void		ft_lstdelone_token(t_token *lst, void (*del)(void*));
 void		ft_lstclear_token(t_token **lst, void (*del)(void*));
 void		ft_lst_split_dup(t_token **lst, int (*f)(), char *cmp);
-int			ft_count_dup(char *s1 , char *s2 , char *dup);
+int			ft_count_dup(char *s1, char *s2, char *dup);
 
 //cleanup.c
 void		free_elem(void *elem, t_mem_type mem);
 void		free_tabstr(char **tabstr);
-void	free_cmd(t_cmd *cmd);
+void		free_cmd(t_cmd *cmd);
 
 // Builtins
-int change_dir(t_data *data, char *path);
+int			change_dir(t_data *data, char *path);
 #endif

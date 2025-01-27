@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 16:03:43 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 17:06:03 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,12 @@ int	run_shell(t_data *data)
 		}
 		//printf("\n\n----------- List of token is : -");
 		data->token_list = tokenize(data->user_input);
-		
+		printf( "nb_word -> :%d\n", ft_nbword(data->user_input) );
+
 		print_list(data->token_list);
 		//printf("\n\n----------- DEBUG TREE ---------");
 		cpy = data->token_list;
-		data->tree = build_tree(&cpy, CMD);
+		//data->tree = build_tree(&cpy, CMD);
 		//print_tree(data->tree, 0); // print the tree for debug
 		//printf("\n\n----------- EXECUTION ----------");
 		//execute_tree(data); 
@@ -84,6 +85,6 @@ int	main(int ac, char **argv, char **envp)
 	data.envp = envp;
 	init_shell(&data);
 	run_shell(&data);
-	free_minishell(&data);
+	//free_minishell(&data);
 	return (signal_caught);
 }
