@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 00:42:03 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/27 15:35:57 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ int	run_shell(t_data *data)
 		printf("caught input = %s\n", data->user_input);
 		if (!data->user_input || !ft_strcmp(data->user_input, ""))
 		{
-			free(data->user_input);
-			free(data->prompt);
+			free_minishell(data);
+			rl_clear_history();
 			ft_putendl_fd("exit", 2);
 			exit(0);
 		}
@@ -67,6 +67,8 @@ int	run_shell(t_data *data)
 		print_tree(data->tree, 0); // print the tree for debug
 		printf("\n\n----------- EXECUTION ---------\n");
 		execute_tree(data); 
+		printf("\n\n----- AFTER EXECUTION ---------\n");
+		print_tree(data->tree, 0);
 		free_minishell(data);
 		init_shell(data);
 	}
@@ -82,6 +84,7 @@ int	main(int ac, char **argv, char **envp)
 	register_signals();
 	data.envp = envp;
 	init_shell(&data);
+	//change_dir(&data, argv[1]);
 	run_shell(&data);
 	free_minishell(&data);
 	return (signal_caught);

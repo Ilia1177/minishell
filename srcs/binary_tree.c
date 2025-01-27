@@ -6,11 +6,31 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/25 17:05:26 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/27 12:08:41 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	redir_cpy(t_token *token, t_bintree *leaf)
+{
+	if (token->in_rdir)
+		leaf->in_rdir = ft_strdup(token->in_rdir);
+	else
+		leaf->in_rdir = NULL;
+	if (token->out_rdir)
+		leaf->out_rdir = ft_strdup(token->out_rdir);
+	else
+		leaf->out_rdir = NULL;
+	if (token->append)
+		leaf->append = ft_strdup(token->append);
+	else
+		leaf->append = NULL;
+	if (token->heredoc)
+		leaf->heredoc = ft_strdup(token->heredoc);
+	else
+		leaf->heredoc = NULL;
+}	
 
 t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 {
@@ -20,11 +40,12 @@ t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 	current_token = *token;
 	root = malloc(sizeof(t_bintree));
 	root->type = current_token->type;
-	root->content = ft_split(current_token->input, ' ');
+	root->input = ft_strdup(current_token->input);
 	if (current_token->type == CMD)
-		root->cmd = current_token->cmd;
-	root->rdir_out = NULL;
-	root->rdir_in = NULL;
+		root->cmd = cmddup(current_token->cmd);
+	else 
+		root->cmd = NULL;
+	redir_cpy(current_token, root);
 	root->left = left;
 	root->right = right;
 	current_token = current_token->next;

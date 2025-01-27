@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 16:47:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/23 17:49:36 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 14:36:58 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,15 @@ void	ft_lstdelone_token(t_token *lst, void (*del)(void*))
 	if (!lst || !del)
 		return ;
 	(*del)(lst->input);
+	(*del)(lst->in_rdir);
+	(*del)(lst->out_rdir);
+	(*del)(lst->append);
+	(*del)(lst->heredoc);
+	if (lst->cmd)
+	{
+		free_tabstr(lst->cmd->args);
+		free(lst->cmd);
+	}
 	free(lst);
 }
 

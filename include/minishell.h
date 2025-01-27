@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/26 22:55:16 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/27 15:13:26 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ typedef struct s_cmd
 	int		error;
 	char	*in;
 	char	*out;
-	int		pipe_in;
-	int		pipe_out;
 }	t_cmd;
 
 typedef struct s_token
@@ -64,25 +62,22 @@ typedef struct s_token
 	char			*in_rdir;
 	char			*out_rdir;
 	char			*heredoc;
-	//char			**content;
 	char			*input;
 	t_type			type;
 	t_cmd			*cmd;
-	//char			*in;
-	//char			*out;
-	//int				error;
 	struct s_token	*next;
 }	t_token;
 
 typedef struct s_bintree
 {
-	int					stdfd[3]; // standar input(0)/output(1)/tmp_fd(2)
+	int					stdfd[2]; // standar input(0)/output(1)/tmp_fd(2)
 	int					pipefd[2]; // pipefd
-	char				**content; // Malloc
 	t_cmd				*cmd;
 	char				*input;
-	char				*rdir_out;
-	char				*rdir_in;
+	char				*append;
+	char				*heredoc;
+	char				*out_rdir;
+	char				*in_rdir;
 	t_type				type;
 	struct s_bintree	*left;
 	struct s_bintree	*right;
@@ -137,12 +132,14 @@ int	catch_heredoc(t_token *token, char *str);
 int			execute_tree(t_data *data);
 int	connect_node(t_bintree *a, t_bintree *b);
 int	execute_node(t_bintree *node, t_data *data);
-int			build_cmd(t_bintree *node, t_data  *data);
-char		*get_full_path(char **paths, char *str);
-char		**get_paths(char **env);
 
 //exec_utils.c
+char		**get_paths(char **env);
+char		*get_full_path(char **paths, char *str);
+int			build_cmd(t_bintree *node, t_data  *data);
 char	**tab_dup(char **tab);
+t_cmd	*cmddup(t_cmd *cmd);
+
 // DEBUG FUNCTION
 void		print_list(t_token *list);
 void		print_args(char **list);
@@ -170,4 +167,8 @@ int			ft_count_dup(char *s1 , char *s2 , char *dup);
 //cleanup.c
 void		free_elem(void *elem, t_mem_type mem);
 void		free_tabstr(char **tabstr);
+void	free_cmd(t_cmd *cmd);
+
+// Builtins
+int change_dir(t_data *data, char *path);
 #endif

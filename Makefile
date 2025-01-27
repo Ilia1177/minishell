@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/27 10:23:33 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/01/27 15:17:32 by npolack          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRCS		=	binary_tree.c\
 				exec_utils.c\
 				exec.c\
 				signals.c\
+				builtin_cd.c\
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 

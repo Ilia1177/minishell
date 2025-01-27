@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 10:45:01 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/27 13:13:39 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ t_token	*tokenize(char *input)
 		return(NULL);
 	tokens = ft_split_token(input);
 	print_args(tokens);
+	printf("\n");
 	i = 0;
 	head = make_token(tokens[i], CMD);
 	current_token = head;
@@ -85,7 +86,7 @@ int	true_wordlen(char *str)
 	int	len;
 
 	len = 0;
-	while (str[len] && !is_space(str[len]))
+	while (str[len] && !is_space(str[len]) && !ft_issep(str[len]))
 		len++;
 	return (len);
 }

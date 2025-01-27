@@ -3,3 +3,4 @@
 *.o
 *.nfs*
 minishell
+libft/libft.a
