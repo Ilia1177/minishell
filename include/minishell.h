@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 20:55:56 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/28 16:27:42 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,14 @@ typedef struct s_cmd
 {
 	char	**args;
 	int		error;
-	char	*in;
-	char	*out;
+	char	*append;
+	char	*in_rdir;
+	char	*out_rdir;
+	char	*heredoc;
 }	t_cmd;
 
 typedef struct s_token
 {
-	char			*append;
-	char			*in_rdir;
-	char			*out_rdir;
-	char			*heredoc;
 	char			*input;
 	t_type			type;
 	t_cmd			*cmd;
@@ -122,6 +120,7 @@ t_token		*tokenize(char *prompt);
 t_token		*make_token(char *str, t_type type);
 int			ft_nbword(const char *s);
 char		**ft_split_token(char const *s);
+t_cmd		*make_cmd();
 
 void		get_redir(t_token *token);
 int			true_wordlen(char *str);
@@ -155,7 +154,7 @@ int			syntax_error(char *str);
 int			ft_issep(char c);
 int			ft_isquote(char c);
 int			is_space(char c);
-int			ft_len_until_quote(char *str);
+/* int			ft_len_until_quote(char *str); */
 
 //token_tab.c
 void		ft_skip_quote(const char *s, int *index);

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 20:58:07 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:51:48 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	init_shell(t_data *data)
 
 int	run_shell(t_data *data)
 {
-	t_token		*cpy;
+	//t_token		*cpy;
 	char		wd[1024];
 	char		*tmp;
 
@@ -50,7 +50,7 @@ int	run_shell(t_data *data)
 			free(tmp);
 		}
 		data->user_input = listen_to_user(data->prompt);
-		syntax_error(data->user_input);
+	//	syntax_error(data->user_input);
 		if (!data->user_input || !ft_strcmp(data->user_input, ""))	// doesnt work either...
 		{
 			free(data->user_input);
@@ -62,11 +62,11 @@ int	run_shell(t_data *data)
 		}
 		//printf("\n\n----------- List of token is : -");
 		data->token_list = tokenize(data->user_input);
-		printf( "nb_word -> :%d\n", ft_nbword(data->user_input) );
+		//printf( "nb_word -> :%d\n", ft_nbword(data->user_input) );
 
 		print_list(data->token_list);
 		//printf("\n\n----------- DEBUG TREE ---------");
-		cpy = data->token_list;
+		//cpy = data->token_list;
 		//data->tree = build_tree(&cpy, CMD);
 		//print_tree(data->tree, 0); // print the tree for debug
 		//printf("\n\n----------- EXECUTION ----------");

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 12:08:41 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/28 16:47:38 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,20 @@
 
 void	redir_cpy(t_token *token, t_bintree *leaf)
 {
-	if (token->in_rdir)
-		leaf->in_rdir = ft_strdup(token->in_rdir);
+	if (token->cmd->in_rdir)
+		leaf->in_rdir = ft_strdup(token->cmd->in_rdir);
 	else
 		leaf->in_rdir = NULL;
-	if (token->out_rdir)
-		leaf->out_rdir = ft_strdup(token->out_rdir);
+	if (token->cmd->out_rdir)
+		leaf->out_rdir = ft_strdup(token->cmd->out_rdir);
 	else
 		leaf->out_rdir = NULL;
-	if (token->append)
-		leaf->append = ft_strdup(token->append);
+	if (token->cmd->append)
+		leaf->append = ft_strdup(token->cmd->append);
 	else
 		leaf->append = NULL;
-	if (token->heredoc)
-		leaf->heredoc = ft_strdup(token->heredoc);
+	if (token->cmd->heredoc)
+		leaf->heredoc = ft_strdup(token->cmd->heredoc);
 	else
 		leaf->heredoc = NULL;
 }	

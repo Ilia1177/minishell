@@ -6,11 +6,26 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 21:03:47 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/28 16:38:32 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_cmd	*make_cmd()
+{
+	t_cmd	*cmd;
+	
+	cmd = malloc (sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
+	//cmd->args = NULL;
+	cmd->in_rdir = NULL;	//added by nil
+	cmd->out_rdir = NULL;	//added by nil
+	cmd->append = NULL;	//added by nil
+	cmd->heredoc = NULL;	//added by nil
+	return (cmd);
+}
 
 // make a token 
 t_token	*make_token(char *str, t_type type)
@@ -18,14 +33,12 @@ t_token	*make_token(char *str, t_type type)
 	t_token	*token;
 
 	token = malloc(sizeof(t_token));
+	if (!token)
+		return (NULL);
 	token->input = ft_strdup(str);
 	token->type = type;
 	token->cmd = NULL;
 	token->next = NULL;
-	token->in_rdir = NULL;	//added by nil
-	token->out_rdir = NULL;	//added by nil
-	token->append = NULL;	//added by nil
-	token->heredoc = NULL;	//added by nil
 	return (token);
 }
 
@@ -64,6 +77,7 @@ void	get_redir(t_token *token)
 {
 	char	*str;
 
+
 	str = token->input;
 	if (!str)
 		return ;
@@ -71,7 +85,7 @@ void	get_redir(t_token *token)
 	{
 		if (!ft_strncmp(str, "<<", 2))
 			//str += catch_heredoc(token, str);
-			token->heredoc = ft_strdup("heredoc");
+			token->cmd->heredoc = ft_strdup("heredoc");
 		else if (!ft_strncmp(str, ">>", 2))
 			str += catch_append(token, str);
 	   	else if (!ft_strncmp(str, "<", 1) || !ft_strncmp(str, ">", 1))
@@ -105,9 +119,9 @@ int	catch_rdir(t_token *token, char *str)
 	name = malloc(sizeof(char) * len + 1);
 	ft_strlcpy(name, str + i, len + 1);
 	if (!ft_strncmp(str, ">", 1))
-		token->out_rdir = name;
+		token->cmd->out_rdir = name;
 	else if (!ft_strncmp(str, "<", 1))
-		token->in_rdir = name;
+		token->cmd->in_rdir = name;
 	ft_memset(str, ' ', len + i);
 	return (len + i);
 }
@@ -125,7 +139,7 @@ int	catch_append(t_token *token, char *str)
 	len = true_wordlen(str + i);
 	name = malloc(sizeof(char) * len + 1);
 	ft_strlcpy(name, str + i, len + 1);
-	token->append = name;
+	token->cmd->append = name;
 	ft_memset(str, ' ', len + i);
 	return (len + i);
 }
@@ -141,6 +155,6 @@ int	catch_heredoc(t_token *token, char *str)
 		i++;
 	name = malloc(sizeof(char) * true_wordlen(str + i) + 1);
 	ft_strlcpy(name, str, true_wordlen(str + i) + 1);
-	token->heredoc = name;
+	token->cmd->heredoc = name;
 	return (i);
 }
