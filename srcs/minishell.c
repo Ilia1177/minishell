@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/28 20:50:11 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/28 20:58:44 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	run_shell(t_data *data, char **envp)
 		printf("caught input = %s\n", data->user_input);
 		if (!data->user_input || !ft_strcmp(data->user_input, ""))
 		{
-			free_tabstr(data->env);
+			free_tabstr(data->envp);
 			free_minishell(data);
 			rl_clear_history();
 			ft_putendl_fd("exit", 2);
