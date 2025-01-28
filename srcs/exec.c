@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 14:41:51 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/28 20:29:55 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,31 @@ int	redir(t_bintree *node)
 {
 	int	fd_in;
 	int	fd_out;
+	int i;
+	char *name;
+	t_type_rdir type;
 	
 	//heredoc ??
-	if (node->out_rdir || node->append)
+	i = -1;
+	while (node->cmd->rdir[++i].name)
 	{
-		if (node->append)
-			fd_out = open(node->append, O_CREAT | O_WRONLY | O_APPEND, 0777);
-		else
-			fd_out = open(node->out_rdir, O_CREAT | O_WRONLY | O_TRUNC, 0777);
-		dup2(fd_out, node->stdfd[OUT]);
-		close(fd_out);
-	}
-	if (node->in_rdir)
-	{
-		fd_in = open(node->in_rdir, O_RDONLY, 0777);
-		dup2(fd_in, node->stdfd[IN]);
-		close(fd_in);
+		type = node->cmd->rdir[i].type;
+		name = node->cmd->rdir[i].name;
+		if (type == R_OUT || type == APPEND)
+		{
+			if (type == APPEND)
+				fd_out = open(name, O_CREAT | O_WRONLY | O_APPEND, 0777);
+			else
+				fd_out = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+			dup2(fd_out, node->stdfd[OUT]);
+			close(fd_out);
+		}
+		if (type == R_IN)
+		{
+			fd_in = open(name, O_RDONLY, 0777);
+			dup2(fd_in, node->stdfd[IN]);
+			close(fd_in);
+		}
 	}
 	return (0);
 }

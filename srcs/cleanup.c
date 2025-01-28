@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/27 14:38:19 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/28 20:09:43 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ void	free_leaf(t_bintree *leaf)
 	if (!leaf)
 		return ;
 	i = -1;
-	free(leaf->input);
-	free(leaf->in_rdir);
-	free(leaf->out_rdir);
-	free(leaf->append);
-	free(leaf->heredoc);
+	/* free(leaf->input); */
+	/* free(leaf->in_rdir); */
+	/* free(leaf->out_rdir); */
+	/* free(leaf->append); */
+	/* free(leaf->heredoc); */
 	free_cmd(leaf->cmd);
 	free(leaf);
 }

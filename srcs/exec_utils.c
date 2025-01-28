@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/01/27 13:29:03 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/28 20:13:26 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,29 @@ char	*get_full_path(char **paths, char *str)
 
 t_cmd	*cmddup(t_cmd *cmd)
 {
-	t_cmd	*new;
+	t_cmd	*new_cmd;
+	t_rdir	*new_rdir;
+	int		i;
 
-	new = malloc(sizeof(t_cmd));
-	new->args = tab_dup(cmd->args);
-	return (new);
+	new_cmd = malloc(sizeof(t_cmd));
+	new_cmd->args = tab_dup(cmd->args);
+	i = 0;
+	if (cmd->rdir)
+	{
+		while (cmd->rdir[i].name)
+			i++;
+		new_rdir = malloc(sizeof(t_cmd)* (i + 1));
+		if (!new_rdir)
+			return (NULL);
+		i = 0;
+		while (cmd->rdir[i].name)
+		{
+			new_cmd->rdir[i] = cmd->rdir[i];
+			i++;
+		}
+		new_cmd->rdir[i].name = NULL;
+	}
+	return (new_cmd);
 }
 
 int	build_cmd(t_bintree *node, t_data *data)

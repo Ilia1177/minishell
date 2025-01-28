@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/28 16:27:42 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:36:46 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,14 @@ typedef enum e_mem_type
 	TREE
 }	t_mem_type;
 
+typedef enum e_type_rdir
+{
+	R_IN,
+	R_OUT,
+	APPEND,
+	HEREDOC
+}	t_type_rdir;
+
 typedef struct s_mem
 {
 	void			*elem;
@@ -49,14 +57,17 @@ typedef struct s_mem
 	struct s_mem	*next;
 }	t_mem;
 
+typedef struct s_rdir
+{
+	char		*name;
+	t_type_rdir	type;	
+}	t_rdir;
+
 typedef struct s_cmd
 {
 	char	**args;
+	t_rdir	*rdir;
 	int		error;
-	char	*append;
-	char	*in_rdir;
-	char	*out_rdir;
-	char	*heredoc;
 }	t_cmd;
 
 typedef struct s_token
@@ -73,10 +84,10 @@ typedef struct s_bintree
 	int					pipefd[2]; // pipefd
 	t_cmd				*cmd;
 	char				*input;
-	char				*append;
-	char				*heredoc;
-	char				*out_rdir;
-	char				*in_rdir;
+	/* char				*append; */
+	/* char				*heredoc; */
+	/* char				*out_rdir; */
+	/* char				*in_rdir; */
 	t_type				type;
 	struct s_bintree	*left;
 	struct s_bintree	*right;
@@ -124,7 +135,8 @@ t_cmd		*make_cmd();
 
 void		get_redir(t_token *token);
 int			true_wordlen(char *str);
-int			catch_rdir(t_token *token, char *str);
+/* int			catch_rdir(t_token *token, char *str); */
+int			catch_rdir(t_rdir	*rdir, char *str, t_type_rdir type, int num_rdir);
 int			catch_append(t_token *token, char *str);
 int			catch_heredoc(t_token *token, char *str);
 //exec.c 

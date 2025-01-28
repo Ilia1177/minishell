@@ -6,31 +6,32 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/28 16:47:38 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:44:46 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	redir_cpy(t_token *token, t_bintree *leaf)
-{
-	if (token->cmd->in_rdir)
-		leaf->in_rdir = ft_strdup(token->cmd->in_rdir);
-	else
-		leaf->in_rdir = NULL;
-	if (token->cmd->out_rdir)
-		leaf->out_rdir = ft_strdup(token->cmd->out_rdir);
-	else
-		leaf->out_rdir = NULL;
-	if (token->cmd->append)
-		leaf->append = ft_strdup(token->cmd->append);
-	else
-		leaf->append = NULL;
-	if (token->cmd->heredoc)
-		leaf->heredoc = ft_strdup(token->cmd->heredoc);
-	else
-		leaf->heredoc = NULL;
-}	
+/* void	redir_cpy(t_token *token, t_bintree *leaf) */
+/* { */
+/* 	if (token->cmd->) */
+/* 	if (token->cmd->in_rdir) */
+/* 		leaf->in_rdir = ft_strdup(token->cmd->in_rdir); */
+/* 	else */
+/* 		leaf->in_rdir = NULL; */
+/* 	if (token->cmd->out_rdir) */
+/* 		leaf->out_rdir = ft_strdup(token->cmd->out_rdir); */
+/* 	else */
+/* 		leaf->out_rdir = NULL; */
+/* 	if (token->cmd->append) */
+/* 		leaf->append = ft_strdup(token->cmd->append); */
+/* 	else */
+/* 		leaf->append = NULL; */
+/* 	if (token->cmd->heredoc) */
+/* 		leaf->heredoc = ft_strdup(token->cmd->heredoc); */
+/* 	else */
+/* 		leaf->heredoc = NULL; */
+/* } */	
 
 t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 {
@@ -42,10 +43,11 @@ t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 	root->type = current_token->type;
 	root->input = ft_strdup(current_token->input);
 	if (current_token->type == CMD)
-		root->cmd = cmddup(current_token->cmd);
+		root->cmd = current_token->cmd;
+		/* root->cmd = cmddup(current_token->cmd); */
 	else 
 		root->cmd = NULL;
-	redir_cpy(current_token, root);
+	//redir_cpy(current_token, root);
 	root->left = left;
 	root->right = right;
 	current_token = current_token->next;
