@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/28 11:29:41 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/28 20:56:51 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,29 +26,27 @@ void	ft_lstiter_token(t_token *lst, void (*f)(t_token *))
 	}
 }
 
-int arg_len(char *str)
+int	arg_len(char *str)
 {
-	int len;
+	int	len;
 
 	len = 0;
-	while (str[len] && !is_space(str[len]))
+	while(ft_isquote(str[len]))
 	{
-		if (ft_isquote(str[len]))
-			ft_skip_quote(&str[len], &len);
-		if (str[len])
-			len++;
+		ft_skip_quote(&str[len], &len);
 	}
+	while (str[len] && !is_space(str[len]))
+			len++;
 	return (len);
 }
 
-int ft_nb_args(const char *s)
+int	ft_nb_args(const char *s)
 {
 	int	nb_args;
 	int	i;
 
 	nb_args = 0;
 	i = 0;
-
 	while (s[i])
 	{
 		if (i == 0 && !is_space(s[i]))
@@ -65,40 +63,36 @@ int ft_nb_args(const char *s)
 
 void	split_args(t_token *token)
 {
-	t_cmd	*cmd;
 	int		nb_args;
 	int		i;
-	char *input;
-
+	char	*input;
 
 	if (token->type == CMD)
 	{
 		input = token->input;
 		i = 0;
-		cmd = malloc (sizeof(t_cmd));
-		if (!cmd)
-			return ;
 		nb_args = ft_nb_args(token->input);
-		cmd->args = ft_calloc(nb_args + 1, sizeof(char *));
-		if (!cmd->args)
+		printf("\n|nb_args=%d|\n",nb_args);
+		token->cmd->args = ft_calloc(nb_args + 1, sizeof(char *));
+		if (!token->cmd->args)
 			return ;
 		//cmd->args = NULL;
 		while (*input && i < nb_args)
 		{
 			while (*input && is_space(*input) && !ft_isquote(*input))
 				input++;
-			cmd->args[i] = ft_calloc(arg_len(input)+1, sizeof(char));
-			if (!cmd->args[i])
+			token->cmd->args[i] = ft_calloc(arg_len(input) + 1, sizeof(char));
+			if (!token->cmd->args[i])
 			{
-				ft_free_bugsplit(cmd->args, i -1);
+				ft_free_bugsplit(token->cmd->args, i - 1);
 				return ; 
 			}
-			ft_strlcpy(cmd->args[i], input, arg_len(input)+1);
+			ft_strlcpy(token->cmd->args[i], input, arg_len(input) + 1);
 			input += arg_len(input);
 			i++;
 		}
 		/* cmd->args = ft_split(token->input, ' '); */
-		token->cmd = cmd;
+		//token->cmd = cmd;
 	}
 }
 
@@ -115,7 +109,10 @@ void	type_token(t_token *token)
 	else if (!ft_strcmp(token->input, ")"))
 		token->type = OPERATOR;
 	else
+	{
 		token->type = CMD;
+		token->cmd = make_cmd();
+	}
 }
 
 static int check_closing_quote(char *str)
@@ -141,9 +138,38 @@ static int check_closing_quote(char *str)
 	return (close);
 }
 
+/* int	syntax_error(char *str) */
+/* { */
+/* 	int	len; */
+/* 	int	i; */
+
+/* 	if (!check_closing_quote(str) || str[0] == '|' || str[0] == '&') */
+/* 	{ */
+/* 		printf("minishell: syntax error near unexpected token\n"); */
+/* 		return (1); */
+/* 	} */
+/* 	i = 0; */
+/* 	len = 0; */
+/* 	while (str[i]) */
+/* 	{ */
+/* 		if (ft_isquote(str[i])) */
+/* 			ft_skip_quote(&str[i], &i); */
+/* 		len = ft_len_until_quote(&str[i]); */
+/* 		if (ft_strnstr(&str[i], "&|", len) || ft_strnstr(&str[i], "|&", len) */
+/* 			|| ft_strnstr(&str[i], "|||", len) || ft_strnstr(&str[i], "<<<", len) */
+/* 			|| ft_strnstr(&str[i], ">>>", len)) */
+/* 		{ */
+/* 			printf("minishell: syntax error near unexpected token\n"); */
+/* 			return (1); */
+/* 		} */
+/* 		if (str[i]) */
+/* 			i++; */
+/* 	} */
+/* 	return (0); */
+/* } */
+
 int	syntax_error(char *str)
 {
-	int	len;
 	int	i;
 
 	if (!check_closing_quote(str) || str[0] == '|' || str[0] == '&')
@@ -152,14 +178,13 @@ int	syntax_error(char *str)
 		return (1);
 	}
 	i = 0;
-	len = 0;
 	while (str[i])
 	{
-		if (ft_isquote(str[i]))
-			ft_skip_quote(&str[i], &i);
-		len = ft_len_until_quote(&str[i]);
-		if (ft_strnstr(&str[i], "&|", len) || ft_strnstr(&str[i], "|&", len)
-			|| ft_strnstr(&str[i], "|||", len))
+		if (str[i] == '\"' || str[i] == '\'')
+			i += ft_strnlen(str, str[i]);
+		else if (!ft_strncmp(&str[i], "&|", 2) || !ft_strncmp(&str[i], "|&", 2)
+			|| !ft_strncmp(&str[i], "|||", 3) || !ft_strncmp(&str[i], "<<<", 3)
+			|| !ft_strncmp(&str[i], ">>>", 3))
 		{
 			printf("minishell: syntax error near unexpected token\n");
 			return (1);

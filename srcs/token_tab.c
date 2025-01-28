@@ -6,13 +6,16 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/27 18:46:40 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/28 13:03:18 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/* allows you to take into account what is between quote
- * one bloc between same quote */
+
+/* allows you to include what is between quote as a string
+ * one bloc between same quote
+ * i in is pos of first quote
+ * i out is pos of char the end quote*/
 void	ft_skip_quote(const char *s, int *index)
 {
 	int		i;
@@ -56,14 +59,9 @@ int	ft_nbword(const char *s)
 		{
 			++i;
 			if (ft_isquote(s[i]))
-			{
 				ft_skip_quote(&s[i], &i);
-				/* if (s[i]) */
-				/* 	i++; */
-			}
 		}
 	}
-
 	return (nb_word);
 }
 
@@ -103,6 +101,7 @@ void	ft_free_bugsplit(char **str, int i)
 	}
 	free(str);
 }
+
 /* this function split the input of the user
  * in token which could be ;
  * --a command
@@ -113,7 +112,6 @@ char	**ft_split_token(char const *s)
 	int		i;
 	char	**str;
 	int		nb_word;
-	int 	world_len;
 
 	if (!s)
 		return (NULL);
@@ -124,7 +122,6 @@ char	**ft_split_token(char const *s)
 	i = 0;
 	while (*s && i < nb_word)
 	{
-		world_len = ft_wordlen(s);
 		str[i] = (char *) ft_calloc(ft_wordlen(s) + 1, sizeof(char));
 		if (!str[i])
 		{

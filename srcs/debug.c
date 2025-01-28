@@ -37,7 +37,7 @@ void	print_list(t_token *list)
 		}
 		else
 			printf("\n");
-		printf("in_rdir = %6s, out_rdir = %6s, append = %6s, heredoc = %6s\n\n", list->in_rdir, list->out_rdir, list->append, list->heredoc);
+		/* printf("in_rdir = %6s, out_rdir = %6s, append = %6s, heredoc = %6s\n\n", list->cmd->in_rdir, list->cmd->out_rdir, list->cmd->append, list->cmd->heredoc); */
 		list = list->next;
 	}
 }
