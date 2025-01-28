@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 14:41:51 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/28 20:25:18 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,64 @@ void	child_process(t_bintree *node, t_data *data)
 	exit(127);
 }
 
+int	is_builtin(t_cmd *cmd)
+{
+	if (!ft_strcmp(cmd->args[0], "cd"))
+		return (1);
+	if (!ft_strcmp(cmd->args[0], "pwd"))
+		return (1);
+	if (!ft_strcmp(cmd->args[0], "export"))
+		return (1);
+	if (!ft_strcmp(cmd->args[0], "unset"))
+		return (1);
+	if (!ft_strcmp(cmd->args[0], "env"))
+		return (1);
+	if (!ft_strcmp(cmd->args[0], "exit"))
+		return (1);
+	if (!ft_strcmp(cmd->args[0], "echo"))
+		return (1);
+	return (0);
+}
+
+int	exec_builtin(t_bintree *node, t_data *data)
+{
+	ft_putstr_fd("exec builtins: ", 2);
+	ft_putendl_fd(node->cmd->args[0], 2);
+//	if (!ft_strcmp(node->cmd->args[0], "cd"))
+//		change_dir(node, data);
+	if (!ft_strcmp(node->cmd->args[0], "pwd"))
+		print_working_dir(node, data);
+	if (!ft_strcmp(node->cmd->args[0], "export"))
+		export(node, data);
+	if (!ft_strcmp(node->cmd->args[0], "env"))
+		print_env(node, data->envp, "");
+	/* if (!ft_strcmp(node->cmd->args[0], "unset")) */
+	/* 	unset(node, data); */
+	if (!ft_strcmp(node->cmd->args[0], "echo"))
+		echo(node, data);
+	if (!ft_strcmp(node->cmd->args[0], "exit"))
+	{
+		printf("exiting");
+		free_minishell(data);
+		exit(0);
+	}
+
+	return (0);
+}
+
 int	exec_cmd(t_bintree *node, t_data *data)
 {
 	int pid;
 	int exit_status;
 
 	redir(node);
-//	if (is_builtin(node->cmd))
-//		return (builtin(node->cmd));
+	if (is_builtin(node->cmd))
+	{
+		exit_status = exec_builtin(node, data);
+		close(node->stdfd[IN]);
+		close(node->stdfd[OUT]);
+		return (exit_status);
+	}
 	if (!build_cmd(node, data))
 		pid = fork();
 	else

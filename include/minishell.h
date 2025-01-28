@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 20:55:56 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:25:33 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,10 @@ typedef struct s_data
 extern int	signal_caught;
 
 //main.c
-void		init_shell(t_data *data);
+void		init_shell(t_data *data, char **envp);
 void		free_minishell(t_data *data);
 char		*listen_to_user(char *prompt);
-int			run_shell(t_data *data);
+int			run_shell(t_data *data, char **envp);
 
 //binary_tree.c
 t_bintree	*build_tree(t_token **start, int priority);
@@ -176,7 +176,11 @@ void		free_tabstr(char **tabstr);
 void		free_cmd(t_cmd *cmd);
 
 // Builtins
-int			change_dir(t_data *data, char *path);
+int			change_dir(t_cmd *cmd, t_data *data);
+int			echo(t_bintree *node, t_data *data);
+int			print_working_dir(t_bintree *node, t_data *data);
+int			print_env(t_bintree *node, char **envp, char *format);
+int			export(t_bintree *node, t_data *data); 
 
 //heredoc.c
 void	get_here_doc(char *lim);

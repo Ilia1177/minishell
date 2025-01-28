@@ -50,7 +50,7 @@ void	print_args(char **args)
 	i = 0;
 	while (args[i])
 	{
-		printf("\t%4s, ", args[i]);
+		printf("'%s', ", args[i]);
 		i++;
 	}
 }

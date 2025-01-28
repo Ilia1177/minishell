@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/27 19:28:52 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/28 11:29:41 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ void	split_args(t_token *token)
 		if (!cmd->args)
 			return ;
 		//cmd->args = NULL;
-		printf("args: %d", nb_args);
 		while (*input && i < nb_args)
 		{
 			while (*input && is_space(*input) && !ft_isquote(*input))

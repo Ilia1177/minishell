@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 09:36:13 by ilia              #+#    #+#             */
-/*   Updated: 2025/01/25 18:13:42 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/28 18:55:40 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,24 +53,24 @@ int	register_signals(void)
 	return (0);
 }
 
-int	listen_to_signal(t_data *data)
-{
-	if (signal_caught == SIGQUIT)
-	{
-		printf("signal %d heard\n", signal_caught);
-		printf("SIGQUIT received");
-		kill(0, SIGQUIT);
-		free_minishell(data);
-		exit(signal_caught);
-	}
-	else if (signal_caught == SIGINT)
-	{
-		printf("signal %d heard\n", signal_caught);
-		//rl_on_newline();
-		printf("SIGINT received");
-		free_minishell(data);
-		init_shell(data);
-		return (1);
-	}
-	return(0);
-}
+/* int	listen_to_signal(t_data *data) */
+/* { */
+/* 	if (signal_caught == SIGQUIT) */
+/* 	{ */
+/* 		printf("signal %d heard\n", signal_caught); */
+/* 		printf("SIGQUIT received"); */
+/* 		kill(0, SIGQUIT); */
+/* 		free_minishell(data); */
+/* 		exit(signal_caught); */
+/* 	} */
+/* 	else if (signal_caught == SIGINT) */
+/* 	{ */
+/* 		printf("signal %d heard\n", signal_caught); */
+/* 		//rl_on_newline(); */
+/* 		printf("SIGINT received"); */
+/* 		free_minishell(data); */
+/* 		init_shell(data); */
+/* 		return (1); */
+/* 	} */
+/* 	return(0); */
+/* } */

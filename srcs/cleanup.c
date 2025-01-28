@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/27 14:38:19 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/28 19:46:31 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	free_minishell(t_data *data)
 	free(data->user_input);
 	//close_all_fd(data->tree);			output error in valgrind (not a good idea ?)
 	free_tree(data->tree);
+	//free_tabstr(data->envp);
 	free_elem(data->token_list, LST);
 	free_elem(data->paths, D_TAB);
 }

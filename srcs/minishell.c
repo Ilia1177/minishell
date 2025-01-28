@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/27 17:37:33 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/28 20:50:11 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ char	*listen_to_user(char *prompt)
 	return (input);
 }
 
-void	init_shell(t_data *data)
+void	init_shell(t_data *data, char **envp)
 {
+	(void)envp;
 	rl_catch_signals = 0; // Disable readline's signal handling
 	signal_caught = 0;
 	data->tree = NULL;
@@ -34,7 +35,7 @@ void	init_shell(t_data *data)
 	data->user_input = NULL;
 }
 
-int	run_shell(t_data *data)
+int	run_shell(t_data *data, char **envp)
 {
 	t_token		*cpy;
 	char		wd[1024];
@@ -53,6 +54,7 @@ int	run_shell(t_data *data)
 		printf("caught input = %s\n", data->user_input);
 		if (!data->user_input || !ft_strcmp(data->user_input, ""))
 		{
+			free_tabstr(data->env);
 			free_minishell(data);
 			rl_clear_history();
 			ft_putendl_fd("exit", 2);
@@ -70,10 +72,9 @@ int	run_shell(t_data *data)
 			printf("\n\n----------- EXECUTION ---------\n");
 			execute_tree(data); 
 			printf("\n\n----- AFTER EXECUTION ---------\n");
-			print_tree(data->tree, 0);
 			free_minishell(data);
 		}
-		init_shell(data);
+		init_shell(data, envp);
 	}
 }
 
@@ -85,10 +86,10 @@ int	main(int ac, char **argv, char **envp)
 	if (ac > 1)
 		printf("minishell: ???\n");
 	register_signals();
-	data.envp = envp;
-	init_shell(&data);
+	data.envp = tab_dup(envp);
+	init_shell(&data, envp);
 	//change_dir(&data, argv[1]);
-	run_shell(&data);
+	run_shell(&data, envp);
 	free_minishell(&data);
 	return (signal_caught);
 }
