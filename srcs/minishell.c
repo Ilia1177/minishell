@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 19:12:47 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/29 21:11:03 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int	run_shell(t_data *data)
 		}
 		if (!syntax_error(data->user_input))
 		{
-			data->token_list = tokenize(data);
+			/* data->token_list = tokenize(data); */
+			tokenize(data);
 			cpy = data->token_list;
 			if (data->flag)
 			{
