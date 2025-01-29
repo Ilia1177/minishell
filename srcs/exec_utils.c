@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/01/28 20:13:26 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/29 10:48:57 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ char	*get_full_path(char **paths, char *str)
 	char	*tmp;
 
 	tmp = malloc(sizeof(char) * (ft_strnlen(str, ' ') + 1));
+	if (!tmp)
+		return (NULL);
 	i = -1;
 	while (++i < (int)ft_strnlen(str, ' '))
 		tmp[i] = str[i];
