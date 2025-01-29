@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/28 20:53:33 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/29 00:56:53 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,7 @@ void	free_minishell(t_data *data)
 	free(data->user_input);
 	//close_all_fd(data->tree);			output error in valgrind (not a good idea ?)
 	free_tree(data->tree);
-	//free_tabstr(data->envp);
-	free_elem(data->token_list, LST);
+	//ree_elem(data->token_list, LST);
 	free_elem(data->paths, D_TAB);
 }
 
@@ -58,16 +57,8 @@ void	free_elem(void *elem, t_mem_type mem)
 // free each node of the tree;
 void	free_leaf(t_bintree *leaf)
 {
-	int	i;
-
 	if (!leaf)
 		return ;
-	i = -1;
-	/* free(leaf->input); */
-	/* free(leaf->in_rdir); */
-	/* free(leaf->out_rdir); */
-	/* free(leaf->append); */
-	/* free(leaf->heredoc); */
 	free_cmd(leaf->cmd);
 	free(leaf);
 }
@@ -99,9 +90,17 @@ int	is_fd_open(int fd)
 
 void	free_cmd(t_cmd *cmd)
 {
+	int	i;
+
 	if (!cmd)
 		return ;
 	free_tabstr(cmd->args);
+	i = -1;
+	if (cmd->rdir)
+	{
+		while (cmd->rdir[++i].name)
+			free(cmd->rdir[i].name);
+	}
 	free(cmd);
 }
 

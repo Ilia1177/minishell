@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 09:36:13 by ilia              #+#    #+#             */
-/*   Updated: 2025/01/28 18:55:40 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/29 01:01:24 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,7 @@ void	handle_signals(int sig, siginfo_t *info, void *ctx)
 		rl_redisplay();         // Redisplay the prompt   
 	}
 	else if (sig == SIGQUIT)
-	{
-		rl_on_new_line();       // Inform readline to start a new line
-	}
+		return ;
 }
 
 int	register_signals(void)

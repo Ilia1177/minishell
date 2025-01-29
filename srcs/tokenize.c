@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/28 20:57:46 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/29 02:06:46 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ int ft_nb_rdir(char *str)
 		else
 			str++;
 	}
-	printf("\n-----nb redir:%d\n", nb_rdir);
 	return (nb_rdir);
 }
 
@@ -104,6 +103,11 @@ void	get_redir(t_token *token)
 	t_rdir	*rdir;
 	int		i;
 
+	if (token->type != CMD)
+	{
+		token->cmd = NULL;
+		return ;
+	}
 	str = token->input;
 	nb_rdir = 0;
 	nb_rdir = ft_nb_rdir(str);
@@ -134,7 +138,12 @@ int	true_wordlen(char *str)
 
 	len = 0;
 	while (str[len] && !is_space(str[len]) && !ft_issep(str[len]))
+	{
+		if (str[len] == '<' || str[len] == '>')
+			return (len);
 		len++;
+
+	}
 	return (len);
 }
 
@@ -152,14 +161,11 @@ int	catch_rdir(t_rdir	*rdir, char *str, t_type_rdir type, int num_rdir)
 		i++;
 	len = true_wordlen(str + i);
 	name = malloc(sizeof(char) * len + 1);
+	if (!name)
+		return (0);
 	ft_strlcpy(name, str + i, len + 1);
 	rdir[num_rdir].name = name;
 	rdir[num_rdir].type = type;
-
-	/* if (!ft_strncmp(str, ">", 1)) */
-	/* 	token->cmd->rdir->name = name; */
-	/* else if (!ft_strncmp(str, "<", 1)) */
-	/* 	token->cmd->rdir->name = name; */
 	ft_memset(str, ' ', len + i);
 	return (len + i);
 }
@@ -176,6 +182,8 @@ int	catch_append(t_token *token, char *str)
 		i++;
 	len = true_wordlen(str + i);
 	name = malloc(sizeof(char) * len + 1);
+	if (!name)
+		return (0);
 	ft_strlcpy(name, str + i, len + 1);
 	token->cmd->rdir->name = name;
 	ft_memset(str, ' ', len + i);
@@ -185,14 +193,32 @@ int	catch_append(t_token *token, char *str)
 // not tested
 int	catch_heredoc(t_token *token, char *str)
 {
+	char 	*stop;
 	char	*name;
+	char	*line;
 	int		i;
+	int		fd;
+	int		len;
 
 	i = 2;
 	while (is_space(str[i]))
 		i++;
-	name = malloc(sizeof(char) * true_wordlen(str + i) + 1);
-	ft_strlcpy(name, str, true_wordlen(str + i) + 1);
+	len = true_wordlen(str + i);
+	stop = malloc(sizeof(char) * len + 1);
+	if (!stop)
+		return (0);
+	ft_strlcpy(stop, str, len + 1);
+	line = NULL;
+	name = random_name(9);
+	fd = open(name, O_CREAT | O_WRONLY, 0777);
+	while (ft_strcmp(stop, line))
+	{
+		free(line);
+		line = readline(">");
+		ft_putendl_fd(line, fd);
+	}
+	free(line);
+	ft_memset(str, ' ', len + i);
 	token->cmd->rdir->name = name;
-	return (i);
+	return (len + i);
 }

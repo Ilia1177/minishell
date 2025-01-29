@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/28 20:56:51 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/28 23:43:49 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	split_args(t_token *token)
 		input = token->input;
 		i = 0;
 		nb_args = ft_nb_args(token->input);
-		printf("\n|nb_args=%d|\n",nb_args);
+		//printf("\n|nb_args=%d|\n",nb_args);
 		token->cmd->args = ft_calloc(nb_args + 1, sizeof(char *));
 		if (!token->cmd->args)
 			return ;

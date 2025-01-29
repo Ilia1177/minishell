@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/28 20:55:58 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/29 02:12:15 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,11 @@ int	is_builtin(t_cmd *cmd)
 
 int	exec_builtin(t_bintree *node, t_data *data)
 {
-	ft_putstr_fd("exec builtins: ", 2);
-	ft_putendl_fd(node->cmd->args[0], 2);
+	if (data->flag)
+	{
+		ft_putstr_fd("exec builtins: ", 2);
+		ft_putendl_fd(node->cmd->args[0], 2);
+	}
 //	if (!ft_strcmp(node->cmd->args[0], "cd"))
 //		change_dir(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "pwd"))
@@ -127,7 +130,8 @@ int	exec_cmd(t_bintree *node, t_data *data)
 	close(node->stdfd[OUT]);
 	waitpid(-1, &exit_status, 0);
 	data->status = WEXITSTATUS(exit_status);
-	printf("Exit status of %s is %d\n", node->input, exit_status);
+	if (data->flag)
+		printf("Exit status of %s is %d\n", node->input, exit_status);
 	return (exit_status);
 }
 

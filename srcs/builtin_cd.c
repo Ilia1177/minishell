@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 18:27:25 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/28 20:24:56 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/29 02:14:16 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	echo(t_bintree *node, t_data *data)
 	}
 	if (node->cmd->args[1] && !ft_strcmp(node->cmd->args[1], "-n"))
 		ft_printf(node->stdfd[OUT], "\n");
+	ft_printf(node->stdfd[OUT], "\n");
 	return (0);
 }
 
@@ -165,12 +166,28 @@ char	**set_env(char *name, char *value, char **old_envp)
 	return (new_env);
 }
 
+int	exist(char **envp, char *name)
+{
+	int i;
+
+	if (!envp || !name)
+		return (-1);
+	i = -1;
+	while (envp[++i])
+		if(!ft_strncmp(envp[i], name, ft_strlen(name)))
+			return (i);
+	return (-1);
+}
+	
+
 int	export(t_bintree *node, t_data *data)
-{ 
+{
+	char	*tmp;
 	char	*str;
 	int		j;
 	char	*name;
 	char	*value;
+	int		at_index;
 
 	j = 1;
 	if (!node->cmd->args[j])
@@ -182,7 +199,17 @@ int	export(t_bintree *node, t_data *data)
 		if (name)
 		{
 			value = catch_value(str);
-			data->envp = set_env(name, value, data->envp);
+			at_index = exist(data->envp, name);
+			if (at_index >= 0)
+			{
+				tmp = data->envp[at_index];
+				data->envp[at_index] = new_entry(name, value);
+				free(tmp);
+				j++;
+				continue ;
+			}
+			else
+				data->envp = set_env(name, value, data->envp);
 		}
 		j++;
 	}

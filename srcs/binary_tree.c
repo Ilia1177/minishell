@@ -6,51 +6,31 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/28 20:44:46 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/29 01:17:56 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/* void	redir_cpy(t_token *token, t_bintree *leaf) */
-/* { */
-/* 	if (token->cmd->) */
-/* 	if (token->cmd->in_rdir) */
-/* 		leaf->in_rdir = ft_strdup(token->cmd->in_rdir); */
-/* 	else */
-/* 		leaf->in_rdir = NULL; */
-/* 	if (token->cmd->out_rdir) */
-/* 		leaf->out_rdir = ft_strdup(token->cmd->out_rdir); */
-/* 	else */
-/* 		leaf->out_rdir = NULL; */
-/* 	if (token->cmd->append) */
-/* 		leaf->append = ft_strdup(token->cmd->append); */
-/* 	else */
-/* 		leaf->append = NULL; */
-/* 	if (token->cmd->heredoc) */
-/* 		leaf->heredoc = ft_strdup(token->cmd->heredoc); */
-/* 	else */
-/* 		leaf->heredoc = NULL; */
-/* } */	
-
 t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 {
 	t_bintree	*root;
 	t_token		*current_token;
+	t_token		*tmp;
 
 	current_token = *token;
 	root = malloc(sizeof(t_bintree));
 	root->type = current_token->type;
-	root->input = ft_strdup(current_token->input);
+	root->input = current_token->input;
 	if (current_token->type == CMD)
 		root->cmd = current_token->cmd;
-		/* root->cmd = cmddup(current_token->cmd); */
 	else 
 		root->cmd = NULL;
-	//redir_cpy(current_token, root);
 	root->left = left;
 	root->right = right;
+	tmp = current_token;
 	current_token = current_token->next;
+	free(tmp);
 	*token = current_token;
 	return (root);
 }
@@ -59,8 +39,10 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 {
 	t_token		*current_token;
 	t_bintree	*new_root;
+	t_token		*tmp;
 
 	current_token = *token;
+	tmp = current_token;
 	if (!current_token)
 		return (-1);
 	if (!ft_strcmp(current_token->input, "("))
@@ -70,12 +52,14 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 		*root = new_root;
 		*old_root = new_root;
 		*token = current_token;
+		ft_lstdelone_token(tmp, &free);
 		return (1);
 	}
 	else if (!ft_strcmp(current_token->input, ")"))
 	{
 		current_token = current_token->next;
 		*token = current_token;
+		ft_lstdelone_token(tmp, &free);
 		return (-1);
 	}
 	return (0);
