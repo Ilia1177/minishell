@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 20:53:11 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/29 21:15:32 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ t_token		*make_token(char *str, t_type type);
 int			ft_nbword(const char *s);
 char		**ft_split_token(char const *s);
 t_cmd		*make_cmd();
+void		unquote(t_token *token);
 
 /* void		get_redir(t_token *token); */
 void		get_redir(t_token *token, t_data *data);
@@ -158,6 +159,7 @@ t_cmd		*cmddup(t_cmd *cmd);
 
 // DEBUG FUNCTION
 void		print_list(t_token *list);
+void	print_rdir(t_token *token);
 void		print_args(char **list);
 void		print_tree(t_bintree *root, int space);
 

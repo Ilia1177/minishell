@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 21:00:17 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/29 21:23:30 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@ t_cmd	*make_cmd()
 		return (NULL);
 	cmd->args = NULL;
 	cmd->rdir = NULL;
-	/* cmd->in_rdir = NULL;	//added by nil */
-	/* cmd->out_rdir = NULL;	//added by nil */
-	/* cmd->append = NULL;	//added by nil */
-	/* cmd->heredoc = NULL;	//added by nil */
 	return (cmd);
 }
 
@@ -73,6 +69,32 @@ void	tokenize(t_data *data)
 	//return (head);
 }
 
+void unquote(t_token *token)
+{
+	char	*set;
+	int		i;
+	char	*str;
+
+	if (token->type != CMD)
+		return ;
+	i = 0;
+	while (token->cmd->args[i])
+	{
+		str = token->cmd->args[i];
+		if (*str == '\'' || *str == '\"')
+		{
+			if (*str == '\"')
+				set = "\"";
+			else if (*str == '\'')
+				set = "\'";
+			token->cmd->args[i] = ft_strtrim(str, set);
+			free(str);
+		}
+		i++;
+	}
+}
+
+
 int ft_nb_rdir(char *str)
 {
 	int	nb_rdir;
@@ -80,7 +102,12 @@ int ft_nb_rdir(char *str)
 	nb_rdir = 0;
 	while (*str)
 	{
-		if ((!ft_strncmp(str, "<<", 2)) ||(!ft_strncmp(str, ">>", 2)))
+		if (*str == '\"' || *str == '\'')
+		{
+			str += ft_strnlen(str + 1, *str);
+			str ++;
+		}
+		if ((!ft_strncmp(str, "<<", 2)) || (!ft_strncmp(str, ">>", 2)))
 		{
 			nb_rdir++;
 			str = str + 2;
@@ -90,7 +117,7 @@ int ft_nb_rdir(char *str)
 			nb_rdir++;
 			str++;
 		}
-		else
+		else if (*str)
 			str++;
 	}
 	return (nb_rdir);
@@ -124,6 +151,8 @@ void	get_expand(t_token *token, t_data *data)
 			i++;
 	}
 }
+
+
 // working
 // creat an array of rdir null terminated
 void	get_redir(t_token *token,t_data *data)
@@ -134,6 +163,7 @@ void	get_redir(t_token *token,t_data *data)
 	int		i;
 	
 	(void)data;
+
 	if (token->type != CMD)
 	{
 		token->cmd = NULL;
@@ -148,6 +178,11 @@ void	get_redir(t_token *token,t_data *data)
 	i = 0;
 	while (*str)
 	{
+		if (*str == '\'' || *str == '\"')
+		{
+			str += ft_strnlen(str + 1, *str);
+			str++;
+		}
 		if (!ft_strncmp(str, "<<", 2))
 			str += catch_heredoc(rdir, str, HEREDOC, i++);
 		else if (!ft_strncmp(str, ">>", 2))
@@ -156,11 +191,12 @@ void	get_redir(t_token *token,t_data *data)
 			str += catch_rdir(rdir, str, R_IN, i++);
 	   	else if (!ft_strncmp(str, ">", 1))
 			str += catch_rdir(rdir, str, R_OUT, i++);
-		else
+		else if (*str)
 			str++;
 	}
 	rdir[nb_rdir].name = NULL;
 	token->cmd->rdir = rdir;
+	print_rdir(token);
 }
 
 int	true_wordlen(char *str)

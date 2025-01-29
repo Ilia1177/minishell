@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 18:27:25 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 02:14:16 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/29 11:48:36 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	echo(t_bintree *node, t_data *data)
 	if (node->cmd->args[1] && !ft_strcmp(node->cmd->args[1], "-n"))
 		ft_printf(node->stdfd[OUT], "\n");
 	ft_printf(node->stdfd[OUT], "\n");
+	data->status = 0;
 	return (0);
 }
 
@@ -64,7 +65,11 @@ int	print_working_dir(t_bintree *node, t_data *data)
 	if (getcwd(wd, sizeof(wd)))
 		ft_printf(node->stdfd[OUT], "%s\n", wd);
 	else
-		return (-1);
+	{
+		data->status = 256;
+		return (256);
+	}
+	data->status = 0;
 	return (0);
 }
 
@@ -211,6 +216,8 @@ int	export(t_bintree *node, t_data *data)
 			else
 				data->envp = set_env(name, value, data->envp);
 		}
+		else
+			data->status = 1;
 		j++;
 	}
 	return (0);

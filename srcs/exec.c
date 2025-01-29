@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 12:59:37 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/29 21:17:47 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,14 @@ void	child_process(t_bintree *node, t_data *data)
 
 int	is_builtin(t_cmd *cmd)
 {
-	if (!ft_strcmp(cmd->args[0], "cd"))
-		return (1);
+	/* if (!ft_strcmp(cmd->args[0], "cd")) */
+	/* 	return (1); */
 	if (!ft_strcmp(cmd->args[0], "pwd"))
 		return (1);
 	if (!ft_strcmp(cmd->args[0], "export"))
 		return (1);
-	if (!ft_strcmp(cmd->args[0], "unset"))
-		return (1);
+	/* if (!ft_strcmp(cmd->args[0], "unset")) */
+	/* 	return (1); */
 	if (!ft_strcmp(cmd->args[0], "env"))
 		return (1);
 	if (!ft_strcmp(cmd->args[0], "exit"))
@@ -95,7 +95,7 @@ int	exec_builtin(t_bintree *node, t_data *data)
 		echo(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "exit"))
 	{
-		printf("exit");
+		ft_printf(2, "exit");
 		free_minishell(data);
 		exit(0);
 	}
@@ -121,6 +121,7 @@ int	exec_cmd(t_bintree *node, t_data *data)
 	else
 	{
 		perror("not a cmd");
+		data->status = 127;
 		return (127); // if dont find the command with access
 	}
 	if (!pid)

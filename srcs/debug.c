@@ -21,6 +21,20 @@ void print_tree(t_bintree *tree, int space)
     print_tree(tree->left, space);
 }
 
+void	print_rdir(t_token *token)
+{
+	int	i;
+
+	i = 0;
+	ft_printf(2, "token %s redir :", token->input);
+	while (token->cmd->rdir[i].name)
+	{
+		ft_printf(2, "name ='%s' type ='%d'\n", token->cmd->rdir[i].name, token->cmd->rdir[i].type);
+		i++;
+	}
+	ft_printf(2,"\n");
+}
+
 void	print_list(t_token *list)
 {
 	int	i;
