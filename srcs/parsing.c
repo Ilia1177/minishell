@@ -6,22 +6,22 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/28 23:43:49 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/29 19:45:51 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_lstiter_token(t_token *lst, void (*f)(t_token *))
+void	ft_lstiter_token(t_data *data, void (*f)(t_token *, t_data *))
 {
 	t_token	*iterator;
 
-	if (!lst || !f)
+	if (!data->token_list || !f)
 		return ;
-	iterator = lst;
+	iterator = data->token_list;
 	while (iterator)
 	{
-		(*f)(iterator);
+		(*f)(iterator, data);
 		iterator = iterator->next;
 	}
 }
@@ -61,12 +61,13 @@ int	ft_nb_args(const char *s)
 	return (nb_args);
 }
 
-void	split_args(t_token *token)
+void	split_args(t_token *token, t_data *data)
 {
 	int		nb_args;
 	int		i;
 	char	*input;
 
+	(void)data;
 	if (token->type == CMD)
 	{
 		input = token->input;
@@ -96,8 +97,9 @@ void	split_args(t_token *token)
 	}
 }
 
-void	type_token(t_token *token)
+void	type_token(t_token *token, t_data *data)
 {
+	(void)data;
 	if (!ft_strcmp(token->input, "|"))
 		token->type = PIPE;
 	else if (!ft_strcmp(token->input, "||"))

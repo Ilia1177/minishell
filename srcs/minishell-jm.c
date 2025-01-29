@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/28 13:51:48 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/29 20:54:07 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,25 +45,22 @@ int	run_shell(t_data *data)
 	{
 		if (getcwd(wd, sizeof(wd)))
 		{
-			tmp = ft_strjoin("M!N!$H3LL>", wd);
-			data->prompt = ft_strjoin(tmp, ">$");
+			tmp = ft_strjoin("Mini-unit-test>", wd);
+			/* data->prompt = ft_strjoin(tmp, ">$"); */
+			data->prompt = "Mini-unit-test>$";
 			free(tmp);
 		}
 		data->user_input = listen_to_user(data->prompt);
-	//	syntax_error(data->user_input);
-		if (!data->user_input || !ft_strcmp(data->user_input, ""))	// doesnt work either...
+		if (!data->user_input || !ft_strcmp(data->user_input, ""))
 		{
-			free(data->user_input);
-			/* if (ft_strnstr(data->user_input,"<<", ft_strlen(data->user_input))) */
-			/* 	get_here_doc("end"); */
-			free(data->prompt);
+			free_tabstr(data->envp);
+			free_minishell(data);
+			rl_clear_history();
 			ft_putendl_fd("exit", 2);
 			exit(0);
 		}
-		//printf("\n\n----------- List of token is : -");
-		data->token_list = tokenize(data->user_input);
-		//printf( "nb_word -> :%d\n", ft_nbword(data->user_input) );
-
+		/* data->token_list = tokenize(data); */
+		tokenize(data);
 		print_list(data->token_list);
 		//printf("\n\n----------- DEBUG TREE ---------");
 		//cpy = data->token_list;
@@ -87,6 +84,6 @@ int	main(int ac, char **argv, char **envp)
 	data.envp = envp;
 	init_shell(&data);
 	run_shell(&data);
-	//free_minishell(&data);
+	free_minishell(&data);
 	return (signal_caught);
 }
