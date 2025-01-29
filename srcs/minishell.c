@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 10:55:15 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/29 11:00:25 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ int	main(int ac, char **argv, char **envp)
 	register_signals();
 	data.envp = tab_dup(envp);
 	init_shell(&data);
-	//change_dir(&data, argv[1]);
 	run_shell(&data);
 	free_minishell(&data);
 	return (signal_caught);

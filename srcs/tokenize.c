@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 02:06:46 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/29 13:31:41 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@ t_cmd	*make_cmd()
 		return (NULL);
 	cmd->args = NULL;
 	cmd->rdir = NULL;
-	/* cmd->in_rdir = NULL;	//added by nil */
-	/* cmd->out_rdir = NULL;	//added by nil */
-	/* cmd->append = NULL;	//added by nil */
-	/* cmd->heredoc = NULL;	//added by nil */
 	return (cmd);
 }
 
@@ -64,12 +60,40 @@ t_token	*tokenize(char *input)
 		previous_token->next = current_token;
 	}
 	ft_lstiter_token(head, &type_token);
+	//ft_lstiter_token(head, &expand);
 	ft_lstiter_token(head, &get_redir); // added by NIL
 	ft_lstiter_token(head, &split_args);
+	ft_lstiter_token(head, &unquote);
 	ft_lst_split_dup(&head, &ft_count_dup, "()");
 	free_tabstr(tokens);
 	return (head);
 }
+
+void unquote(t_token *token)
+{
+	char	*set;
+	int		i;
+	char	*str;
+
+	if (token->type != CMD)
+		return ;
+	i = 0;
+	while (token->cmd->args[i])
+	{
+		str = token->cmd->args[i];
+		if (*str == '\'' || *str == '\"')
+		{
+			if (*str == '\"')
+				set = "\"";
+			else if (*str == '\'')
+				set = "\'";
+			token->cmd->args[i] = ft_strtrim(str, set);
+			free(str);
+		}
+		i++;
+	}
+}
+
 
 int ft_nb_rdir(char *str)
 {
@@ -78,7 +102,12 @@ int ft_nb_rdir(char *str)
 	nb_rdir = 0;
 	while (*str)
 	{
-		if ((!ft_strncmp(str, "<<", 2)) ||(!ft_strncmp(str, ">>", 2)))
+		if (*str == '\"' || *str == '\'')
+		{
+			str += ft_strnlen(str + 1, *str);
+			str ++;
+		}
+		if ((!ft_strncmp(str, "<<", 2)) || (!ft_strncmp(str, ">>", 2)))
 		{
 			nb_rdir++;
 			str = str + 2;
@@ -88,11 +117,13 @@ int ft_nb_rdir(char *str)
 			nb_rdir++;
 			str++;
 		}
-		else
+		else if (*str)
 			str++;
 	}
 	return (nb_rdir);
 }
+
+
 
 // working
 // creat an array of rdir null terminated
@@ -102,6 +133,7 @@ void	get_redir(t_token *token)
 	int		nb_rdir;
 	t_rdir	*rdir;
 	int		i;
+	int		len;
 
 	if (token->type != CMD)
 	{
@@ -115,8 +147,14 @@ void	get_redir(t_token *token)
 	if (!rdir)
 		return ;
 	i = 0;
+	len = 0;
 	while (*str)
 	{
+		if (*str == '\'' || *str == '\"')
+		{
+			str += ft_strnlen(str + 1, *str);
+			str++;
+		}
 		if (!ft_strncmp(str, "<<", 2))
 			str += catch_rdir(rdir, str, HEREDOC, i++);
 		else if (!ft_strncmp(str, ">>", 2))
@@ -125,11 +163,12 @@ void	get_redir(t_token *token)
 			str += catch_rdir(rdir, str, R_IN, i++);
 	   	else if (!ft_strncmp(str, ">", 1))
 			str += catch_rdir(rdir, str, R_OUT, i++);
-		else
+		else if (*str)
 			str++;
 	}
 	rdir[nb_rdir].name = NULL;
 	token->cmd->rdir = rdir;
+	print_rdir(token);
 }
 
 int	true_wordlen(char *str)
