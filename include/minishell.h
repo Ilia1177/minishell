@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 21:15:32 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/30 13:19:22 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ t_token		*make_token(char *str, t_type type);
 int			ft_nbword(const char *s);
 char		**ft_split_token(char const *s);
 t_cmd		*make_cmd();
-void		unquote(t_token *token);
+void		unquote(t_token *token, t_data *data);
 
 /* void		get_redir(t_token *token); */
 void		get_redir(t_token *token, t_data *data);

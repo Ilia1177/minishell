@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/30 13:14:22 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/30 13:16:35 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,13 +131,14 @@ char *remove_quote(char *str)
 	return (arg);
 }
 
-void unquote(t_data *data, t_token *token)
+void unquote(t_token *token, t_data *data)
 {
 	int		j;
 	char	*str;
 	char	*new_arg;
 	int		len;
 
+	(void)data;
 	if (token->type != CMD)
 		return ;
 	j = 0;
