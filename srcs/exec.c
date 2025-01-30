@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 11:42:21 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/29 21:17:47 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int	redir(t_bintree *node)
 	char *name;
 	t_type_rdir type;
 	
-	//heredoc ??
 	i = -1;
 	while (node->cmd->rdir[++i].name)
 	{
@@ -35,7 +34,7 @@ int	redir(t_bintree *node)
 			dup2(fd_out, node->stdfd[OUT]);
 			close(fd_out);
 		}
-		else if (type == R_IN)
+		if (type == R_IN || type == HEREDOC)
 		{
 			fd_in = open(name, O_RDONLY, 0777);
 			dup2(fd_in, node->stdfd[IN]);

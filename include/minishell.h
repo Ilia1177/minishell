@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 13:15:41 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/29 21:15:32 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,19 +128,23 @@ void		handle_signals(int sig, siginfo_t *info, void *ctx);
 int			listen_to_signal(t_data *data);
 
 //tokenize.c
-t_token		*tokenize(char *prompt);
+/* t_token		*tokenize(char *prompt); */
+/* t_token		*tokenize(t_data *data); */
+void		tokenize(t_data *data);
 t_token		*make_token(char *str, t_type type);
 int			ft_nbword(const char *s);
 char		**ft_split_token(char const *s);
 t_cmd		*make_cmd();
 void		unquote(t_token *token);
 
-void		get_redir(t_token *token);
+/* void		get_redir(t_token *token); */
+void		get_redir(t_token *token, t_data *data);
 int			true_wordlen(char *str);
 /* int			catch_rdir(t_token *token, char *str); */
 int			catch_rdir(t_rdir	*rdir, char *str, t_type_rdir type, int num_rdir);
 int			catch_append(t_token *token, char *str);
-int			catch_heredoc(t_token *token, char *str);
+/* int			catch_heredoc(t_token *token, char *str); */
+int	catch_heredoc(t_rdir *rdir, char *str, t_type_rdir type, int num_rdir);
 //exec.c 
 int			execute_tree(t_data *data);
 int			connect_node(t_bintree *a, t_bintree *b);
@@ -160,9 +164,12 @@ void		print_args(char **list);
 void		print_tree(t_bintree *root, int space);
 
 //parsing.c
-void		ft_lstiter_token(t_token *lst, void (*f)(t_token *));
-void		type_token(t_token *token);
-void		split_args(t_token *token);
+/* void		ft_lstiter_token(t_token *lst, void (*f)(t_token *)); */
+void		ft_lstiter_token(t_data *data, void (*f)(t_token *, t_data *));
+/* void		type_token(t_token *token); */
+void		type_token(t_token *token, t_data *data);
+/* void		split_args(t_token *token); */
+void		split_args(t_token *token, t_data *data);
 int			syntax_error(char *str);
 
 //token_utils.c
@@ -197,7 +204,9 @@ int			print_env(t_bintree *node, char **envp, char *format);
 int			export(t_bintree *node, t_data *data); 
 
 //heredoc.c
-void	get_here_doc(char *lim);
-char	*get_expand(char **env, char *str);
+char	*get_here_doc(char *lim);
+/* char	*get_expand(char **env, char *str); */
+void	get_expand(t_token *token, t_data *data);
+char	*catch_expand(t_data *data, char *str);
 char	*random_name(int nb_char);
 #endif
