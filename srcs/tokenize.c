@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 21:23:30 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:11:53 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void	tokenize(t_data *data)
 	data->token_list = head;
 	ft_lstiter_token(data, &type_token);
 	ft_lstiter_token(data, &get_redir); // added by NIL
-	ft_lstiter_token(data, &split_args);
 	ft_lstiter_token(data, &get_expand);
+	ft_lstiter_token(data, &split_args);
 	ft_lst_split_dup(&data->token_list, &ft_count_dup, "()");
 	free_tabstr(tokens);
 	//return (head);
@@ -123,6 +123,37 @@ int ft_nb_rdir(char *str)
 	return (nb_rdir);
 }
 
+/**/
+
+int	insert_expand(char **input, int pos, char *exp)
+{
+	int		var_len;
+	int		new_size;
+	int		end_size;
+	char	*new_input;
+	char	*str;
+
+	str = *input;
+	var_len = 0;
+	while (str[pos + var_len] && ft_isalnum(str[pos + var_len]))
+		var_len++;
+	end_size = ft_strlen(str) - var_len - (pos - 1);
+	if (exp)
+		new_size = pos - 1 + ft_strlen(exp) + end_size + 1;
+	else
+		new_size = pos - 1 + end_size + 1;
+	new_input = malloc(sizeof(char) * new_size);
+	ft_strlcpy (new_input, str, pos - 1 + 1);
+	if (exp)
+		ft_strlcat (new_input, exp, new_size);
+	ft_strlcat (new_input, str + pos + var_len, new_size);
+	free(str);
+	*input = new_input;
+	if (exp)
+		return (pos - 1 + ft_strlen(exp));
+	return (pos - 1);
+}
+
 void	get_expand(t_token *token, t_data *data)
 {
 	int		i;
@@ -144,8 +175,13 @@ void	get_expand(t_token *token, t_data *data)
 		}
 		else if (str[i] == '$')
 		{
-			exp = catch_expand(data, &str[i]);
-			i++;
+			
+			exp = catch_expand(data, &str[i + 1]);
+			i = insert_expand (&token->input, i + 1 , exp);
+			str = token->input;
+			//printf("result expand-%s\n",exp);
+			printf("result newinput-%s\n",str);
+			/* exp = catch_expand(data, "HOME"); */
 		}
 		else
 			i++;
