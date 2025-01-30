@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/30 15:35:12 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:11:46 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	tokenize(t_data *data)
 	}
 	data->token_list = head;
 	ft_lstiter_token(data, &type_token);
-	ft_lstiter_token(data, &get_redir); // added by NIL
+	ft_lstiter_token(data, &get_redir);
 	ft_lstiter_token(data, &get_expand);
 	ft_lstiter_token(data, &split_args);
 	ft_lstiter_token(data, &unquote);
@@ -98,8 +98,8 @@ char	find_next_quote(char *str)
 
 char	*get_quotedword(char **str)
 {
-	char *word;
-	
+	char	*word;
+
 	word = ft_substr(*str, 1, ft_strnlen(*str + 1, **str));
 	*str += ft_strnlen(*str + 1, **str) + 2;
 	return (word);
@@ -168,7 +168,6 @@ void unquote(t_token *token, t_data *data)
 	}
 }
 
-
 int ft_nb_rdir(char *str)
 {
 	int	nb_rdir;
@@ -183,7 +182,7 @@ int ft_nb_rdir(char *str)
 			nb_rdir++;
 			str = str + 2;
 		}
-	   	else if (!ft_strncmp(str, "<", 1) || !ft_strncmp(str, ">", 1))
+		else if (!ft_strncmp(str, "<", 1) || !ft_strncmp(str, ">", 1))
 		{
 			nb_rdir++;
 			str++;
@@ -196,6 +195,18 @@ int ft_nb_rdir(char *str)
 
 /**/
 
+int expand_size(char *str, int pos)
+{
+	int		var_len;
+
+	if (str[pos] == '?')
+		return (1);
+	var_len = 0;
+	while (str[pos + var_len] && ft_isalnum(str[pos + var_len]))
+		var_len++;
+	return (var_len);
+}
+
 int	insert_expand(char **input, int pos, char *exp)
 {
 	int		var_len;
@@ -205,9 +216,7 @@ int	insert_expand(char **input, int pos, char *exp)
 	char	*str;
 
 	str = *input;
-	var_len = 0;
-	while (str[pos + var_len] && ft_isalnum(str[pos + var_len]))
-		var_len++;
+	var_len = expand_size(str, pos);
 	end_size = ft_strlen(str) - var_len - (pos - 1);
 	if (exp)
 		new_size = pos - 1 + ft_strlen(exp) + end_size + 1;
@@ -233,32 +242,25 @@ void	get_expand(t_token *token, t_data *data)
 	int		quoted;
 
 	str = token->input;
-	i = 0;
+	i = -1;
 	quoted = -1;
-	while (str[i])
+	while (str[++i])
 	{
-		if (str[i]== '\"')
+		if (str[i] == '\"')
 			quoted *= -1;
-		else if (str[i]== '\'' && quoted < 0)
+		else if (str[i] == '\'' && quoted < 0)
 		{
 			i++;
-			i += ft_strnlen(&str[i],'\'');
+			i += ft_strnlen(&str[i], '\'');
 		}
 		else if (str[i] == '$')
 		{
-			
 			exp = catch_expand(data, &str[i + 1]);
-			i = insert_expand (&token->input, i + 1 , exp);
+			i = insert_expand(&token->input, i + 1, exp);
 			str = token->input;
-			//printf("result expand-%s\n",exp);
-			printf("result newinput-%s\n",str);
-			/* exp = catch_expand(data, "HOME"); */
 		}
-		else
-			i++;
 	}
 }
-
 
 // working
 // creat an array of rdir null terminated
