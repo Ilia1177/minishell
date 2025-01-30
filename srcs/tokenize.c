@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/30 13:16:35 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/30 13:55:55 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	tokenize(t_data *data)
 	ft_lstiter_token(data, &type_token);
 	ft_lstiter_token(data, &get_redir); // added by NIL
 	ft_lstiter_token(data, &split_args);
-	ft_lstiter_token(data, &get_expand);
+//	ft_lstiter_token(data, &get_expand);
 	ft_lstiter_token(data, &unquote);
 	ft_lst_split_dup(&data->token_list, &ft_count_dup, "()");
 	free_tabstr(tokens);
@@ -96,9 +96,28 @@ char	find_next_quote(char *str)
 	return (0);
 }
 
-char *remove_quote(char *str)
+char	*get_quotedword(char **str)
+{
+	char *word;
+	
+	word = ft_substr(*str, 1, ft_strnlen(*str + 1, **str));
+	*str += ft_strnlen(*str + 1, **str) + 2;
+	return (word);
+}
+
+char	*get_cleanword(char **str)
 {
 	char	quote;
+	char	*word;
+
+	quote = find_next_quote(*str);
+	word = ft_substr(*str, 0, ft_strnlen(*str, quote));
+	*str += ft_strnlen(*str, quote);
+	return (word);
+}
+
+char *remove_quote(char *str)
+{
 	char	*tmp;
 	char	*arg;
 	char	*word;
@@ -108,16 +127,9 @@ char *remove_quote(char *str)
 	while (*str)
 	{
 		if (ft_isquote(*str))
-		{
-			word = ft_substr(str, 1, ft_strnlen(str + 1, *str));
-			str += ft_strnlen(str + 1, *str) + 2;
-		}
+			word = get_quotedword(&str);
 		else
-		{
-			quote = find_next_quote(str);
-			word = ft_substr(str, 0, ft_strnlen(str, quote));
-			str += ft_strnlen(str, quote);
-		}
+			word = get_cleanword(&str);
 		if (!arg)
 			arg = word;
 		else
