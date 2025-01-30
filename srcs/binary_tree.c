@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/30 15:29:16 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/30 15:48:46 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 	t_token		*tmp;
 
 	current_token = *token;
+	ft_printf(2, "Make node with : %s\n", current_token->input);
 	root = malloc(sizeof(t_bintree));
 	root->type = current_token->type;
 	root->input = current_token->input;
@@ -46,6 +47,7 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 		return (-1);
 	if (!ft_strcmp(current_token->input, "("))
 	{
+		ft_printf(2, "make under tree with :'('\n");
 		current_token = current_token->next;
 		*root = build_tree(&current_token, 0);
 		*old_root = *root;
@@ -55,6 +57,7 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 	}
 	else if (!ft_strcmp(current_token->input, ")"))
 	{
+		ft_printf(2, "return -1 with :')'\n");
 		*token = current_token->next;
 		ft_lstdelone_token(tmp, &free);
 		return (-1);
@@ -94,12 +97,15 @@ t_bintree	*build_tree(t_token **head, int priority)
 			new_root = make_node(NULL, NULL, &curr);
 		else
 		{
+			ft_printf(2, "make operator :\n");
 			//new_root = make_operator(&curr, old_root);
 			new_root = make_node(old_root, NULL, &curr);
 			new_root->right = build_tree(&curr, (int)new_root->type);
+			ft_printf(2, "%d->right : %s ->left : %s\n", new_root->input, new_root->right->input, new_root->left->input);
 		}
 		old_root = new_root;
 	}
+	ft_printf(2, "returned root is : %s\n", new_root->input);
 	*head = curr;
 	return (new_root);
 }
