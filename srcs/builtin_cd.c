@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 18:27:25 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 11:48:36 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/30 15:09:30 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,13 @@
 
 int	echo(t_bintree *node, t_data *data)
 {
-	int	i;
+	int		i;
+	char	*option;
 
 	(void)data;
 	if (!node->cmd->args)
 		return (0);
-
+	option = NULL;
 	i = 1;
 	if (node->cmd->args[1] && !ft_strcmp(node->cmd->args[1], "-n"))
 		i = 2;
@@ -49,13 +50,13 @@ int	echo(t_bintree *node, t_data *data)
 			ft_printf(node->stdfd[OUT], " ");
 		i++;
 	}
-	if (node->cmd->args[1] && !ft_strcmp(node->cmd->args[1], "-n"))
+	if (node->cmd->args[1] && ft_strcmp(node->cmd->args[1], "-n"))
 		ft_printf(node->stdfd[OUT], "\n");
-	ft_printf(node->stdfd[OUT], "\n");
+	else if (!node->cmd->args[1])
+		ft_printf(node->stdfd[OUT], "\n");
 	data->status = 0;
 	return (0);
 }
-
 
 int	print_working_dir(t_bintree *node, t_data *data)
 {
@@ -89,17 +90,16 @@ char	*catch_name(char *str)
 	name = malloc(sizeof(char) * len + 1);
 	if (!name)
 		return (NULL);
-	i = 0;
-	while (i < len)
+	i = -1;
+	while (++i < len)
 	{
 		if (is_space(str[i]) || !ft_isalnum(str[i]))
 		{
-			ft_printf(2, "minishell : export : `%s\"%s", str, warning);
+			ft_printf(2, "minishell : export : `%s\"%s\n", str, warning);
 			free(name);
 			return (NULL);
 		}
 		name[i] = str[i];
-		i++;
 	}
 	name[i] = '\0';
 	return (name);
@@ -173,51 +173,53 @@ char	**set_env(char *name, char *value, char **old_envp)
 
 int	exist(char **envp, char *name)
 {
-	int i;
+	int	i;
 
 	if (!envp || !name)
 		return (-1);
 	i = -1;
 	while (envp[++i])
-		if(!ft_strncmp(envp[i], name, ft_strlen(name)))
+		if (!ft_strncmp(envp[i], name, ft_strlen(name)))
 			return (i);
 	return (-1);
 }
 	
-
-int	export(t_bintree *node, t_data *data)
+int	update_envp(t_data *data, char *str)
 {
 	char	*tmp;
-	char	*str;
-	int		j;
 	char	*name;
 	char	*value;
 	int		at_index;
+
+	name = catch_name(str);
+	if (name)
+	{
+		value = catch_value(str);
+		at_index = exist(data->envp, name);
+		if (at_index >= 0)
+		{
+			tmp = data->envp[at_index];
+			data->envp[at_index] = new_entry(name, value);
+			free(tmp);
+		}
+		else
+			data->envp = set_env(name, value, data->envp);
+	}
+	else
+		data->status = 1;
+	return (0);
+}
+
+int	export(t_bintree *node, t_data *data)
+{
+	int		j;
 
 	j = 1;
 	if (!node->cmd->args[j])
 		print_env(node, data->envp, "declare -x ");
 	while (node->cmd->args[j])
 	{
-		str = node->cmd->args[j];
-		name = catch_name(str);
-		if (name)
-		{
-			value = catch_value(str);
-			at_index = exist(data->envp, name);
-			if (at_index >= 0)
-			{
-				tmp = data->envp[at_index];
-				data->envp[at_index] = new_entry(name, value);
-				free(tmp);
-				j++;
-				continue ;
-			}
-			else
-				data->envp = set_env(name, value, data->envp);
-		}
-		else
-			data->status = 1;
+		update_envp(data, node->cmd->args[j]);
 		j++;
 	}
 	return (0);
@@ -234,7 +236,7 @@ int	print_env(t_bintree *node, char **envp, char *format)
 	{
 		while (envp[i])
 		{
-			ft_printf(node->stdfd[OUT], "%s%s\n",format, envp[i]);
+			ft_printf(node->stdfd[OUT], "%s%s\n", format, envp[i]);
 			i++;
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/29 10:51:08 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/29 13:55:03 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	free_minishell(t_data *data)
 	free(data->user_input);
 	//close_all_fd(data->tree);			output error in valgrind (not a good idea ?)
 	free_tree(data->tree);
-	//ree_elem(data->token_list, LST);
 	free_elem(data->paths, D_TAB);
 }
 
@@ -100,7 +99,13 @@ void	free_cmd(t_cmd *cmd)
 	if (cmd->rdir)
 	{
 		while (cmd->rdir[++i].name)
-			free(cmd->rdir[i].name);
+		{
+			if (cmd->rdir->type == HEREDOC)
+				unlink(cmd->rdir[i].name);
+			else
+				free(cmd->rdir[i].name);
+		}
+		free(cmd->rdir);
 	}
 	free(cmd);
 }

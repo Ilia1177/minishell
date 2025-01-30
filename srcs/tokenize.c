@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/30 15:11:53 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/30 15:35:12 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,33 +64,107 @@ void	tokenize(t_data *data)
 	ft_lstiter_token(data, &get_redir); // added by NIL
 	ft_lstiter_token(data, &get_expand);
 	ft_lstiter_token(data, &split_args);
+	ft_lstiter_token(data, &unquote);
 	ft_lst_split_dup(&data->token_list, &ft_count_dup, "()");
 	free_tabstr(tokens);
-	//return (head);
 }
 
-void unquote(t_token *token)
+int	skip_quote(char *str, char quote)
 {
-	char	*set;
-	int		i;
-	char	*str;
+	int	len;
 
+	if (!str)
+		return (0);
+	len = 1;
+	while (str[len] && str[len] != quote)
+		len++;
+	if (str[len] == quote)
+		len++;
+	return (len);
+}
+
+char	find_next_quote(char *str)
+{
+	if (!str)
+		return (0);
+	while (*str)
+	{
+		if (*str == '\'' || *str == '\"')
+			return (*str);
+		str++;
+	}
+	return (0);
+}
+
+char	*get_quotedword(char **str)
+{
+	char *word;
+	
+	word = ft_substr(*str, 1, ft_strnlen(*str + 1, **str));
+	*str += ft_strnlen(*str + 1, **str) + 2;
+	return (word);
+}
+
+char	*get_cleanword(char **str)
+{
+	char	quote;
+	char	*word;
+
+	quote = find_next_quote(*str);
+	word = ft_substr(*str, 0, ft_strnlen(*str, quote));
+	*str += ft_strnlen(*str, quote);
+	return (word);
+}
+
+char *remove_quote(char *str)
+{
+	char	*tmp;
+	char	*arg;
+	char	*word;
+
+	arg = NULL;
+	word = 0;
+	while (*str)
+	{
+		if (ft_isquote(*str))
+			word = get_quotedword(&str);
+		else
+			word = get_cleanword(&str);
+		if (!arg)
+			arg = word;
+		else
+		{
+			tmp = arg;
+			arg = ft_strjoin(arg, word);
+			free(tmp);
+			free(word);
+		}
+	}
+	return (arg);
+}
+
+void unquote(t_token *token, t_data *data)
+{
+	int		j;
+	char	*str;
+	char	*new_arg;
+	int		len;
+
+	(void)data;
 	if (token->type != CMD)
 		return ;
-	i = 0;
-	while (token->cmd->args[i])
+	j = 0;
+	while (token->cmd->args[j])
 	{
-		str = token->cmd->args[i];
-		if (*str == '\'' || *str == '\"')
+		str = token->cmd->args[j];
+		len = ft_strlen(str);
+		if (ft_strnstr(str, "\"", len) || ft_strnstr(str, "\'", len))
 		{
-			if (*str == '\"')
-				set = "\"";
-			else if (*str == '\'')
-				set = "\'";
-			token->cmd->args[i] = ft_strtrim(str, set);
+			new_arg = remove_quote(str);
+			token->cmd->args[j] = new_arg;
 			free(str);
 		}
-		i++;
+		j++;
 	}
 }
 
@@ -103,10 +177,7 @@ int ft_nb_rdir(char *str)
 	while (*str)
 	{
 		if (*str == '\"' || *str == '\'')
-		{
-			str += ft_strnlen(str + 1, *str);
-			str ++;
-		}
+			str += skip_quote(str, *str);
 		if ((!ft_strncmp(str, "<<", 2)) || (!ft_strncmp(str, ">>", 2)))
 		{
 			nb_rdir++;
@@ -197,16 +268,14 @@ void	get_redir(t_token *token,t_data *data)
 	int		nb_rdir;
 	t_rdir	*rdir;
 	int		i;
-	
-	(void)data;
 
+	(void)data;
 	if (token->type != CMD)
 	{
 		token->cmd = NULL;
 		return ;
 	}
 	str = token->input;
-	nb_rdir = 0;
 	nb_rdir = ft_nb_rdir(str);
 	rdir = malloc(sizeof(t_rdir) * (nb_rdir + 1));
 	if (!rdir)
@@ -215,10 +284,7 @@ void	get_redir(t_token *token,t_data *data)
 	while (*str)
 	{
 		if (*str == '\'' || *str == '\"')
-		{
-			str += ft_strnlen(str + 1, *str);
-			str++;
-		}
+			str += skip_quote(str, *str);
 		if (!ft_strncmp(str, "<<", 2))
 			str += catch_heredoc(rdir, str, HEREDOC, i++);
 		else if (!ft_strncmp(str, ">>", 2))
@@ -232,7 +298,6 @@ void	get_redir(t_token *token,t_data *data)
 	}
 	rdir[nb_rdir].name = NULL;
 	token->cmd->rdir = rdir;
-	print_rdir(token);
 }
 
 int	true_wordlen(char *str)
@@ -273,25 +338,6 @@ int	catch_rdir(t_rdir *rdir, char *str, t_type_rdir type, int num_rdir)
 	return (len + i);
 }
 
-// not tested
-/* int	catch_append(t_token *token, char *str) */
-/* { */
-/* 	char	*name; */
-/* 	int		i; */
-/* 	int		len; */
-
-/* 	i = 2; */
-/* 	while (is_space(str[i])) */
-/* 		i++; */
-/* 	len = true_wordlen(str + i); */
-/* 	name = malloc(sizeof(char) * len + 1); */
-/* 	if (!name) */
-/* 		return (0); */
-/* 	ft_strlcpy(name, str + i, len + 1); */
-/* 	token->cmd->rdir->name = name; */
-/* 	ft_memset(str, ' ', len + i); */
-/* 	return (len + i); */
-/* } */
 
 // not tested
 int	catch_heredoc(t_rdir *rdir, char *str, t_type_rdir type, int num_rdir)

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 01:17:56 by ilia             ###   ########.fr       */
+/*   Updated: 2025/01/30 15:29:16 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 	root->input = current_token->input;
 	if (current_token->type == CMD)
 		root->cmd = current_token->cmd;
-	else 
+	else
 		root->cmd = NULL;
 	root->left = left;
 	root->right = right;
@@ -38,7 +38,6 @@ t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 {
 	t_token		*current_token;
-	t_bintree	*new_root;
 	t_token		*tmp;
 
 	current_token = *token;
@@ -48,22 +47,29 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 	if (!ft_strcmp(current_token->input, "("))
 	{
 		current_token = current_token->next;
-		new_root = build_tree(&current_token, 0);
-		*root = new_root;
-		*old_root = new_root;
+		*root = build_tree(&current_token, 0);
+		*old_root = *root;
 		*token = current_token;
 		ft_lstdelone_token(tmp, &free);
 		return (1);
 	}
 	else if (!ft_strcmp(current_token->input, ")"))
 	{
-		current_token = current_token->next;
-		*token = current_token;
+		*token = current_token->next;
 		ft_lstdelone_token(tmp, &free);
 		return (-1);
 	}
 	return (0);
 }
+
+t_bintree	*make_operator(t_token **curr, t_bintree *old_root)
+{
+	t_bintree	*new_root;
+
+	new_root = make_node(old_root, NULL, curr);
+	new_root->right = build_tree(curr, (int)new_root->type);
+	return (new_root);
+}	
 
 t_bintree	*build_tree(t_token **head, int priority)
 {
@@ -88,6 +94,7 @@ t_bintree	*build_tree(t_token **head, int priority)
 			new_root = make_node(NULL, NULL, &curr);
 		else
 		{
+			//new_root = make_operator(&curr, old_root);
 			new_root = make_node(old_root, NULL, &curr);
 			new_root->right = build_tree(&curr, (int)new_root->type);
 		}
