@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:16:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/29 20:57:11 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:12:45 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,27 @@ char	*get_here_doc(char *lim)
 	return (name);
 }
 
+/*get value of export var
+ * +1 is to skip =
+ * checks that the string is followed by = 
+ * to not  return variables that start with the same string*/
 char	*catch_expand(t_data *data, char *str)
 {
 	char	*expand;
 	int		i;
+	int		len;
 
+	if (str[0] == '?')
+		return (ft_itoa(data->status));
 	expand = NULL;
-	/* if (str) */
+	len = 0;
+	while (str[len] && ft_isalnum(str[len]))
+		len++;
 	i = 0;
-	while (data->envp && data->envp[i] && !ft_strncmp(data->envp[i], str + 1, ft_strlen(str + 1)))
+	while (data->envp && data->envp[i] && ft_strncmp(data->envp[i], str, len))
 		i++;
-	if (data->envp && data->envp[i])
-		expand = data->envp[i] + ft_strlen(str + 1) + 1;
-	printf("expand =%s\n", expand);
+	if (data->envp && data->envp[i] && data->envp[i][len] == '=')
+		expand = data->envp[i] + len + 1;
 	return (expand);
 }
 
@@ -70,8 +78,7 @@ char	*random_name(int nb_char)
 	{
 		read(fd, buf, 1);
 		buf[0] = buf[0] % 122;
-		if ((buf[0] >= 'A' && buf[0] <= 'Z') || (buf[0] >= 'a' && buf[0] <= 'z')
-			|| (buf[0] >= '0' && buf[0] <= '9'))
+		if (ft_isalnum(buf[0]))
 			str[i++] = buf[0];
 	}
 	str[nb_char] = '\0';

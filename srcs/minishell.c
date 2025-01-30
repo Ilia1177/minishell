@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 21:18:40 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/30 16:14:29 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	main(int ac, char **argv, char **envp)
 	t_data				data;
 
 	data.flag = 0;
+	data.status = 0;
 	(void)argv;
 	if (ac > 1)
 		data.flag = 1;
