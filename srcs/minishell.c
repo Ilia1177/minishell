@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/30 16:14:29 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/01 22:30:26 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,25 +57,25 @@ int	run_shell(t_data *data)
 			ft_putendl_fd("exit", 2);
 			exit(0);
 		}
-		if (!syntax_error(data->user_input))
-		{
-			/* data->token_list = tokenize(data); */
-			tokenize(data);
-			cpy = data->token_list;
-			if (data->flag)
+		//if (!syntax_error(data->user_input))
+		//{
+			if (!tokenize(data))
+				continue ;
+			else
 			{
-				printf("\n\n----------- List of tokens is :\n");
-				print_list(data->token_list);
-				printf("\n\n----------- DEBUG TREE --------\n");
+				cpy = data->token_list;
+				data->tree = build_tree(&cpy, CMD);
+				if (data->flag)
+				{
+					printf("\n\n----------- List of tokens is :\n");
+					print_list(data->token_list);
+					printf("\n\n----------- Binary tree :  ----\n");
+					print_tree(data->tree, 0); // print the tree for debug
+				}
+				execute_tree(data); 
+				free_minishell(data);
 			}
-			data->tree = build_tree(&cpy, CMD);
-			if (data->flag)
-				print_tree(data->tree, 0); // print the tree for debug
-			execute_tree(data); 
-			free_minishell(data);
-			rl_redisplay();         // Redisplay the prompt   
-		}
-		init_shell(data);
+	//	}
 	}
 }
 

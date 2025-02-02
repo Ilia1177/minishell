@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/28 13:03:18 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/31 17:49:13 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* allows you to include what is between quote as a string
  * one bloc between same quote
  * i in is pos of first quote
- * i out is pos of char the end quote*/
+ * i out is pos of char the end quote
 void	ft_skip_quote(const char *s, int *index)
 {
 	int		i;
@@ -33,63 +33,72 @@ void	ft_skip_quote(const char *s, int *index)
 	if (s[i] && s[i] == quote)
 		*index += 1;
 }
+*/
 
-/* count nb of word. A word could be a command and a operator
- * the tmp var allow to check if the separator does not change*/
-int	ft_nbword(const char *s)
+int	cmd_len(char *str)
 {
-	int		nb_word;
-	int		i;
+	int	len;
+
+	len = 0;
+	while (!ft_issep(str[len]) && str[len])
+	{
+		if (ft_isquote(str[len]))
+			len += skip_quote((char *)(str + len), str[len]);
+		else
+			len++;
+	}
+	return (len);
+}
+
+int	sep_len(char *str)
+{
+	int		len;
 	char	tmp_sep;
+
+	len = 0;
+	if (str[len] == ')' || str[len] == '(')
+	{
+		len++;
+		while (isspace(str[len]))
+			len++;
+		return (len);
+	}
+	tmp_sep = str[len];
+	while (ft_issep(str[len]) && str[len] == tmp_sep && len < 2)
+		len++;
+	while (isspace(str[len]) && len > 0)
+		len++;
+	return (len);
+}
+
+int				ft_nbword(const char *s)
+{
+	int	i;
+	int	nb_word;
 
 	i = 0;
 	nb_word = 0;
 	while (s[i])
 	{
-		tmp_sep = s[i];
-		if (ft_isquote(s[i]))
-			ft_skip_quote(&s[i], &i);
 		if (ft_issep(s[i]))
-			nb_word++;
-		while (s[i] && ft_issep(s[i]) && s[i] == tmp_sep)
-			++i;
-		if (s[i] && !ft_issep(s[i]))
-			nb_word++;
-		while (s[i] && !ft_issep(s[i]))
-		{
-			++i;
-			if (ft_isquote(s[i]))
-				ft_skip_quote(&s[i], &i);
-		}
+			i += sep_len((char *)s + i);
+		else if (!ft_issep(s[i]))
+			i += cmd_len((char *)s + i);
+		nb_word++;
 	}
 	return (nb_word);
 }
 
-/* calculate the size of a word
- * a word could be : 
- * ---a command with args
- * ---a group of identical operators*/
 static size_t	ft_wordlen(const char *s)
 {
-	int		strlen;
-	char	tmp_sep;
+	int		len;
 
-	strlen = 0;
-	tmp_sep = s[0];
-	if (ft_issep(s[strlen]))
-		while (s[strlen] && ft_issep(s[strlen]) && s[strlen] == tmp_sep)
-			strlen++;
+	len = 0;
+	if (ft_issep(s[len]))
+		len += sep_len((char *)s);
 	else
-	{
-		while (s[strlen] && !ft_issep(s[strlen]))
-		{
-			if (ft_isquote(s[strlen]))
-				ft_skip_quote(&s[strlen], &strlen);
-			if (s[strlen])
-				strlen++;
-		}
-	}
-	return (strlen);
+		len += cmd_len((char *)s);
+	return (len);
 }
 
 void	ft_free_bugsplit(char **str, int i)
@@ -112,6 +121,7 @@ char	**ft_split_token(char const *s)
 	int		i;
 	char	**str;
 	int		nb_word;
+	char	*tmp;
 
 	if (!s)
 		return (NULL);
@@ -119,18 +129,18 @@ char	**ft_split_token(char const *s)
 	str = (char **) ft_calloc(nb_word + 1, sizeof(char *));
 	if (!str)
 		return (NULL);
-	i = 0;
-	while (*s && i < nb_word)
+	i = -1;
+	while (*s && ++i < nb_word)
 	{
-		str[i] = (char *) ft_calloc(ft_wordlen(s) + 1, sizeof(char));
+		tmp = ft_substr(s, 0, ft_wordlen(s));
+		str[i] = ft_strtrim(tmp, "\r\f\v\n\t ");
+		free(tmp);
 		if (!str[i])
 		{
 			ft_free_bugsplit(str, i - 1);
 			return (NULL);
 		}
-		ft_strlcpy(str[i], s, ft_wordlen(s) + 1);
 		s += ft_wordlen(s);
-		i++;
 	}
 	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/30 16:42:47 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/02 10:26:51 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,49 +24,144 @@ t_cmd	*make_cmd()
 	return (cmd);
 }
 
+t_type	get_type(char *str)
+{
+	t_type	type;
+
+	if (!ft_strcmp(str, "&"))
+		return (-1);
+	else if (!ft_strcmp(str, "|"))
+		type = PIPE;
+	else if (!ft_strcmp(str, "||"))
+		type = OPERATOR;
+	else if (!ft_strcmp(str, "&&"))
+		type = OPERATOR;
+	else if (!ft_strcmp(str, "("))
+		type = OPERATOR;
+	else if (!ft_strcmp(str, ")"))
+		type = OPERATOR;
+	else
+		type = CMD;
+	return (type);
+}
 // make a token 
-t_token	*make_token(char *str, t_type type)
+t_token	*make_token(char *str)
 {
 	t_token	*token;
 
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->input = ft_strdup(str);
-	token->type = type;
-	token->cmd = NULL;
+	token->input = str;
+	token->type = get_type(str);
+	if (token->type == CMD)
+		token->cmd = make_cmd();
+	else
+		token->cmd = NULL;
 	token->next = NULL;
 	return (token);
 }
 
-void	tokenize(t_data *data)
+int	parenthesis_syntax(t_token *prev, t_token *curr)
 {
-	t_token	*head;
-	t_token	*current_token;
-	t_token	*previous_token;
-	char	**tokens;
-	int		i;
+	int	error;
 
-	if (!data->user_input)
-		return ;
-	tokens = ft_split_token(data->user_input);
+	error = 0;
+	if (!ft_strcmp(curr->input, "("))
+	{
+		if (prev->type == CMD || !ft_strcmp(prev->input, ")"))
+			error = 1;
+	}
+	else if (!ft_strcmp(curr->input, ")"))
+	{
+		if (!ft_strcmp(prev->input, ")"))
+			error = 0;
+		else if (prev->type == OPERATOR || prev->type == PIPE)
+			error = 1;
+	}
+	return (error);
+
+}
+
+int	catch_syntax_error(t_token *prev, t_token *curr)
+{
+	int	error;
+
+	if (!prev || !curr)
+		return (-1);
+	error = 0;
+	if (!ft_strcmp(curr->input, "&"))
+		error = 1;
+	else if (!ft_strcmp(curr->input, ")") || !ft_strcmp(curr->input, "("))
+		error = parenthesis_syntax(prev, curr);
+	else if (curr->type == OPERATOR || curr->type == PIPE)
+	{
+		if (!ft_strcmp(prev->input, ")"))
+			error = 0;
+		else if (prev->type == PIPE || prev->type == OPERATOR)
+			error = 1;
+	}	
+	else if (curr->type == CMD)
+	{
+		if (prev->type == CMD || !ft_strcmp(prev->input, ")"))
+			error = 1;
+	}
+	if (error)
+		ft_printf(2, "error near expected token '%s'\n", curr->input);
+	return (error);
+}
+
+t_token	*build_tokenlist(char **tokens)
+{
+	int		i;
+	t_token	*head;
+	t_token	*curr_token;
+	t_token	*prev_token;
+
 	i = 0;
-	head = make_token(tokens[i], CMD);
-	current_token = head;
+	head = make_token(tokens[i]);
+	if (!head || (head->type != CMD && ft_strcmp(head->input, "(")))
+	{
+		ft_printf(2, "error near expected token '%s'\n", head->input);
+		ft_lstclear_token(&head, &free);
+		return (NULL);
+	}
+	curr_token = head;
 	while (tokens[++i])
 	{
-		previous_token = current_token;
-		current_token = make_token(tokens[i], CMD);
-		previous_token->next = current_token;
+		prev_token = curr_token;
+		curr_token = make_token(tokens[i]);
+		if (!curr_token || catch_syntax_error(prev_token, curr_token))
+		{
+			ft_lstclear_token(&head, &free);
+			return (NULL);
+		}
+		prev_token->next = curr_token;
 	}
-	data->token_list = head;
-	ft_lstiter_token(data, &type_token);
+	free(tokens);
+	return (head);
+}
+
+int	tokenize(t_data *data)
+{
+	char	**tokens;
+
+	if (!data->user_input)
+		return (0);
+	tokens = ft_split_token(data->user_input);
+	if (!tokens)
+		return (0);
+	data->token_list = build_tokenlist(tokens);
+	if (!data->token_list)
+	{
+		free_tabstr(tokens);
+		return (0);
+	}
 	ft_lstiter_token(data, &get_redir);
 	ft_lstiter_token(data, &get_expand);
 	ft_lstiter_token(data, &split_args);
 	ft_lstiter_token(data, &unquote);
-	ft_lst_split_dup(&data->token_list, &ft_count_dup, "()");
-	free_tabstr(tokens);
+	return (-1);
 }
 
 
@@ -96,8 +191,6 @@ int ft_nb_rdir(char *str)
 	}
 	return (nb_rdir);
 }
-
-/**/
 
 int expand_size(char *str, int pos)
 {

@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 16:47:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/30 16:26:38 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/02 10:24:12 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,9 @@ void	ft_lstdelone_token(t_token *lst, void (*del)(void*))
 	if (!lst || !del)
 		return ;
 	(*del)(lst->input);
+	lst->input = NULL;
 	if (lst->cmd)
-	{
-		(*del)(lst->cmd->rdir);
-		free_tabstr(lst->cmd->args);
-		free(lst->cmd);
-	}
+		free_cmd(lst->cmd);
 	free(lst);
 }
 
@@ -86,7 +83,7 @@ void	ft_lst_split_dup(t_token **lst, int (*f)(char *, char *, char *), char *cmp
 		next = current->next;
 		while (++i < nb_cmp)
 		{
-			new = make_token(dup, OPERATOR);
+			new = make_token(dup);
 			current->input = ft_strdup(dup);
 			new->next = current->next;
 			current->next = new;

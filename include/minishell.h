@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/30 16:52:41 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/31 16:27:59 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,8 +124,8 @@ int			listen_to_signal(t_data *data);
 
 /***********TOKENIZE****************/
 //tokenize.c
-void		tokenize(t_data *data);
-t_token		*make_token(char *str, t_type type);
+int			tokenize(t_data *data);
+t_token		*make_token(char *str);
 int			ft_nbword(const char *s);
 char		**ft_split_token(char const *s);
 t_cmd		*make_cmd();
@@ -182,6 +182,7 @@ int			arg_len(char *str);
 int			ft_issep(char c);
 int			ft_isquote(char c);
 int			is_space(char c);
+int			is_parenthesis(char c);
 
 //token_tab.c
 void		ft_skip_quote(const char *s, int *index);

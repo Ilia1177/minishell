@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 18:27:25 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/30 15:09:30 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/30 21:07:50 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,10 @@
 int	echo(t_bintree *node, t_data *data)
 {
 	int		i;
-	char	*option;
 
 	(void)data;
 	if (!node->cmd->args)
 		return (0);
-	option = NULL;
 	i = 1;
 	if (node->cmd->args[1] && !ft_strcmp(node->cmd->args[1], "-n"))
 		i = 2;

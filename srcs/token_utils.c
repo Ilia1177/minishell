@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:26:02 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/28 13:48:44 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/31 18:56:16 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,9 @@ int	ft_isquote(char c)
 	return (0);
 }
 
-/* int	ft_len_until_quote(char *str) */
-/* { */
-/* 	int	strlen; */
-
-/* 	strlen = 0; */
-/* 	while (str[strlen] && !ft_isquote(str[strlen])) */
-/* 		strlen++; */
-/* 	return (strlen); */
-/* } */
+int	is_parenthesis(char c)
+{
+	if (c == ')' || c == '(')
+		return (c);
+	return (0);
+}

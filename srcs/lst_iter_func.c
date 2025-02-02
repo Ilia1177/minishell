@@ -6,14 +6,14 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:31:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/30 16:35:45 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/30 21:15:42 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
 
-void unquote(t_token *token, t_data *data)
+void	unquote(t_token *token, t_data *data)
 {
 	int		j;
 	char	*str;

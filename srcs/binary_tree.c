@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/30 16:48:06 by npolack          ###   ########.fr       */
+/*   Updated: 2025/01/31 16:22:46 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 	t_token		*tmp;
 
 	current_token = *token;
-	ft_printf(2, "Make node with : %s\n", current_token->input);
 	root = malloc(sizeof(t_bintree));
 	root->type = current_token->type;
 	root->input = current_token->input;

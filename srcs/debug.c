@@ -42,7 +42,7 @@ void	print_list(t_token *list)
 	i = 0;
 	while(list)
 	{
-		printf("TOKEN nº%d : input = %6s, type = %d", i++, list->input, list->type);
+		printf("TOKEN nº%d : input = '%s', type = %d", i++, list->input, list->type);
 		if (list->type == CMD)
 		{
 			printf (", args = ");

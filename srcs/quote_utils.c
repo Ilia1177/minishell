@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:40:34 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/30 16:42:35 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/01/31 12:29:26 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	skip_quote(char *str, char quote)
 {
 	int	len;
 
-	if (!str)
+	if (!str || (quote != '\'' && quote != '"'))
 		return (0);
 	len = 1;
 	while (str[len] && str[len] != quote)
