@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/01 22:30:26 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/03 11:06:36 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,25 +57,25 @@ int	run_shell(t_data *data)
 			ft_putendl_fd("exit", 2);
 			exit(0);
 		}
-		//if (!syntax_error(data->user_input))
-		//{
-			if (!tokenize(data))
-				continue ;
-			else
+		if (!tokenize(data))
+		{
+			free_minishell(data);
+			continue ;
+		}
+		else
+		{
+			cpy = data->token_list;
+			data->tree = build_tree(&cpy, CMD);
+			if (data->flag)
 			{
-				cpy = data->token_list;
-				data->tree = build_tree(&cpy, CMD);
-				if (data->flag)
-				{
-					printf("\n\n----------- List of tokens is :\n");
-					print_list(data->token_list);
-					printf("\n\n----------- Binary tree :  ----\n");
-					print_tree(data->tree, 0); // print the tree for debug
-				}
-				execute_tree(data); 
-				free_minishell(data);
+				printf("\n\n----------- List of tokens is :\n");
+				print_list(data->token_list);
+				printf("\n\n----------- Binary tree :  ----\n");
+				print_tree(data->tree, 0); // print the tree for debug
 			}
-	//	}
+			execute_tree(data); 
+			free_minishell(data);
+		}
 	}
 }
 

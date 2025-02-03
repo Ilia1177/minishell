@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 16:47:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/02 10:24:12 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/03 11:49:06 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,15 @@ t_mem	*ft_lstnew_mem(void *elem, t_mem_type type)
 	return (new_elem);
 }
 
+
+
+
 void	ft_lstdelone_token(t_token *lst, void (*del)(void*))
 {
 	if (!lst || !del)
 		return ;
-	(*del)(lst->input);
+	if (lst->input)
+		(*del)(lst->input);
 	lst->input = NULL;
 	if (lst->cmd)
 		free_cmd(lst->cmd);

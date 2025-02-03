@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/02 10:26:51 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/03 11:48:55 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ t_token	*make_token(char *str)
 	token = malloc(sizeof(t_token));
 	if (!token)
 		return (NULL);
-	token->input = str;
+	token->input = ft_strdup(str);
 	token->type = get_type(str);
 	if (token->type == CMD)
 		token->cmd = make_cmd();
@@ -120,7 +120,9 @@ t_token	*build_tokenlist(char **tokens)
 
 	i = 0;
 	head = make_token(tokens[i]);
-	if (!head || (head->type != CMD && ft_strcmp(head->input, "(")))
+	if (!head)
+		return (NULL);
+	if (head->type != CMD && ft_strcmp(head->input, "("))
 	{
 		ft_printf(2, "error near expected token '%s'\n", head->input);
 		ft_lstclear_token(&head, &free);
@@ -131,14 +133,13 @@ t_token	*build_tokenlist(char **tokens)
 	{
 		prev_token = curr_token;
 		curr_token = make_token(tokens[i]);
+		prev_token->next = curr_token;
 		if (!curr_token || catch_syntax_error(prev_token, curr_token))
 		{
 			ft_lstclear_token(&head, &free);
 			return (NULL);
 		}
-		prev_token->next = curr_token;
 	}
-	free(tokens);
 	return (head);
 }
 
@@ -161,7 +162,7 @@ int	tokenize(t_data *data)
 	ft_lstiter_token(data, &get_expand);
 	ft_lstiter_token(data, &split_args);
 	ft_lstiter_token(data, &unquote);
-	return (-1);
+	return (1);
 }
 
 
