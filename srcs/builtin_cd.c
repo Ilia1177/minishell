@@ -77,9 +77,7 @@ char	*catch_name(char *str)
 	int		i;
 	int		len;
 	char	*name;
-	char	*warning;
 
-	warning = ": not a valid identifier";
 	if (!str)
 		return (NULL);
 	len = ft_strnlen(str, '=');
@@ -93,7 +91,7 @@ char	*catch_name(char *str)
 	{
 		if (is_space(str[i]) || !ft_isalnum(str[i]))
 		{
-			ft_printf(2, "minishell : export : `%s\"%s\n", str, warning);
+			ft_printf(2, "minishell : export : `%s\"%s\n", str, WARNING);
 			free(name);
 			return (NULL);
 		}
@@ -181,7 +179,7 @@ int	exist(char **envp, char *name)
 			return (i);
 	return (-1);
 }
-	
+
 int	update_envp(t_data *data, char *str)
 {
 	char	*tmp;

@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/31 17:49:13 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/04 17:02:18 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	sep_len(char *str)
 	return (len);
 }
 
-int				ft_nbword(const char *s)
+int	ft_nbword(const char *s)
 {
 	int	i;
 	int	nb_word;
@@ -99,16 +99,6 @@ static size_t	ft_wordlen(const char *s)
 	else
 		len += cmd_len((char *)s);
 	return (len);
-}
-
-void	ft_free_bugsplit(char **str, int i)
-{
-	while (i >= 0)
-	{
-		free(str[i]);
-		i--;
-	}
-	free(str);
 }
 
 /* this function split the input of the user

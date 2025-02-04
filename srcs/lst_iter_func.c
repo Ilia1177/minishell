@@ -6,10 +6,9 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:31:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/30 21:15:42 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/04 19:48:15 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -40,35 +39,15 @@ void	unquote(t_token *token, t_data *data)
 
 void	get_expand(t_token *token, t_data *data)
 {
-	int		i;
 	char	*str;
-	char	*exp;
-	int		quoted;
 
 	str = token->input;
-	i = -1;
-	quoted = -1;
-	while (str[++i])
-	{
-		if (str[i] == '\"')
-			quoted *= -1;
-		else if (str[i] == '\'' && quoted < 0)
-		{
-			i++;
-			i += ft_strnlen(&str[i], '\'');
-		}
-		else if (str[i] == '$')
-		{
-			exp = catch_expand(data, &str[i + 1]);
-			i = insert_expand(&token->input, i + 1, exp);
-			str = token->input;
-		}
-	}
+	expand_str(data, &token->input);
 }
 
 // working
 // creat an array of rdir null terminated
-void	get_redir(t_token *token,t_data *data)
+void	get_redir(t_token *token, t_data *data)
 {
 	char	*str;
 	int		nb_rdir;
@@ -92,12 +71,12 @@ void	get_redir(t_token *token,t_data *data)
 		if (*str == '\'' || *str == '\"')
 			str += skip_quote(str, *str);
 		if (!ft_strncmp(str, "<<", 2))
-			str += catch_heredoc(rdir, str, HEREDOC, i++);
+			str += catch_heredoc(rdir, str, data, i++);
 		else if (!ft_strncmp(str, ">>", 2))
 			str += catch_rdir(rdir, str, APPEND, i++);
-	   	else if (!ft_strncmp(str, "<", 1))
+		else if (!ft_strncmp(str, "<", 1))
 			str += catch_rdir(rdir, str, R_IN, i++);
-	   	else if (!ft_strncmp(str, ">", 1))
+		else if (!ft_strncmp(str, ">", 1))
 			str += catch_rdir(rdir, str, R_OUT, i++);
 		else if (*str)
 			str++;

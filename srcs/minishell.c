@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/03 11:06:36 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/04 17:03:53 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	run_shell(t_data *data)
 				printf("\n\n----------- Binary tree :  ----\n");
 				print_tree(data->tree, 0); // print the tree for debug
 			}
-			execute_tree(data); 
+			execute_tree(data);
 			free_minishell(data);
 		}
 	}
