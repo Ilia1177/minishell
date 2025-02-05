@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:51:50 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/04 19:51:54 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:05:29 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	catch_syntax_error(t_token *prev, t_token *curr)
 			error = 1;
 	}
 	if (error)
-		ft_printf(2, "SYNTERR '%s'\n", curr->input);
+		ft_printf(2, SYNTERR" %s\n", curr->input);
 	return (error);
 }
 
@@ -89,7 +89,7 @@ int	syntax_error(char *str)
 
 	if (!check_closing_quote(str) || str[0] == '|' || str[0] == '&')
 	{
-		printf("SYNTERR\n");
+		printf(SYNTERR"\n");
 		return (1);
 	}
 	i = 0;
@@ -101,7 +101,7 @@ int	syntax_error(char *str)
 			|| !ft_strncmp(&str[i], "|||", 3) || !ft_strncmp(&str[i], "<<<", 3)
 			|| !ft_strncmp(&str[i], ">>>", 3))
 		{
-			printf("SYNTERR\n");
+			printf(SYNTERR"\n");
 			return (1);
 		}
 		if (str[i])

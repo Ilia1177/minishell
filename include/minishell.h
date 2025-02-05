@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/04 19:44:16 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/05 12:44:37 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,12 @@ int			listen_to_signal(t_data *data);
 //tokenize.c
 t_token		*build_tokenlist(char **tokens);
 int			tokenize(t_data *data);
+
+//redir.c
 int			ft_nb_rdir(char *str);
 int			true_wordlen(char *str);
 int			catch_rdir(t_rdir	*rdir, char *str, t_type_rdir type, int num_rdir);
+void		seek_rdir(char *str, t_rdir **s_rdir, t_data *data);
 
 //make_elem.c
 t_cmd		*make_cmd(void);
@@ -177,12 +180,11 @@ int			ft_nb_args(const char *s);
 int			arg_len(char *str);
 
 //lst_utils.c
-void		ft_lstadd_front_mem(t_mem **lst, t_mem *new);
-t_mem		*ft_lstnew_mem(void *elem, t_mem_type type);
 void		ft_lstdelone_token(t_token *lst, void (*del)(void*));
 void		ft_lstclear_token(t_token **lst, void (*del)(void*));
 void		ft_lst_split_dup(t_token **lst, int (*f)(), char *cmp);
 int			ft_count_dup(char *s1, char *s2, char *dup);
+void		iter_split_args(char *input, t_token **iter_token, int nb_args);
 
 /***********FREE AND EXIT****************/
 //cleanup.c

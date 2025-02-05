@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/04 17:03:34 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/05 10:32:10 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	arg_len(char *str)
 	while (ft_isquote(str[len]))
 	{
 		len += skip_quote(str + len, str[len]);
-		//ft_skip_quote(&str[len], &len);
 	}
 	while (str[len] && !is_space(str[len]))
 		len++;
@@ -56,7 +55,6 @@ int	ft_nb_args(const char *s)
 			nb_args++;
 		while (ft_isquote(s[i]))
 			i += skip_quote((char *)s + i, s[i]);
-			//ft_skip_quote(&s[i], &i);
 		if (s[i])
 			i++;
 	}

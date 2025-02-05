@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/02/04 19:54:55 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/02/05 11:12:19 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,6 +53,7 @@ SRCS		=	binary_tree.c\
 				expand.c\
 				syntax.c\
 				make_elem.c\
+				redir.c\
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 
