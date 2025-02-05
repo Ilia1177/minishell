@@ -57,8 +57,8 @@ void	child_process(t_bintree *node, t_data *data)
 
 int	is_builtin(t_cmd *cmd)
 {
-	/* if (!ft_strcmp(cmd->args[0], "cd")) */
-	/* 	return (1); */
+	if (!ft_strcmp(cmd->args[0], "cd"))
+		return (1);
 	if (!ft_strcmp(cmd->args[0], "pwd"))
 		return (1);
 	if (!ft_strcmp(cmd->args[0], "export"))
@@ -81,8 +81,8 @@ int	exec_builtin(t_bintree *node, t_data *data)
 		ft_putstr_fd("exec builtins: ", 2);
 		ft_putendl_fd(node->cmd->args[0], 2);
 	}
-//	if (!ft_strcmp(node->cmd->args[0], "cd"))
-//		change_dir(node, data);
+	if (!ft_strcmp(node->cmd->args[0], "cd"))
+		change_dir(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "pwd"))
 		print_working_dir(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "export"))

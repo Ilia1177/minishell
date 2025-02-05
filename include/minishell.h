@@ -23,6 +23,7 @@
 # include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
 # define IN 0
 # define OUT 1
 # define TMP 2
@@ -107,13 +108,17 @@ typedef struct s_data
 //global variable
 extern int	signal_caught;
 
-/***********MINISHELL RUNTIME****************/
+/****************************************/
+/*         MINISHELL RUNTIME            */
+/****************************************/
 //main.c
 void		init_shell(t_data *data);
 char		*listen_to_user(char *prompt);
 int			run_shell(t_data *data);
 
-/***********BINARY TREE****************/
+/****************************************/
+/*            BINARY TREE               */
+/****************************************/
 //binary_tree.c
 t_bintree	*build_tree(t_token **start, int priority);
 
@@ -152,7 +157,9 @@ int			ft_nbword(const char *s);
 // void		ft_skip_quote(const char *s, int *index);
 char		**ft_split_token(char const *s);
 
-/***********LST_ITER_FUNC****************/
+/****************************************/
+/*           LST_ITER_FUNC              */
+/****************************************/
 //lst_iter_func.c
 void		unquote(t_token *token, t_data *data);
 void		get_redir(t_token *token, t_data *data);
@@ -172,6 +179,7 @@ char		*get_full_path(char **paths, char *str);
 int			build_cmd(t_bintree *node, t_data *data);
 char		**tab_dup(char **tab);
 t_cmd		*cmddup(t_cmd *cmd);
+int			update_envp(t_data *data, char *str);
 
 /***********PARSING****************/
 //parsing.c
@@ -205,7 +213,7 @@ void		print_tree(t_bintree *root, int space);
 
 /***********PARSING****************/
 // Builtins
-int			change_dir(t_cmd *cmd, t_data *data);
+int			change_dir(t_bintree *node, t_data *data);
 int			echo(t_bintree *node, t_data *data);
 int			print_working_dir(t_bintree *node, t_data *data);
 int			print_env(t_bintree *node, char **envp, char *format);

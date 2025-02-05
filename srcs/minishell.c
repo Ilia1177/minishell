@@ -37,17 +37,21 @@ void	init_shell(t_data *data)
 int	run_shell(t_data *data)
 {
 	t_token		*cpy;
-	char		wd[1024];
+	/* char		wd[1024]; */
 	char		*tmp;
 
 	while (1)
 	{
-		if (getcwd(wd, sizeof(wd)))
-		{
-			tmp = ft_strjoin("M!N!$H3LL>", wd);
-			data->prompt = ft_strjoin(tmp, ">$");
-			free(tmp);
-		}
+		/* if (getcwd(wd, sizeof(wd))) */
+		/* { */
+		/* 	tmp = ft_strjoin("M!N!$H3LL>", wd); */
+		/* 	data->prompt = ft_strjoin(tmp, ">$"); */
+		/* 	free(tmp); */
+		/* } */
+		tmp = catch_expand(data, "PWD");
+		tmp = ft_strjoin("M!N!$H3LL>", tmp);
+		data->prompt = ft_strjoin(tmp, ">$");
+
 		data->user_input = listen_to_user(data->prompt);
 		if (!data->user_input || !ft_strcmp(data->user_input, ""))
 		{

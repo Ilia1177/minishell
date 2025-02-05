@@ -65,6 +65,7 @@ MINISHELL_JM_OBJ := $(OBJS_DIR)/minishell-jm.o
 MINISHELL_NIL_OBJ := $(OBJS_DIR)/minishell-nil.o
 
 OBJS		= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
+DEPS = $(OBJS:%.o=%.d)
 
 msg				:
 	@echo "$(COLOR)"
@@ -90,18 +91,18 @@ nil:fclean $(OBJS) $(MINISHELL_NIL_OBJ) $(LIBFT)
 
 $(OBJS_DIR)/%.o	: $(SRCS_DIR)/%.c 
 	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(MINISHELL_OBJ) : $(MINISHELL_SRC)
 	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(MINISHELL_JM_OBJ) : $(MINISHELL_JM_SRC)
-	$(CC) $(C_FLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(MINISHELL_NIL_OBJ) : $(MINISHELL_NIL_SRC)
 	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(NAME)			:  $(OBJS) $(MINISHELL_OBJ) $(LIBFT)
 	@mkdir -p bin
@@ -122,3 +123,4 @@ re				: fclean all
 
 .PHONY			: all clean fclean re bonus
 
+-include $(DEPS)

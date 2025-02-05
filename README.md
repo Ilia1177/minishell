@@ -33,3 +33,21 @@ C1]
     end
     
 ```
+
+## Découpage du projet
+
+### Tokenize
+> [!IMPORTANT]
+> bien comprendre comment découper l'entrée utilisateur
+> séparateur :  | ( ) &
+
+> erreur de syntax
+> | ou & en dédut de string
+> &| n'importe où
+
+
+### Parsing
+
+### Arbre binaire
+
+### Execution
