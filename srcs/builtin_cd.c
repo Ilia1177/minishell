@@ -22,48 +22,48 @@
 /* 	printf("path = %s\n", old_path); */
 /* 	new_path = ft_strjoin("PATH=", path); */
 /* } */
-
-int	change_dir(t_bintree *node, t_data *data)
+void	update_pwds(t_data *data)
 {
 	char	wd[1024];
-	char	*path;
 	char	*old_pwd;
 	char	*new_pwd;
 
+	old_pwd = ft_strjoin("OLDPWD=", catch_expand(data, "PWD"));
+	update_envp(data, old_pwd);
+	free(old_pwd);
+	getcwd(wd, sizeof(wd));
+	new_pwd = ft_strjoin("PWD=", wd);
+	update_envp(data, new_pwd);
+	free(new_pwd);
+}
+
+void	change_dir(t_bintree *node, t_data *data)
+{
+	char	wd[1024];
+	char	*path;
+
 	if (!node->cmd->args[1])
-		return (0);
-	if (node->cmd->args[1][0] == '/')
+		return ;
+	if (!ft_strcmp(node->cmd->args[1], "-"))
+		path = ft_strdup(catch_expand(data, "OLDPWD"));
+	else if (!ft_strcmp(node->cmd->args[1], "--"))
+		path = ft_strdup(catch_expand(data, "HOME"));
+	else if (node->cmd->args[1][0] == '/')
 		path = ft_strdup(node->cmd->args[1]);
 	else
 	{
 		getcwd(wd, sizeof(wd));
 		path = ft_strjoin(wd, "/");
 		path = ft_strjoin(path, node->cmd->args[1]);
-		/* ft_printf(1, "**path**%s\n", path); */
 	}
 	if (!chdir(path))
-	{
-		old_pwd = ft_strjoin("OLDPWD=", catch_expand(data, "PWD"));
-		/* ft_printf(1, "****%s\n", old_pwd); */
-		update_envp(data, old_pwd);
-		free(old_pwd);
-
-		getcwd(wd, sizeof(wd));
-		new_pwd = ft_strjoin("PWD=", wd);
-		/* new_pwd = ft_strtrim(new_pwd,"/."); */
-		/* ft_printf(1, "****%s\n", new_pwd); */
-		update_envp(data, new_pwd);
-		free(new_pwd);
-		free(path);
-		return (0);
-	}
+		update_pwds(data);
 	else
 	{
 		ft_printf(2, "M!N!$H3LL: cd: include: No such file or directory\n");
 		data->status = 1;
-		free(path);
-		return (-1);
 	}
+	free(path);
 }
 
 int	echo(t_bintree *node, t_data *data)

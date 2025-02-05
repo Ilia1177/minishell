@@ -128,7 +128,9 @@ int			register_signals(void);
 void		handle_signals(int sig, siginfo_t *info, void *ctx);
 int			listen_to_signal(t_data *data);
 
-/***********TOKENIZE****************/
+/****************************************/
+/*             TOKENIZE                 */
+/****************************************/
 //tokenize.c
 t_token		*build_tokenlist(char **tokens);
 int			tokenize(t_data *data);
@@ -167,7 +169,9 @@ void		type_token(t_token *token, t_data *data);
 void		split_args(t_token *token, t_data *data);
 void		get_expand(t_token *token, t_data *data);
 
-/***********EXEC****************/
+/****************************************/
+/*                EXEC                  */
+/****************************************/
 //exec.c 
 int			execute_tree(t_data *data);
 int			connect_node(t_bintree *a, t_bintree *b);
@@ -181,7 +185,9 @@ char		**tab_dup(char **tab);
 t_cmd		*cmddup(t_cmd *cmd);
 int			update_envp(t_data *data, char *str);
 
-/***********PARSING****************/
+/****************************************/
+/*               PARSING                */
+/****************************************/
 //parsing.c
 void		ft_lstiter_token(t_data *data, void (*f)(t_token *, t_data *));
 int			ft_nb_args(const char *s);
@@ -213,7 +219,7 @@ void		print_tree(t_bintree *root, int space);
 
 /***********PARSING****************/
 // Builtins
-int			change_dir(t_bintree *node, t_data *data);
+void		change_dir(t_bintree *node, t_data *data);
 int			echo(t_bintree *node, t_data *data);
 int			print_working_dir(t_bintree *node, t_data *data);
 int			print_env(t_bintree *node, char **envp, char *format);
