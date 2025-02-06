@@ -116,17 +116,34 @@ void		init_shell(t_data *data);
 char		*listen_to_user(char *prompt);
 int			run_shell(t_data *data);
 
-/****************************************/
-/*            BINARY TREE               */
-/****************************************/
-//binary_tree.c
-t_bintree	*build_tree(t_token **start, int priority);
-
 /***********SIGNAL***************/
 //signals.c
 int			register_signals(void);
 void		handle_signals(int sig, siginfo_t *info, void *ctx);
 int			listen_to_signal(t_data *data);
+
+/***********FREE AND EXIT****************/
+//cleanup.c
+void		free_elem(void *elem, t_mem_type mem);
+void		free_tabstr(char **tabstr);
+void		free_cmd(t_cmd *cmd);
+void		free_minishell(t_data *data);
+void		free_tree(t_bintree *root);
+void		free_leaf(t_bintree *leaf);
+void		close_all_fd(t_bintree *root);
+void		ft_free_bugsplit(char **str, int i);
+
+// DEBUG FUNCTION
+void		print_list(t_token *list);
+void		print_rdir(t_token *token);
+void		print_args(char **list);
+void		print_tree(t_bintree *root, int space);
+
+/****************************************/
+/*            BINARY TREE               */
+/****************************************/
+//binary_tree.c
+t_bintree	*build_tree(t_token **start, int priority);
 
 /****************************************/
 /*             TOKENIZE                 */
@@ -159,9 +176,7 @@ int			ft_nbword(const char *s);
 // void		ft_skip_quote(const char *s, int *index);
 char		**ft_split_token(char const *s);
 
-/****************************************/
-/*           LST_ITER_FUNC              */
-/****************************************/
+/*************LST_ITER_FUNC***********/
 //lst_iter_func.c
 void		unquote(t_token *token, t_data *data);
 void		get_redir(t_token *token, t_data *data);
@@ -200,30 +215,11 @@ void		ft_lst_split_dup(t_token **lst, int (*f)(), char *cmp);
 int			ft_count_dup(char *s1, char *s2, char *dup);
 void		iter_split_args(char *input, t_token **iter_token, int nb_args);
 
-/***********FREE AND EXIT****************/
-//cleanup.c
-void		free_elem(void *elem, t_mem_type mem);
-void		free_tabstr(char **tabstr);
-void		free_cmd(t_cmd *cmd);
-void		free_minishell(t_data *data);
-void		free_tree(t_bintree *root);
-void		free_leaf(t_bintree *leaf);
-void		close_all_fd(t_bintree *root);
-void		ft_free_bugsplit(char **str, int i);
-
-// DEBUG FUNCTION
-void		print_list(t_token *list);
-void		print_rdir(t_token *token);
-void		print_args(char **list);
-void		print_tree(t_bintree *root, int space);
-
-/***********PARSING****************/
-// Builtins
-void		change_dir(t_bintree *node, t_data *data);
-int			echo(t_bintree *node, t_data *data);
-int			print_working_dir(t_bintree *node, t_data *data);
-int			print_env(t_bintree *node, char **envp, char *format);
-int			export(t_bintree *node, t_data *data);
+/*****************SYNTAX*****************/
+//syntax.c
+int			parenthesis_syntax(t_token *prev, t_token *curr);
+int			catch_syntax_error(t_token *prev, t_token *curr);
+int			syntax_error(char *str);
 
 /***********QUOTE_UTILS****************/
 //quote_utils.c
@@ -233,24 +229,33 @@ char	*get_quotedword(char **str);
 char	*get_cleanword(char **str);
 char 	*remove_quote(char *str);
 
-/***********HEREDOC****************/
+/****************************************/
+/*               BUILTINS               */
+/****************************************/
+// Builtins
+void		change_dir(t_bintree *node, t_data *data);
+int			echo(t_bintree *node, t_data *data);
+int			print_working_dir(t_bintree *node, t_data *data);
+int			print_env(t_bintree *node, char **envp, char *format);
+int			export(t_bintree *node, t_data *data);
+void		unset(t_bintree *node, t_data *data);
+
+/****************************************/
+/*               HEREDOC                */
+/****************************************/
 //heredoc.c
 char		*get_here_doc(char *lim, t_data *data);
 char		*random_name(int nb_char);
 int			catch_heredoc(t_rdir *rdir, char *str, t_data *data, int num_rdir);
 
-/***********EXPAND****************/
+/****************************************/
+/*               EXPAND                 */
+/****************************************/
 //expand.c
 int			expand_size(char *str, int pos);
 int			insert_expand(char **input, int pos, char *exp);
 int			find_expand(char *str);
 char		*catch_expand(t_data *data, char *str);
 void		expand_str(t_data *data, char **str);
-
-/***********SYNTAX****************/
-//syntax.c
-int			parenthesis_syntax(t_token *prev, t_token *curr);
-int			catch_syntax_error(t_token *prev, t_token *curr);
-int			syntax_error(char *str);
 
 #endif

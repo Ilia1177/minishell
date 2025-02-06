@@ -202,6 +202,7 @@ char	**set_env(char *name, char *value, char **old_envp)
 	return (new_env);
 }
 
+
 int	exist(char **envp, char *name)
 {
 	int	i;
@@ -272,4 +273,47 @@ int	print_env(t_bintree *node, char **envp, char *format)
 		}
 	}
 	return (0);
+}
+
+char	**unset_env(char *name, char **old_envp)
+{
+	int		i;
+	int		j;
+	int		env_index;
+	char	**new_env;
+
+	env_index = exist(old_envp, name);
+	if (env_index == -1)
+		return (old_envp);
+	i = 0;
+	while (old_envp[i])
+		i++;
+	new_env = malloc(sizeof(char *) * i);
+	if (!new_env)
+		return (old_envp);
+	i = -1;
+	j = -1;
+	while (old_envp[++i])
+	{
+		if (i == env_index)
+			i++;
+		new_env[++j] = old_envp[i];
+	}
+	new_env[j] = NULL;
+	free(old_envp);
+	return (new_env);
+}
+
+void	unset(t_bintree *node, t_data *data)
+{
+	int	i;
+
+	i = 1;
+	if (!node->cmd->args[i])
+		return ;
+	while (node->cmd->args[i])
+	{
+		data->envp = unset_env(node->cmd->args[1], data->envp);
+		i++;
+	}
 }
