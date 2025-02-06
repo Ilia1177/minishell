@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/06 14:43:41 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/06 14:59:15 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,23 +38,14 @@ int	run_shell(t_data *data)
 {
 	t_token				*cpy;
 	static char			*tmp;
-	//char		wd[1024];
 
 	while (1)
 	{
 		init_shell(data);
-		/* if (getcwd(wd, sizeof(wd))) */
-		/* { */
-		/* 	tmp = ft_strjoin("M!N!$H3LL>", wd); */
-		/* 	data->prompt = ft_strjoin(tmp, ">$"); */
-		/* 	free(tmp); */
-		/* } */
 		tmp = catch_expand(data, "PWD");
 		tmp = ft_strjoin("M!N!$H3LL>", tmp);
 		data->prompt = ft_strjoin(tmp, ">$");
 		free(tmp);
-		//free(tmp2);
-
 		data->user_input = listen_to_user(data->prompt);
 		if (!data->user_input || !ft_strcmp(data->user_input, ""))
 		{
@@ -62,21 +53,22 @@ int	run_shell(t_data *data)
 			free_minishell(data);
 			rl_clear_history();
 			ft_putendl_fd("exit", 2);
-			exit(0);
+			data->status += signal_caught;
+			exit(signal_caught);
 		}
 		if (!tokenize(data))
-		{
 			free_minishell(data);
-			continue ;
-		}
 		else
 		{
 			cpy = data->token_list;
+			if (data->flag)
+			{				
+				printf("\n\n----------- List of tokens is :\n");
+				print_list(data->token_list);
+			}
 			data->tree = build_tree(&cpy, CMD);
 			if (data->flag)
 			{
-				printf("\n\n----------- List of tokens is :\n");
-				print_list(data->token_list);
 				printf("\n\n----------- Binary tree :  ----\n");
 				print_tree(data->tree, 0); // print the tree for debug
 			}

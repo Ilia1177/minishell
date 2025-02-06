@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 09:36:13 by ilia              #+#    #+#             */
-/*   Updated: 2025/01/29 01:01:24 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/06 14:57:17 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	handle_signals(int sig, siginfo_t *info, void *ctx)
 		ft_putendl_fd(" ^C", 1);
 		rl_replace_line("", 0); // Clear the current input
 		rl_on_new_line();       // Inform readline to start a new line
-		rl_redisplay();         // Redisplay the prompt   
+		rl_redisplay();         // Redisplay the prompt 
 	}
 	else if (sig == SIGQUIT)
 		return ;
