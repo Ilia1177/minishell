@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/01/29 10:48:57 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/04 11:11:23 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	**tab_dup(char **tab)
 	int		i;
 
 	i = 0;
+	if (!tab)
+		return (NULL);
 	while (tab[i])
 		i++;
 	new = malloc(sizeof(char *) * (i + 1));
@@ -61,6 +63,8 @@ char	*get_full_path(char **paths, char *str)
 	char	*cmd;
 	char	*tmp;
 
+	if (!paths)
+		return (NULL);
 	tmp = malloc(sizeof(char) * (ft_strnlen(str, ' ') + 1));
 	if (!tmp)
 		return (NULL);

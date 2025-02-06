@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:31:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/30 21:15:42 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/04 11:13:29 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	unquote(t_token *token, t_data *data)
 	int		len;
 
 	(void)data;
-	if (token->type != CMD)
+	if (token->type != CMD || !token->cmd)
 		return ;
 	j = 0;
 	while (token->cmd->args[j])
