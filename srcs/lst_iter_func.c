@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:31:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/05 12:47:14 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/06 07:31:37 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	unquote(t_token *token, t_data *data)
 	int		len;
 
 	(void)data;
-	if (token->type != CMD)
+	if (token->type != CMD || !token->cmd)
 		return ;
 	j = 0;
 	while (token->cmd->args[j])
@@ -39,9 +39,9 @@ void	unquote(t_token *token, t_data *data)
 
 void	get_expand(t_token *token, t_data *data)
 {
-	char	*str;
+	//char	*str;
 
-	str = token->input;
+	//str = token->input;
 	expand_str(data, &token->input);
 }
 
@@ -66,19 +66,19 @@ void	get_redir(t_token *token, t_data *data)
 	seek_rdir(str, &rdir, data);
 	rdir[nb_rdir].name = NULL;
 	token->cmd->rdir = rdir;
-}
+}	
 
 void	split_args(t_token *token, t_data *data)
 {
 	int		nb_args;
-	int		i;
+	//int		i;
 	char	*input;
 
 	(void)data;
 	if (token->type == CMD)
 	{
 		input = token->input;
-		i = 0;
+	//	i = 0;
 		nb_args = ft_nb_args(token->input);
 		token->cmd->args = ft_calloc(nb_args + 1, sizeof(char *));
 		if (!token->cmd->args)

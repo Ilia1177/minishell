@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/05 11:11:59 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:23:08 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ t_token	*add_back_tokenlist(t_token **head, t_token **lst, char *tokens)
 	t_token	*curr_token;
 	t_token	*prev_token;
 
-	curr_token = *lst;
-	prev_token = curr_token;
+	prev_token = *lst;
 	curr_token = make_token(tokens);
-	prev_token->next = curr_token;
-	if (!curr_token || catch_syntax_error(prev_token, curr_token))
+	if (prev_token)
+		prev_token->next = curr_token;
+	if (!*head)
+		*head = curr_token;
+	if (catch_syntax_error(prev_token, curr_token))
 	{
 		ft_lstclear_token(head, &free);
 		return (NULL);
@@ -36,20 +38,13 @@ t_token	*build_tokenlist(char **tokens)
 	t_token	*curr_token;
 
 	i = 0;
-	head = make_token(tokens[i]);
-	if (!head)
-		return (NULL);
-	if (head->type != CMD && ft_strcmp(head->input, "("))
-	{
-		ft_printf(2, "SYNTERR '%s'\n", head->input);
-		ft_lstclear_token(&head, &free);
-		return (NULL);
-	}
-	curr_token = head;
-	while (tokens[++i])
+	head = NULL;
+	curr_token = NULL;
+	curr_token = add_back_tokenlist(&head, &curr_token, tokens[i]);
+	while (curr_token && tokens[++i])
 	{
 		curr_token = add_back_tokenlist(&head, &curr_token, tokens[i]);
-		if (curr_token == NULL)
+		if (!curr_token)
 			return (NULL);
 	}
 	return (head);
@@ -61,15 +56,15 @@ int	tokenize(t_data *data)
 
 	if (!data->user_input)
 		return (0);
+	if (!check_closing_quote(data->user_input) || open_parenthesis(data->user_input))
+		return (0);	
 	tokens = ft_split_token(data->user_input);
 	if (!tokens)
 		return (0);
 	data->token_list = build_tokenlist(tokens);
+	free_tabstr(tokens);
 	if (!data->token_list)
-	{
-		free_tabstr(tokens);
 		return (0);
-	}
 	ft_lstiter_token(data, &get_redir);
 	ft_lstiter_token(data, &get_expand);
 	ft_lstiter_token(data, &split_args);
