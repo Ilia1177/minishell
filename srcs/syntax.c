@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:51:50 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/06 14:21:23 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/06 17:50:04 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	catch_syntax_error(t_token *prev, t_token *curr)
 	else if (curr->type == CMD)
 		error = cmd_syntax(prev, curr);
 	if (error)
-		ft_printf(2, "SYNTERR (syntax err) '%s'\n", curr->input);
+		ft_printf(2, "SYNTERR '%s'\n", curr->input);
 	return (error);
 }
 
@@ -151,32 +151,32 @@ int	check_closing_quote(char *str)
 	return (close);
 }
 
-int	syntax_error(char *str)
-{
-	int	i;
-
-	if (!check_closing_quote(str) || str[0] == '|' || str[0] == '&')
-	{
-		printf(SYNTERR"\n");
-		return (1);
-	}
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '\"' || str[i] == '\'')
-			i += ft_strnlen(str, str[i]);
-		else if (!ft_strncmp(&str[i], "&|", 2) || !ft_strncmp(&str[i], "|&", 2)
-			|| !ft_strncmp(&str[i], "|||", 3) || !ft_strncmp(&str[i], "<<<", 3)
-			|| !ft_strncmp(&str[i], ">>>", 3))
-		{
-			printf(SYNTERR"\n");
-			return (1);
-		}
-		if (str[i])
-			i++;
-	}
-	return (0);
-}
+//	int	syntax_error(char *str)
+//	{
+//		int	i;
+//
+//		if (!check_closing_quote(str) || str[0] == '|' || str[0] == '&')
+//		{
+//			printf(SYNTERR"\n");
+//			return (1);
+//		}
+//		i = 0;
+//		while (str[i])
+//		{
+//			if (str[i] == '\"' || str[i] == '\'')
+//				i += ft_strnlen(str, str[i]);
+//			else if (!ft_strncmp(&str[i], "&|", 2) || !ft_strncmp(&str[i], "|&", 2)
+//				|| !ft_strncmp(&str[i], "|||", 3) || !ft_strncmp(&str[i], "<<<", 3)
+//				|| !ft_strncmp(&str[i], ">>>", 3))
+//			{
+//				printf(SYNTERR"\n");
+//				return (1);
+//			}
+//			if (str[i])
+//				i++;
+//		}
+//		return (0);
+//	}
 
 int	open_parenthesis(char *str)
 {
