@@ -6,7 +6,7 @@
 #    By: jhervoch <jhervoch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/23 14:19:41 by jhervoch          #+#    #+#              #
-#    Updated: 2025/01/23 17:24:19 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/02/06 15:13:18 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,7 @@ CPPFLAGS 	:= $(addprefix -I, $(INC_DIR))
 #CHAR
 SRCS		:= 	$(addprefix $(SRCS_DIR)char/ft_, isalnum isalpha isascii isdigit isprint tolower toupper)
 #CONVERT
-SRCS		+= 	$(addprefix $(SRCS_DIR)convert/ft_,atoi atoier atol itoa)
+SRCS		+= 	$(addprefix $(SRCS_DIR)convert/ft_,atoi atoier atol itoa atoller)
 #LST
 SRCS		+= 	$(addprefix $(SRCS_DIR)lst/ft_,lstadd_back lstadd_front lstclear lstdelone lstiter	\
 			   	lstlast lstmap lstnew lstsize)

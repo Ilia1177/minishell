@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/04 19:46:17 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:49:24 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,10 @@ int	exec_builtin(t_bintree *node, t_data *data)
 		echo(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "exit"))
 	{
-		ft_printf(2, "exit");
-		free_minishell(data);
-		exit(0);
+		exit_minishell(node, data);
+		/* ft_printf(2, "exit"); */
+		/* free_minishell(data); */
+		/* exit(0); */
 	}
 
 	return (0);
@@ -105,7 +106,7 @@ int	exec_builtin(t_bintree *node, t_data *data)
 
 int	exec_cmd(t_bintree *node, t_data *data)
 {
-	int pid;
+	int	pid;
 	int exit_status;
 
 	redir(node);
