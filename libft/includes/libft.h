@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 19:23:22 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/22 23:05:33 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/06 15:12:50 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int			ft_memcmp(const void *s1, const void *s2, size_t n);
 char		*ft_strnstr(const char *big, const char *little, size_t len);
 int			ft_atoi(const char *nptr);
 long int	ft_atol(const char *nptr);
+int64_t		ft_atoller(const char *nptr, int *error);
 int			ft_atoier(const char *nptr, int *error);
 void		*ft_calloc(size_t nmemb, size_t size);
 char		*ft_strdup(const char *s);

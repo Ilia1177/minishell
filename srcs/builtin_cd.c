@@ -202,7 +202,6 @@ char	**set_env(char *name, char *value, char **old_envp)
 	return (new_env);
 }
 
-
 int	exist(char **envp, char *name)
 {
 	int	i;

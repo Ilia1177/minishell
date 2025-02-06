@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/06 14:42:22 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/06 16:52:40 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@
 # define TMP 2
 # define WARNING ": not a valid identifier"
 # define SYNTERR "minishell: syntax error near unexpected token"
+# define TM_ARG "minishell: exit: too many arguments\n"
+# define NR_ARG "minishell: exit: %s: numeric argument required\n"
+
 
 typedef enum e_type
 {
@@ -239,6 +242,8 @@ int			print_working_dir(t_bintree *node, t_data *data);
 int			print_env(t_bintree *node, char **envp, char *format);
 int			export(t_bintree *node, t_data *data);
 void		unset(t_bintree *node, t_data *data);
+//exit.c
+void exit_minishell(t_bintree *node, t_data *data);
 
 /****************************************/
 /*               HEREDOC                */
