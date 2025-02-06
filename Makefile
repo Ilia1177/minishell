@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/01/30 16:44:03 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/02/05 11:12:19 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,10 @@ SRCS		=	binary_tree.c\
 				heredoc.c\
 				lst_iter_func.c\
 				quote_utils.c\
+				expand.c\
+				syntax.c\
+				make_elem.c\
+				redir.c\
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 
@@ -61,6 +65,7 @@ MINISHELL_JM_OBJ := $(OBJS_DIR)/minishell-jm.o
 MINISHELL_NIL_OBJ := $(OBJS_DIR)/minishell-nil.o
 
 OBJS		= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
+DEPS = $(OBJS:%.o=%.d)
 
 msg				:
 	@echo "$(COLOR)"
@@ -86,18 +91,18 @@ nil:fclean $(OBJS) $(MINISHELL_NIL_OBJ) $(LIBFT)
 
 $(OBJS_DIR)/%.o	: $(SRCS_DIR)/%.c 
 	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(MINISHELL_OBJ) : $(MINISHELL_SRC)
 	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(MINISHELL_JM_OBJ) : $(MINISHELL_JM_SRC)
-	$(CC) $(C_FLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(MINISHELL_NIL_OBJ) : $(MINISHELL_NIL_SRC)
 	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) -c $< -o $@
+	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(NAME)			:  $(OBJS) $(MINISHELL_OBJ) $(LIBFT)
 	@mkdir -p bin
@@ -118,3 +123,4 @@ re				: fclean all
 
 .PHONY			: all clean fclean re bonus
 
+-include $(DEPS)

@@ -22,14 +22,49 @@
 /* 	printf("path = %s\n", old_path); */
 /* 	new_path = ft_strjoin("PATH=", path); */
 /* } */
+void	update_pwds(t_data *data)
+{
+	char	wd[1024];
+	char	*old_pwd;
+	char	*new_pwd;
 
-/* int	change_dir(t_cmd *cmd, t_data *data) */
-/* { */
-/* 	if (!chdir(path)) */
-/* 		return (-1); */
-/* 	change_pwd(data, path); */
-/* 	return (0); */
-/* } */
+	old_pwd = ft_strjoin("OLDPWD=", catch_expand(data, "PWD"));
+	update_envp(data, old_pwd);
+	free(old_pwd);
+	getcwd(wd, sizeof(wd));
+	new_pwd = ft_strjoin("PWD=", wd);
+	update_envp(data, new_pwd);
+	free(new_pwd);
+}
+
+void	change_dir(t_bintree *node, t_data *data)
+{
+	char	wd[1024];
+	char	*path;
+
+	if (!node->cmd->args[1])
+		return ;
+	if (!ft_strcmp(node->cmd->args[1], "-"))
+		path = ft_strdup(catch_expand(data, "OLDPWD"));
+	else if (!ft_strcmp(node->cmd->args[1], "--"))
+		path = ft_strdup(catch_expand(data, "HOME"));
+	else if (node->cmd->args[1][0] == '/')
+		path = ft_strdup(node->cmd->args[1]);
+	else
+	{
+		getcwd(wd, sizeof(wd));
+		path = ft_strjoin(wd, "/");
+		path = ft_strjoin(path, node->cmd->args[1]);
+	}
+	if (!chdir(path))
+		update_pwds(data);
+	else
+	{
+		ft_printf(2, "M!N!$H3LL: cd: include: No such file or directory\n");
+		data->status = 1;
+	}
+	free(path);
+}
 
 int	echo(t_bintree *node, t_data *data)
 {
@@ -77,9 +112,7 @@ char	*catch_name(char *str)
 	int		i;
 	int		len;
 	char	*name;
-	char	*warning;
 
-	warning = ": not a valid identifier";
 	if (!str)
 		return (NULL);
 	len = ft_strnlen(str, '=');
@@ -93,7 +126,7 @@ char	*catch_name(char *str)
 	{
 		if (is_space(str[i]) || !ft_isalnum(str[i]))
 		{
-			ft_printf(2, "minishell : export : `%s\"%s\n", str, warning);
+			ft_printf(2, "minishell : export : `%s\"%s\n", str, WARNING);
 			free(name);
 			return (NULL);
 		}
@@ -181,7 +214,7 @@ int	exist(char **envp, char *name)
 			return (i);
 	return (-1);
 }
-	
+
 int	update_envp(t_data *data, char *str)
 {
 	char	*tmp;

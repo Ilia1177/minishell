@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/03 11:06:36 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/04 17:03:53 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,21 @@ void	init_shell(t_data *data)
 int	run_shell(t_data *data)
 {
 	t_token		*cpy;
-	char		wd[1024];
+	/* char		wd[1024]; */
 	char		*tmp;
 
 	while (1)
 	{
-		if (getcwd(wd, sizeof(wd)))
-		{
-			tmp = ft_strjoin("M!N!$H3LL>", wd);
-			data->prompt = ft_strjoin(tmp, ">$");
-			free(tmp);
-		}
+		/* if (getcwd(wd, sizeof(wd))) */
+		/* { */
+		/* 	tmp = ft_strjoin("M!N!$H3LL>", wd); */
+		/* 	data->prompt = ft_strjoin(tmp, ">$"); */
+		/* 	free(tmp); */
+		/* } */
+		tmp = catch_expand(data, "PWD");
+		tmp = ft_strjoin("M!N!$H3LL>", tmp);
+		data->prompt = ft_strjoin(tmp, ">$");
+
 		data->user_input = listen_to_user(data->prompt);
 		if (!data->user_input || !ft_strcmp(data->user_input, ""))
 		{
@@ -73,7 +77,7 @@ int	run_shell(t_data *data)
 				printf("\n\n----------- Binary tree :  ----\n");
 				print_tree(data->tree, 0); // print the tree for debug
 			}
-			execute_tree(data); 
+			execute_tree(data);
 			free_minishell(data);
 		}
 	}

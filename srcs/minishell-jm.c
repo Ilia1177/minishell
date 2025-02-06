@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 20:54:07 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/05 11:29:17 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	init_shell(t_data *data)
 
 int	run_shell(t_data *data)
 {
-	//t_token		*cpy;
+	t_token		*cpy;
 	char		wd[1024];
 	char		*tmp;
 
@@ -63,13 +63,13 @@ int	run_shell(t_data *data)
 		tokenize(data);
 		print_list(data->token_list);
 		//printf("\n\n----------- DEBUG TREE ---------");
-		//cpy = data->token_list;
-		//data->tree = build_tree(&cpy, CMD);
+		cpy = data->token_list;
+		data->tree = build_tree(&cpy, CMD);
 		//print_tree(data->tree, 0); // print the tree for debug
 		//printf("\n\n----------- EXECUTION ----------");
-		//execute_tree(data); 
-		//free_minishell(data);
-		init_shell(data);
+		execute_tree(data); 
+		free_minishell(data);
+		//init_shell(data);
 	}
 }
 

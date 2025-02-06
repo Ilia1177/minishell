@@ -127,3 +127,14 @@ void	close_all_fd(t_bintree *root)
 	if (is_fd_open(root->pipefd[OUT]))
 		close(root->pipefd[OUT]);
 }
+
+/* free split when token tab failed*/
+void	ft_free_bugsplit(char **str, int i)
+{
+	while (i >= 0)
+	{
+		free(str[i]);
+		i--;
+	}
+	free(str);
+}

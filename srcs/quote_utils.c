@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:40:34 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/31 12:29:26 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/04 17:02:43 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*get_cleanword(char **str)
 	return (word);
 }
 
-char *remove_quote(char *str)
+char	*remove_quote(char *str)
 {
 	char	*tmp;
 	char	*arg;

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/29 21:17:47 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/04 19:46:17 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int	redir(t_bintree *node)
 {
-	int	fd_in;
-	int	fd_out;
-	int i;
-	char *name;
-	t_type_rdir type;
-	
+	int			fd_in;
+	int			fd_out;
+	int			i;
+	char		*name;
+	t_type_rdir	type;
+
 	i = -1;
 	while (node->cmd->rdir[++i].name)
 	{
@@ -57,8 +57,8 @@ void	child_process(t_bintree *node, t_data *data)
 
 int	is_builtin(t_cmd *cmd)
 {
-	/* if (!ft_strcmp(cmd->args[0], "cd")) */
-	/* 	return (1); */
+	if (!ft_strcmp(cmd->args[0], "cd"))
+		return (1);
 	if (!ft_strcmp(cmd->args[0], "pwd"))
 		return (1);
 	if (!ft_strcmp(cmd->args[0], "export"))
@@ -81,8 +81,8 @@ int	exec_builtin(t_bintree *node, t_data *data)
 		ft_putstr_fd("exec builtins: ", 2);
 		ft_putendl_fd(node->cmd->args[0], 2);
 	}
-//	if (!ft_strcmp(node->cmd->args[0], "cd"))
-//		change_dir(node, data);
+	if (!ft_strcmp(node->cmd->args[0], "cd"))
+		change_dir(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "pwd"))
 		print_working_dir(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "export"))
@@ -135,7 +135,6 @@ int	exec_cmd(t_bintree *node, t_data *data)
 	return (exit_status);
 }
 
-
 int	execute_tree(t_data *data)
 {
 	int	exit_status;
@@ -183,7 +182,7 @@ int	make_operation(t_bintree *node, t_data *data)
 	connect_stdio(node, node->left);
 	exit_status = execute_node(node->left, data);
 	if (!ft_strcmp(node->input, "||"))
-	{	
+	{
 		if (exit_status && node->right)
 		{
 			connect_stdio(node, node->right);
