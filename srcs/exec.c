@@ -63,8 +63,8 @@ int	is_builtin(t_cmd *cmd)
 		return (1);
 	if (!ft_strcmp(cmd->args[0], "export"))
 		return (1);
-	/* if (!ft_strcmp(cmd->args[0], "unset")) */
-	/* 	return (1); */
+	if (!ft_strcmp(cmd->args[0], "unset"))
+		return (1);
 	if (!ft_strcmp(cmd->args[0], "env"))
 		return (1);
 	if (!ft_strcmp(cmd->args[0], "exit"))
@@ -89,8 +89,8 @@ int	exec_builtin(t_bintree *node, t_data *data)
 		export(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "env"))
 		print_env(node, data->envp, "");
-	/* if (!ft_strcmp(node->cmd->args[0], "unset")) */
-	/* 	unset(node, data); */
+	if (!ft_strcmp(node->cmd->args[0], "unset"))
+		unset(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "echo"))
 		echo(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "exit"))
