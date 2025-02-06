@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/05 12:44:37 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:42:22 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,4 +258,11 @@ int			find_expand(char *str);
 char		*catch_expand(t_data *data, char *str);
 void		expand_str(t_data *data, char **str);
 
+/***********SYNTAX****************/
+//syntax.c
+int			parenthesis_syntax(t_token *prev, t_token *curr);
+int			catch_syntax_error(t_token *prev, t_token *curr);
+int			syntax_error(char *str);
+int			open_parenthesis(char *str);
+int			check_closing_quote(char *str);
 #endif

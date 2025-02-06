@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/04 17:03:53 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:43:41 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,24 @@ void	init_shell(t_data *data)
 int	run_shell(t_data *data)
 {
 	t_token				*cpy;
-	static char		*tmp;
-	char		wd[1024];
+	static char			*tmp;
+	//char		wd[1024];
 
 	while (1)
 	{
-		if (getcwd(wd, sizeof(wd)))
-		{
-			tmp = ft_strjoin("M!N!$H3LL>", wd);
-			data->prompt = ft_strjoin(tmp, ">$");
-			free(tmp);
-		}
-		else	if (catch_expand(data, "PWD"))
-		{
-			tmp = catch_expand(data, "PWD");
-			tmp = ft_strjoin("M!N!$H3LL>", tmp);
-			data->prompt = ft_strjoin(tmp, ">$");
-		}
+		init_shell(data);
+		/* if (getcwd(wd, sizeof(wd))) */
+		/* { */
+		/* 	tmp = ft_strjoin("M!N!$H3LL>", wd); */
+		/* 	data->prompt = ft_strjoin(tmp, ">$"); */
+		/* 	free(tmp); */
+		/* } */
+		tmp = catch_expand(data, "PWD");
+		tmp = ft_strjoin("M!N!$H3LL>", tmp);
+		data->prompt = ft_strjoin(tmp, ">$");
+		free(tmp);
+		//free(tmp2);
+
 		data->user_input = listen_to_user(data->prompt);
 		if (!data->user_input || !ft_strcmp(data->user_input, ""))
 		{
