@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/04 17:02:18 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/06 07:37:44 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ static size_t	ft_wordlen(const char *s)
  * --a command
  * --a operator
  * --a paremthesis*/
+
+// is the tab null terminated ???
 char	**ft_split_token(char const *s)
 {
 	int		i;

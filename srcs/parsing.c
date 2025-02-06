@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/05 10:32:10 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:08:32 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,19 +59,4 @@ int	ft_nb_args(const char *s)
 			i++;
 	}
 	return (nb_args);
-}
-
-int	ft_closing_parenthesis(char *str)
-{
-	int	open;
-
-	open = 0;
-	while (*str)
-	{
-		if (*str == '(')
-			open += 1;
-		else if (*str == ')')
-			open -= 1;
-	}
-	return (open);
 }
