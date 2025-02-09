@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:31:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/06 07:31:37 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/07 15:04:54 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	split_args(t_token *token, t_data *data)
 	char	*input;
 
 	(void)data;
-	if (token->type == CMD)
+	if (token->type == CMD && token->cmd)
 	{
 		input = token->input;
 	//	i = 0;

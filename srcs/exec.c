@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/06 14:49:24 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/07 17:53:56 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ void	child_process(t_bintree *node, t_data *data)
 	close(node->stdfd[IN]);
 	close(node->stdfd[OUT]);
 	execve(node->cmd->args[0], node->cmd->args, data->envp);
-	perror("minishell is warning you");
-	exit(127);
+	perror("This command is not handled");
+	kill(0, SIGINT);
+	exit_minishell(node, data);
 }
 
 int	is_builtin(t_cmd *cmd)

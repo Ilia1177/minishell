@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 18:27:25 by npolack           #+#    #+#             */
-/*   Updated: 2025/01/30 21:07:50 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/09 10:19:10 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,33 +107,32 @@ int	print_working_dir(t_bintree *node, t_data *data)
 	return (0);
 }
 
-char	*catch_name(char *str)
+int	catch_name(char **buff, char *str)
 {
 	int		i;
 	int		len;
+	int		error;
 	char	*name;
 
+	error = 0;
 	if (!str)
-		return (NULL);
+		return (-1);
 	len = ft_strnlen(str, '=');
-	if (len == (int)ft_strlen(str))
-		return (NULL);
 	name = malloc(sizeof(char) * len + 1);
 	if (!name)
-		return (NULL);
+		return (-1);
+	if (ft_isdigit(str[0]) || str[0] == '=')
+		error = 1;
 	i = -1;
 	while (++i < len)
 	{
 		if (is_space(str[i]) || !ft_isalnum(str[i]))
-		{
-			ft_printf(2, "minishell : export : `%s\"%s\n", str, WARNING);
-			free(name);
-			return (NULL);
-		}
+			error = 1;
 		name[i] = str[i];
 	}
 	name[i] = '\0';
-	return (name);
+	*buff = name;
+	return (error);
 }
 
 char	*catch_value(char *str)
@@ -142,10 +141,12 @@ char	*catch_value(char *str)
 	int		i;
 	int		len;
 
-	i = 0;
 	str += ft_strnlen(str, '=');
 	len = ft_strlen(++str);
 	value = malloc(sizeof(char) * len + 1);
+	if (!value)
+		return (NULL);
+	i = 0;
 	while (str[i])
 	{
 		value[i] = str[i];
@@ -163,16 +164,19 @@ char	*new_entry(char *name, char *value)
 	tmp = name;
 	name = ft_strjoin(name, "=");
 	if (!name)
-		return (NULL);
+		return (tmp);
 	free(tmp);
 	if (!value)
 		line = name;
 	else
 	{
 		line = ft_strjoin(name, value);
-		if (!line)
-			return (NULL);
 		free(name);
+		if (!line)
+		{
+			free(value);
+			return (NULL);
+		}
 	}
 	free(value);
 	return (line);
@@ -221,9 +225,10 @@ int	update_envp(t_data *data, char *str)
 	char	*name;
 	char	*value;
 	int		at_index;
+	int		error;
 
-	name = catch_name(str);
-	if (name)
+	error = catch_name(&name, str);
+	if (!error)
 	{
 		value = catch_value(str);
 		at_index = exist(data->envp, name);
@@ -237,22 +242,30 @@ int	update_envp(t_data *data, char *str)
 			data->envp = set_env(name, value, data->envp);
 	}
 	else
-		data->status = 1;
-	return (0);
+	{
+		if (error == 1)
+			ft_printf(2, "msh: export : `%s\"%s\n", name, WARNING);
+		free(name);
+	}
+	return (error);
 }
 
 int	export(t_bintree *node, t_data *data)
 {
-	int		j;
+	int	j;
+	int	status;
 
+	status = 0;
 	j = 1;
 	if (!node->cmd->args[j])
 		print_env(node, data->envp, "declare -x ");
 	while (node->cmd->args[j])
 	{
-		update_envp(data, node->cmd->args[j]);
+		if (update_envp(data, node->cmd->args[j]))
+			status = 1;
 		j++;
 	}
+	data->status = status;
 	return (0);
 }
 

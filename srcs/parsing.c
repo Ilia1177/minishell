@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/06 18:07:44 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/07 15:31:37 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ int	arg_len(char *str)
 	len = 0;
 	while (str[len] && !is_space(str[len]))
 	{
-		len += skip_quote(str + len, str[len]);
-		len++;
+		if (ft_isquote(str[len]))
+			len += skip_quote(str + len, str[len]);
+		else
+			len++;
 	}
 	return (len);
 }
