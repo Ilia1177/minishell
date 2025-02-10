@@ -35,30 +35,30 @@ SRCS_DIR	= srcs
 OBJS_DIR	= objs
 C_FLAGS		= -Wall -Wextra -Werror -g
 
-SRCS		=	binary_tree.c\
-				tokenize.c\
-				token_tab.c\
-				token_utils.c\
-				lst_utils.c\
-				debug.c\
-				parsing.c\
-				cleanup.c\
-				exec_utils.c\
-				exec.c\
-				signals.c\
-				builtin_cd.c\
-				heredoc.c\
-				lst_iter_func.c\
-				quote_utils.c\
-				expand.c\
-				syntax.c\
-				make_elem.c\
-				redir.c\
-				exit.c\
+SRCS		=	binary_tree/binary_tree.c\
+				tokenize/tokenize.c\
+				tokenize/token_tab.c\
+				tokenize/token_utils.c\
+				parsing/lst_utils.c\
+				minishell_runtime/debug.c\
+				parsing/parsing.c\
+				minishell_runtime/cleanup.c\
+				exec/exec_utils.c\
+				exec/exec.c\
+				minishell_runtime/signals.c\
+				builtins/builtin_cd.c\
+				rdir_and_arg/heredoc.c\
+				parsing/lst_iter_func.c\
+				parsing/quote_utils.c\
+				rdir_and_arg/expand.c\
+				parsing/syntax.c\
+				tokenize/make_elem.c\
+				rdir_and_arg/redir.c\
+				builtins/exit.c\
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 
-MINISHELL_SRC := $(SRCS_DIR)/minishell.c
+MINISHELL_SRC := $(SRCS_DIR)/minishell_runtime/minishell.c
 MINISHELL_JM_SRC := $(SRCS_DIR)/minishell-jm.c
 MINISHELL_NIL_SRC := $(SRCS_DIR)/minishell-nil.c
 MINISHELL_OBJ := $(OBJS_DIR)/minishell.o
@@ -91,7 +91,7 @@ nil:fclean $(OBJS) $(MINISHELL_NIL_OBJ) $(LIBFT)
 	@echo "Compiled with minishell-nil.c"
 
 $(OBJS_DIR)/%.o	: $(SRCS_DIR)/%.c 
-	@mkdir -p $(OBJS_DIR)
+	@mkdir -p $(dir $@)
 	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(MINISHELL_OBJ) : $(MINISHELL_SRC)

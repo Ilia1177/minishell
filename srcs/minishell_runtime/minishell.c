@@ -47,12 +47,13 @@ int	run_shell(t_data *data)
 		data->prompt = ft_strjoin(tmp, ">$");
 		free(tmp);
 		data->user_input = listen_to_user(data->prompt);
-		if (!data->user_input || !ft_strcmp(data->user_input, ""))
-		{
+		/* if (!data->user_input || !ft_strcmp(data->user_input, "")) */
+		if (!data->user_input)
+	{
 			free_tabstr(data->envp);
 			free_minishell(data);
 			rl_clear_history();
-			ft_putendl_fd("exit", 2);
+			//ft_putendl_fd("exit", 2);
 			data->status += signal_caught;
 			exit(signal_caught);
 		}

@@ -28,9 +28,9 @@
 # define OUT 1
 # define TMP 2
 # define WARNING ": not a valid identifier"
-# define SYNTERR "minishell: syntax error near unexpected token"
-# define TM_ARG "minishell: exit: too many arguments\n"
-# define NR_ARG "minishell: exit: %s: numeric argument required\n"
+# define SYNTERR "MSH: syntax error near unexpected token"
+# define TM_ARG "MSH: exit: too many arguments\n"
+# define NR_ARG "MSH: exit: %s: numeric argument required\n"
 
 
 typedef enum e_type
@@ -112,7 +112,7 @@ typedef struct s_data
 extern int	signal_caught;
 
 /****************************************/
-/*         MINISHELL RUNTIME            */
+/*         MINISHELL_RUNTIME            */
 /****************************************/
 //main.c
 void		init_shell(t_data *data);
@@ -155,11 +155,6 @@ t_bintree	*build_tree(t_token **start, int priority);
 t_token		*build_tokenlist(char **tokens);
 int			tokenize(t_data *data);
 
-//redir.c
-int			ft_nb_rdir(char *str);
-int			true_wordlen(char *str);
-int			catch_rdir(t_rdir	*rdir, char *str, t_type_rdir type, int num_rdir);
-void		seek_rdir(char *str, t_rdir **s_rdir, t_data *data);
 
 //make_elem.c
 t_cmd		*make_cmd(void);
@@ -178,14 +173,6 @@ int			sep_len(char *str);
 int			ft_nbword(const char *s);
 // void		ft_skip_quote(const char *s, int *index);
 char		**ft_split_token(char const *s);
-
-/*************LST_ITER_FUNC***********/
-//lst_iter_func.c
-void		unquote(t_token *token, t_data *data);
-void		get_redir(t_token *token, t_data *data);
-void		type_token(t_token *token, t_data *data);
-void		split_args(t_token *token, t_data *data);
-void		get_expand(t_token *token, t_data *data);
 
 /****************************************/
 /*                EXEC                  */
@@ -223,6 +210,9 @@ void		iter_split_args(char *input, t_token **iter_token, int nb_args);
 int			parenthesis_syntax(t_token *prev, t_token *curr);
 int			catch_syntax_error(t_token *prev, t_token *curr);
 int			syntax_error(char *str);
+int			open_parenthesis(char *str);
+int			check_closing_quote(char *str);
+
 
 /***********QUOTE_UTILS****************/
 //quote_utils.c
@@ -231,6 +221,15 @@ char	find_next_quote(char *str);
 char	*get_quotedword(char **str);
 char	*get_cleanword(char **str);
 char 	*remove_quote(char *str);
+
+/*************LST_ITER_FUNC***********/
+//lst_iter_func.c
+void		unquote(t_token *token, t_data *data);
+void		get_redir(t_token *token, t_data *data);
+void		type_token(t_token *token, t_data *data);
+void		split_args(t_token *token, t_data *data);
+void		get_expand(t_token *token, t_data *data);
+
 
 /****************************************/
 /*               BUILTINS               */
@@ -246,16 +245,15 @@ void		unset(t_bintree *node, t_data *data);
 void exit_minishell(t_bintree *node, t_data *data);
 
 /****************************************/
-/*               HEREDOC                */
+/*               RDIR_&&_ARG            */
 /****************************************/
+/***********HEREDOC****************/
 //heredoc.c
 char		*get_here_doc(char *lim, t_data *data);
 char		*random_name(int nb_char);
 int			catch_heredoc(t_rdir *rdir, char *str, t_data *data, int num_rdir);
 
-/****************************************/
-/*               EXPAND                 */
-/****************************************/
+/***********EXPAND****************/
 //expand.c
 int			expand_size(char *str, int pos);
 int			insert_expand(char **input, int pos, char *exp);
@@ -263,11 +261,11 @@ int			find_expand(char *str);
 char		*catch_expand(t_data *data, char *str);
 void		expand_str(t_data *data, char **str);
 
-/***********SYNTAX****************/
-//syntax.c
-int			parenthesis_syntax(t_token *prev, t_token *curr);
-int			catch_syntax_error(t_token *prev, t_token *curr);
-int			syntax_error(char *str);
-int			open_parenthesis(char *str);
-int			check_closing_quote(char *str);
+
+/***********RDIR****************/
+//redir.c
+int			ft_nb_rdir(char *str);
+int			true_wordlen(char *str);
+int			catch_rdir(t_rdir	*rdir, char *str, t_type_rdir type, int num_rdir);
+void		seek_rdir(char *str, t_rdir **s_rdir, t_data *data);
 #endif
