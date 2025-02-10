@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:51:50 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/10 17:15:53 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/10 18:57:48 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,25 +58,40 @@ int	rdir_syntax(t_token *curr, int c)
 	char	*sym;
 	int		error;
 	int		i;
+	char	*str;
 
 	error = 0;
 	sym = ft_strchr(curr->input, c);
-	while (sym && *sym)
+	str = curr->input;
+	c = 0;
+	while(*str)
 	{
-		i = 0;
-		while (sym[i] == c)
-			i++;
-		if (i > 2)
-			return (258);
-		while (isspace(sym[i]))
-			i++;
-		if (!sym[i] || sym[i] == '>' || sym[i] == '<')
-			return (258);
-		else if (ft_isprint(sym[i]))
-			error = 0;
+
+		if (*str == '>' || *str == '<')
+		{
+			i = 0;
+			c = *str;
+			while (str[i] == c)
+				i++;
+			if (i > 2)
+				return (2);
+			while (isspace(str[i]))
+				i++;
+			if (ft_isquote(str[i]))
+				i += skip_quote(str + i, str[i]);
+			else if (!ft_isprint(str[i]))
+				return (2);
+			else
+			{
+				while (isprint(str[i]) && !ft_isquote(str[i]))
+					i++;
+			}
+			str += i;
+		}
+		else if (ft_isquote(*str))
+			str += skip_quote(str, *str);
 		else
-			error = 1;
-		sym = ft_strchr(sym + i, c);
+			str++;
 	}
 	return (error);
 }
@@ -158,12 +173,14 @@ int	open_parenthesis(char *str)
 	open = 0;
 	while (*str)
 	{
-		str += skip_quote(str, *str);
 		if (*str == '(')
 			open += 1;
 		else if (*str == ')')
 			open -= 1;
-		str++;	
+		if (ft_isquote(*str))
+			str += skip_quote(str, *str);
+		else
+			str++;	
 	}
 	if (open > 0)
 		ft_printf(2, SYNTERR);

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/10 17:59:26 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/10 18:35:09 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,8 @@ int	exec_cmd(t_bintree *node, t_data *data)
 		pid = fork();
 	else
 	{
+		close(node->stdfd[IN]);
+		close(node->stdfd[OUT]);
 		perror("Command does not exist");
 		return (127); // if dont find the command with access
 	}

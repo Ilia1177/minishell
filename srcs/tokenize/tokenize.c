@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/10 18:04:37 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/10 18:18:10 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ t_token	*build_tokenlist(char **tokens)
 		if (!curr_token)
 			return (NULL);
 	}
-	if (!ft_strcmp(curr_token->input, ")") || !ft_strcmp(curr_token->input, "("))
-		return (head) ;
-	else if (curr_token->type == OPERATOR)
-	{
-		ft_lstclear_token(&head, &free);
-		ft_printf(2, SYNTERR);
-		return (NULL);
-	}
+	/* if (!ft_strcmp(curr_token->input, ")") || !ft_strcmp(curr_token->input, "(")) */
+	/* 	return (head) ; */
+	/* else if (curr_token->type == OPERATOR) */
+	/* { */
+	/* 	ft_lstclear_token(&head, &free); */
+	/* 	ft_printf(2, SYNTERR); */
+	/* 	return (NULL); */
+	/* } */
 	return (head);
 }
 
