@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-int	signal_caught;
+int	g_signal_caught;
 
 void	handle_signals(int sig, siginfo_t *info, void *ctx)
 {
 	(void)info;
 	(void)ctx;
 
-	signal_caught = sig;
+	g_signal_caught = sig;
 	if (sig == SIGINT)
 	{
 		ft_putendl_fd(" ^C", 1);
@@ -53,17 +53,17 @@ int	register_signals(void)
 
 /* int	listen_to_signal(t_data *data) */
 /* { */
-/* 	if (signal_caught == SIGQUIT) */
+/* 	if (g_signal_caught == SIGQUIT) */
 /* 	{ */
-/* 		printf("signal %d heard\n", signal_caught); */
+/* 		printf("signal %d heard\n", g_signal_caught); */
 /* 		printf("SIGQUIT received"); */
 /* 		kill(0, SIGQUIT); */
 /* 		free_minishell(data); */
-/* 		exit(signal_caught); */
+/* 		exit(g_signal_caught); */
 /* 	} */
-/* 	else if (signal_caught == SIGINT) */
+/* 	else if (g_signal_caught == SIGINT) */
 /* 	{ */
-/* 		printf("signal %d heard\n", signal_caught); */
+/* 		printf("signal %d heard\n", g_signal_caught); */
 /* 		//rl_on_newline(); */
 /* 		printf("SIGINT received"); */
 /* 		free_minishell(data); */

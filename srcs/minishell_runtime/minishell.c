@@ -27,7 +27,7 @@ char	*listen_to_user(char *prompt)
 void	init_shell(t_data *data)
 {
 	rl_catch_signals = 0; // Disable readline's signal handling
-	signal_caught = 0;
+	g_signal_caught = 0;
 	data->tree = NULL;
 	data->token_list = NULL;
 	data->paths = NULL;
@@ -47,15 +47,13 @@ int	run_shell(t_data *data)
 		data->prompt = ft_strjoin(tmp, ">$");
 		free(tmp);
 		data->user_input = listen_to_user(data->prompt);
-		/* if (!data->user_input || !ft_strcmp(data->user_input, "")) */
 		if (!data->user_input)
 	{
 			free_tabstr(data->envp);
 			free_minishell(data);
 			rl_clear_history();
-			//ft_putendl_fd("exit", 2);
-			data->status += signal_caught;
-			exit(signal_caught);
+			data->status += g_signal_caught;
+			exit(g_signal_caught);
 		}
 		if (!tokenize(data))
 			free_minishell(data);
@@ -93,5 +91,5 @@ int	main(int ac, char **argv, char **envp)
 	init_shell(&data);
 	run_shell(&data);
 	free_minishell(&data);
-	return (signal_caught);
+	return (g_signal_caught);
 }

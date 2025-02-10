@@ -109,7 +109,7 @@ typedef struct s_data
 }	t_data;
 
 //global variable
-extern int	signal_caught;
+extern int	g_signal_caught;
 
 /****************************************/
 /*         MINISHELL_RUNTIME            */
