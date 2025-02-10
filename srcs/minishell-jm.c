@@ -27,7 +27,7 @@ char	*listen_to_user(char *prompt)
 void	init_shell(t_data *data)
 {
 	rl_catch_signals = 0; // Disable readline's signal handling
-	signal_caught = 0;
+	g_signal_caught = 0;
 	data->tree = NULL;
 	data->token_list = NULL;
 	data->paths = NULL;
@@ -36,40 +36,50 @@ void	init_shell(t_data *data)
 
 int	run_shell(t_data *data)
 {
-	t_token		*cpy;
-	char		wd[1024];
-	char		*tmp;
-
+	t_token				*cpy;
+	static char			*tmp;
 
 	while (1)
 	{
-		if (getcwd(wd, sizeof(wd)))
-		{
-			tmp = ft_strjoin("Mini-unit-test>", wd);
-			/* data->prompt = ft_strjoin(tmp, ">$"); */
-			data->prompt = "Mini-unit-test>$";
-			free(tmp);
-		}
+		init_shell(data);
+		tmp = catch_expand(data, "PWD");
+		tmp = ft_strjoin("msh:>", tmp);
+		data->prompt = ft_strjoin(tmp, ">$");
+		free(tmp);
 		data->user_input = listen_to_user(data->prompt);
-		if (!data->user_input || !ft_strcmp(data->user_input, ""))
+		if (!data->user_input)
 		{
 			free_tabstr(data->envp);
 			free_minishell(data);
 			rl_clear_history();
-			ft_putendl_fd("exit", 2);
-			exit(0);
+			data->status += g_signal_caught;
+			exit(data->status);
 		}
-		/* data->token_list = tokenize(data); */
-		tokenize(data);
-		print_list(data->token_list);
-		//printf("\n\n----------- DEBUG TREE ---------");
-		cpy = data->token_list;
-		data->tree = build_tree(&cpy, CMD);
-		//print_tree(data->tree, 0); // print the tree for debug
-		//printf("\n\n----------- EXECUTION ----------");
-		execute_tree(data); 
-		free_minishell(data);
-		//init_shell(data);
+		else if (data->user_input[0] == '\0')
+		{
+			free(data->user_input);
+			free(data->prompt);
+			continue ;
+		}
+		if (!tokenize(data))
+			free_minishell(data);
+		else
+		{
+			cpy = data->token_list;
+			if (data->flag)
+			{				
+				printf("\n\n----------- List of tokens is :\n");
+				print_list(data->token_list);
+			}
+			data->tree = build_tree(&cpy, CMD);
+			if (data->flag)
+			{
+				printf("\n\n----------- Binary tree :  ----\n");
+				print_tree(data->tree, 0); // print the tree for debug
+			}
+			execute_tree(data);
+			free_minishell(data);
+		}
 	}
 }
 
@@ -77,13 +87,15 @@ int	main(int ac, char **argv, char **envp)
 {
 	t_data				data;
 
+	data.flag = 0;
+	data.status = 0;
 	(void)argv;
 	if (ac > 1)
-		printf("minishell: ???\n");
+		data.flag = 1;
 	register_signals();
-	data.envp = envp;
+	data.envp = tab_dup(envp);
 	init_shell(&data);
 	run_shell(&data);
 	free_minishell(&data);
-	return (signal_caught);
+	return (g_signal_caught);
 }
