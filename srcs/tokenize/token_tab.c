@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/06 07:37:44 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/10 16:57:04 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,32 @@ static size_t	ft_wordlen(const char *s)
 	return (len);
 }
 
+
+char	*build_input(const char *s)
+{
+	char	*tmp;
+	char	*str;
+	int		all_space;
+	int		i;
+
+	tmp = ft_substr(s, 0, ft_wordlen(s));
+	if (!tmp)
+		return (NULL);
+	all_space = 1;
+	i = -1;
+	while (tmp[++i])
+		if (!isspace(tmp[i]))
+			all_space = 0;
+	if (all_space)
+	{
+		free(tmp);
+		return (NULL);
+	}
+	str = ft_strtrim(tmp, "\r\f\v\n\t ");
+	free(tmp);
+	return (str);
+}
+
 /* this function split the input of the user
  * in token which could be ;
  * --a command
@@ -113,7 +139,6 @@ char	**ft_split_token(char const *s)
 	int		i;
 	char	**str;
 	int		nb_word;
-	char	*tmp;
 
 	if (!s)
 		return (NULL);
@@ -124,9 +149,7 @@ char	**ft_split_token(char const *s)
 	i = -1;
 	while (*s && ++i < nb_word)
 	{
-		tmp = ft_substr(s, 0, ft_wordlen(s));
-		str[i] = ft_strtrim(tmp, "\r\f\v\n\t ");
-		free(tmp);
+		str[i] = build_input(s);
 		if (!str[i])
 		{
 			ft_free_bugsplit(str, i - 1);

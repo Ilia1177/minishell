@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/07 17:53:56 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/10 17:59:26 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,22 @@ int	redir(t_bintree *node)
 				fd_out = open(name, O_CREAT | O_WRONLY | O_APPEND, 0777);
 			else
 				fd_out = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+			if	(fd_out == -1)
+			{
+				perror("Shit happened");
+				return (1);
+			}
 			dup2(fd_out, node->stdfd[OUT]);
 			close(fd_out);
 		}
 		if (type == R_IN || type == HEREDOC)
 		{
 			fd_in = open(name, O_RDONLY, 0777);
+			if	(fd_out == -1)
+			{
+				perror("Shit happened");
+				return (1);
+			}
 			dup2(fd_in, node->stdfd[IN]);
 			close(fd_in);
 		}
@@ -110,7 +120,12 @@ int	exec_cmd(t_bintree *node, t_data *data)
 	int	pid;
 	int exit_status;
 
-	redir(node);
+	if (redir(node) == 1)
+	{
+		close(node->stdfd[IN]);
+		close(node->stdfd[OUT]);
+		return (1);
+	}
 	if (is_builtin(node->cmd))
 	{
 		exit_status = exec_builtin(node, data);
@@ -122,8 +137,7 @@ int	exec_cmd(t_bintree *node, t_data *data)
 		pid = fork();
 	else
 	{
-		perror("not a cmd");
-		data->status = 127;
+		perror("Command does not exist");
 		return (127); // if dont find the command with access
 	}
 	if (!pid)
@@ -133,7 +147,7 @@ int	exec_cmd(t_bintree *node, t_data *data)
 	waitpid(-1, &exit_status, 0);
 	data->status = WEXITSTATUS(exit_status);
 	if (data->flag)
-		printf("Exit status of %s is %d\n", node->input, exit_status);
+		printf("Exit status of %s is %d\n", node->input, data->status);
 	return (exit_status);
 }
 
@@ -220,6 +234,9 @@ int	execute_node(t_bintree *node, t_data *data)
 		return (exit_status);
 	}
 	else
+	{
 		exit_status = exec_cmd(node, data);
+		data->status = exit_status;
+	}
 	return (exit_status);
 }

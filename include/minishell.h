@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/06 16:52:40 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/10 17:16:44 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define OUT 1
 # define TMP 2
 # define WARNING ": not a valid identifier"
-# define SYNTERR "MSH: syntax error near unexpected token"
+# define SYNTERR "MSH: syntax error. try again\n"
 # define TM_ARG "MSH: exit: too many arguments\n"
 # define NR_ARG "MSH: exit: %s: numeric argument required\n"
 

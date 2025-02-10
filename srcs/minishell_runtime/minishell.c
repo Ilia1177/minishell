@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/06 14:59:15 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/10 17:25:09 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,23 @@ int	run_shell(t_data *data)
 	{
 		init_shell(data);
 		tmp = catch_expand(data, "PWD");
-		tmp = ft_strjoin("M!N!$H3LL>", tmp);
+		tmp = ft_strjoin("msh:>", tmp);
 		data->prompt = ft_strjoin(tmp, ">$");
 		free(tmp);
 		data->user_input = listen_to_user(data->prompt);
 		if (!data->user_input)
-	{
+		{
 			free_tabstr(data->envp);
 			free_minishell(data);
 			rl_clear_history();
 			data->status += g_signal_caught;
-			exit(g_signal_caught);
+			exit(data->status);
+		}
+		else if (data->user_input[0] == '\0')
+		{
+			free(data->user_input);
+			free(data->prompt);
+			continue ;
 		}
 		if (!tokenize(data))
 			free_minishell(data);
