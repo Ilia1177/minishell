@@ -6,34 +6,11 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/06 07:37:44 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/10 17:52:06 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/* allows you to include what is between quote as a string
- * one bloc between same quote
- * i in is pos of first quote
- * i out is pos of char the end quote
-void	ft_skip_quote(const char *s, int *index)
-{
-	int		i;
-	char	quote;
-
-	i = 0;
-	quote = s[i];
-	++i;
-	*index += 1;
-	while (s[i] && s[i] != quote)
-	{
-		++i;
-		*index += 1;
-	}
-	if (s[i] && s[i] == quote)
-		*index += 1;
-}
-*/
 
 int	cmd_len(char *str)
 {

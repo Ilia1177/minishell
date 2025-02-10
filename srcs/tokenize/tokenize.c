@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/07 17:56:09 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/10 17:51:11 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,9 @@ int	tokenize(t_data *data)
 
 	if (!data->user_input)
 		return (0);
-	if (!check_closing_quote(data->user_input) || open_parenthesis(data->user_input))
-		return (0);	
+	if (!check_closing_quote(data->user_input)
+		|| open_parenthesis(data->user_input))
+		return (0);
 	tokens = ft_split_token(data->user_input);
 	if (!tokens)
 		return (0);

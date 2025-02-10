@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/02/06 14:48:25 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/02/10 17:40:13 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,25 +36,29 @@ OBJS_DIR	= objs
 C_FLAGS		= -Wall -Wextra -Werror -g
 
 SRCS		=	binary_tree/binary_tree.c\
-				tokenize/tokenize.c\
+				builtins/builtin_utils.c\
+				builtins/change_dir.c\
+				builtins/echo.c\
+				builtins/exit.c\
+				builtins/export.c\
+				builtins/unset.c\
+				exec/exec.c\
+				exec/exec_utils.c\
+				minishell_runtime/cleanup.c\
+				minishell_runtime/debug.c\
+				minishell_runtime/signals.c\
+				parsing/lst_iter_func.c\
+				parsing/lst_utils.c\
+				parsing/parsing.c\
+				parsing/quote_utils.c\
+				parsing/syntax.c\
+				rdir_and_arg/expand.c\
+				rdir_and_arg/heredoc.c\
+				rdir_and_arg/redir.c\
+				tokenize/make_elem.c\
 				tokenize/token_tab.c\
 				tokenize/token_utils.c\
-				parsing/lst_utils.c\
-				minishell_runtime/debug.c\
-				parsing/parsing.c\
-				minishell_runtime/cleanup.c\
-				exec/exec_utils.c\
-				exec/exec.c\
-				minishell_runtime/signals.c\
-				builtins/builtin_cd.c\
-				rdir_and_arg/heredoc.c\
-				parsing/lst_iter_func.c\
-				parsing/quote_utils.c\
-				rdir_and_arg/expand.c\
-				parsing/syntax.c\
-				tokenize/make_elem.c\
-				rdir_and_arg/redir.c\
-				builtins/exit.c\
+				tokenize/tokenize.c\
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 
