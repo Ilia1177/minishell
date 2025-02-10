@@ -6,11 +6,36 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:31:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/10 17:54:31 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/10 20:30:05 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	unquote_rdir(t_token *token, t_data *data)
+{
+	int		j;
+	char	*str;
+	char	*new_rdir;
+	int		len;
+
+	(void)data;
+	if (token->type != CMD || !token->cmd || !token->cmd->rdir)
+		return ;
+	j = 0;
+	while (token->cmd->rdir[j].name)
+	{
+		str = token->cmd->rdir[j].name;
+		len = ft_strlen(str);
+		if (ft_strnstr(str, "\"", len) || ft_strnstr(str, "\'", len))
+		{
+			new_rdir = remove_quote(str);
+			token->cmd->rdir[j].name = new_rdir;
+			free(str);
+		}
+		j++;
+	}
+}
 
 void	unquote(t_token *token, t_data *data)
 {

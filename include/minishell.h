@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/10 18:03:08 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/10 20:28:34 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,7 @@ char		*remove_quote(char *str);
 
 /*************LST_ITER_FUNC***********/
 //lst_iter_func.c
+void		unquote_rdir(t_token *token, t_data *data);
 void		unquote(t_token *token, t_data *data);
 void		get_redir(t_token *token, t_data *data);
 void		type_token(t_token *token, t_data *data);

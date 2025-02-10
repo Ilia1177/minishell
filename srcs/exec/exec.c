@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/10 18:35:09 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/10 20:59:40 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ int	redir(t_bintree *node)
 		if (type == R_OUT || type == APPEND)
 		{
 			if (type == APPEND)
-				fd_out = open(name, O_CREAT | O_WRONLY | O_APPEND, 0777);
+				fd_out = open(name, O_CREAT | O_WRONLY | O_APPEND, 0644);
 			else
-				fd_out = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+				fd_out = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 			if	(fd_out == -1)
 			{
-				perror("Shit happened");
+				ft_printf(2, "No such file or directory\n");
 				return (1);
 			}
 			dup2(fd_out, node->stdfd[OUT]);
@@ -41,10 +41,10 @@ int	redir(t_bintree *node)
 		}
 		if (type == R_IN || type == HEREDOC)
 		{
-			fd_in = open(name, O_RDONLY, 0777);
-			if	(fd_out == -1)
+			fd_in = open(name, O_RDONLY, 0644);
+			if	(fd_in == -1)
 			{
-				perror("Shit happened");
+				ft_printf(2, "No such file or directory\n");
 				return (1);
 			}
 			dup2(fd_in, node->stdfd[IN]);
@@ -126,7 +126,7 @@ int	exec_cmd(t_bintree *node, t_data *data)
 		close(node->stdfd[OUT]);
 		return (1);
 	}
-	if (is_builtin(node->cmd))
+	if (node->cmd->args && is_builtin(node->cmd))
 	{
 		exit_status = exec_builtin(node, data);
 		close(node->stdfd[IN]);

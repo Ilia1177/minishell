@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:11:19 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/05 12:25:12 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/10 20:00:24 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,12 @@ int	true_wordlen(char *str)
 	len = 0;
 	while (str[len] && !is_space(str[len]) && !ft_issep(str[len]))
 	{
-		if (str[len] == '<' || str[len] == '>')
+		if (ft_isquote(str[len]))
+			len += skip_quote(str + len, str[len]);
+		else if (str[len] == '<' || str[len] == '>')
 			return (len);
-		len++;
+		else
+			len++;
 	}
 	return (len);
 }
@@ -84,7 +87,7 @@ int	catch_rdir(t_rdir *rdir, char *str, t_type_rdir type, int num_rdir)
 
 	i = 1;
 	if (type == APPEND)
-		i++;
+		i++;	
 	while (is_space(str[i]))
 		i++;
 	len = true_wordlen(str + i);
