@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 16:47:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/06 18:10:23 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/10 17:53:57 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,14 @@ void	iter_split_args(char *input, t_token **iter_token, int nb_args)
 {
 	int		i;
 	t_token	*token;
-	token = *iter_token;	
 
+	token = *iter_token;
 	i = 0;
 	while (*input && i < nb_args)
 	{
 		while (is_space(*input))
 			input++;
-		token->cmd->args[i] = ft_calloc(arg_len(input) + 1, sizeof(char));	
+		token->cmd->args[i] = ft_calloc(arg_len(input) + 1, sizeof(char));
 		if (!token->cmd->args[i])
 		{
 			ft_free_bugsplit(token->cmd->args, i - 1);

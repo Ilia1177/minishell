@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/10 17:16:44 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/10 18:03:08 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,14 +213,13 @@ int			syntax_error(char *str);
 int			open_parenthesis(char *str);
 int			check_closing_quote(char *str);
 
-
 /***********QUOTE_UTILS****************/
 //quote_utils.c
-int		skip_quote(char *str, char quote);
-char	find_next_quote(char *str);
-char	*get_quotedword(char **str);
-char	*get_cleanword(char **str);
-char 	*remove_quote(char *str);
+int			skip_quote(char *str, char quote);
+char		find_next_quote(char *str);
+char		*get_quotedword(char **str);
+char		*get_cleanword(char **str);
+char		*remove_quote(char *str);
 
 /*************LST_ITER_FUNC***********/
 //lst_iter_func.c
@@ -230,19 +229,26 @@ void		type_token(t_token *token, t_data *data);
 void		split_args(t_token *token, t_data *data);
 void		get_expand(t_token *token, t_data *data);
 
-
 /****************************************/
 /*               BUILTINS               */
 /****************************************/
-// Builtins
-void		change_dir(t_bintree *node, t_data *data);
-int			echo(t_bintree *node, t_data *data);
+// Builtin_utils
+int			exist(char **envp, char *name);
+int			catch_name(char **buff, char *str);
+char		*catch_value(char *str);
 int			print_working_dir(t_bintree *node, t_data *data);
 int			print_env(t_bintree *node, char **envp, char *format);
-int			export(t_bintree *node, t_data *data);
-void		unset(t_bintree *node, t_data *data);
+//change_dir.c
+void		change_dir(t_bintree *node, t_data *data);
+//echo.c
+int			echo(t_bintree *node, t_data *data);
 //exit.c
-void exit_minishell(t_bintree *node, t_data *data);
+void		exit_minishell(t_bintree *node, t_data *data);
+//export.c
+int			export(t_bintree *node, t_data *data);
+
+//unset.c
+void		unset(t_bintree *node, t_data *data);
 
 /****************************************/
 /*               RDIR_&&_ARG            */
