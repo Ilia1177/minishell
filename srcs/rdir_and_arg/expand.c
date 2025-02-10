@@ -102,12 +102,21 @@ void	expand_str(t_data *data, char **str)
 	char	*new_str;
 	char	*exp;
 	int		i;
+	int		flag_free;
 
 	new_str = *str;
+	flag_free = 0;
 	i = find_expand(new_str);
 	if (i != -1)
 	{
 		exp = catch_expand(data, &new_str[i + 1]);
+		if (new_str[i + 1] == '?')
+			flag_free = 1;
 		i = insert_expand(str, i + 1, exp);
+		if (flag_free)
+		{
+			printf("expand $?\n");
+			free (exp);
+		}
 	}
 }
