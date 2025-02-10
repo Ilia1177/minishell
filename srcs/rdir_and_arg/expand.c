@@ -107,6 +107,8 @@ void	expand_str(t_data *data, char **str)
 	new_str = *str;
 	flag_free = 0;
 	i = find_expand(new_str);
+	if (is_space(new_str[i + 1]) || !new_str[i + 1])
+		return ;
 	if (i != -1)
 	{
 		exp = catch_expand(data, &new_str[i + 1]);
@@ -114,9 +116,6 @@ void	expand_str(t_data *data, char **str)
 			flag_free = 1;
 		i = insert_expand(str, i + 1, exp);
 		if (flag_free)
-		{
-			printf("expand $?\n");
 			free (exp);
-		}
 	}
 }
