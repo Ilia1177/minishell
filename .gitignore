@@ -8,3 +8,4 @@ infile*
 out*
 jm
 minishell_tester/
+*.d
