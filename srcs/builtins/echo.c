@@ -12,6 +12,25 @@
 
 #include "minishell.h"
 
+static int is_option(char *str)
+{
+	int 	i;
+
+	if (!str)
+		return (0);
+	i = 2;
+	if (!ft_strncmp(str, "-n", 2))
+	{
+		while (str[i] == 'n')
+			i++;
+	}
+	else
+		return (0);
+	if (str[i] == '\0')
+		return (1);
+	return (0);
+}
+
 int	echo(t_bintree *node, t_data *data)
 {
 	int		i;
@@ -20,8 +39,8 @@ int	echo(t_bintree *node, t_data *data)
 	if (!node->cmd->args)
 		return (0);
 	i = 1;
-	if (node->cmd->args[1] && !ft_strcmp(node->cmd->args[1], "-n"))
-		i = 2;
+	while (is_option(node->cmd->args[i]))
+			i++;
 	while (node->cmd->args[i])
 	{
 		ft_printf(node->stdfd[OUT], "%s", node->cmd->args[i]);
@@ -29,7 +48,7 @@ int	echo(t_bintree *node, t_data *data)
 			ft_printf(node->stdfd[OUT], " ");
 		i++;
 	}
-	if (node->cmd->args[1] && ft_strcmp(node->cmd->args[1], "-n"))
+	if (node->cmd->args[1] && !is_option(node->cmd->args[1]))
 		ft_printf(node->stdfd[OUT], "\n");
 	else if (!node->cmd->args[1])
 		ft_printf(node->stdfd[OUT], "\n");

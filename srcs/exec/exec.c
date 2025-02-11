@@ -33,7 +33,7 @@ int	redir(t_bintree *node)
 				fd_out = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 			if	(fd_out == -1)
 			{
-				ft_printf(2, "No such file or directory\n");
+				ft_printf(2, "Shit happened\n");
 				return (1);
 			}
 			dup2(fd_out, node->stdfd[OUT]);
@@ -44,7 +44,7 @@ int	redir(t_bintree *node)
 			fd_in = open(name, O_RDONLY, 0644);
 			if	(fd_in == -1)
 			{
-				ft_printf(2, "No such file or directory\n");
+				ft_printf(2, "Shit happened\n");
 				return (1);
 			}
 			dup2(fd_in, node->stdfd[IN]);
@@ -119,6 +119,7 @@ int	exec_cmd(t_bintree *node, t_data *data)
 {
 	int	pid;
 	int exit_status;
+//	char 	*pwd;
 
 	if (redir(node) == 1)
 	{
@@ -133,6 +134,21 @@ int	exec_cmd(t_bintree *node, t_data *data)
 		close(node->stdfd[OUT]);
 		return (exit_status);
 	}
+//	if (build_cmd(node, data)) // to be refactor
+//	{
+//			pwd = ft_strjoin(catch_expand(data, "PWD"), "/");
+//			pwd = ft_strjoin(pwd, node->cmd->args[0]);
+//			if (!access(pwd, X_OK))
+//				node->cmd->args[0] = pwd;	
+//			else
+//			{
+//				close(node->stdfd[IN]);
+//				close(node->stdfd[OUT]);
+//				perror("Command does not exist");
+//				return (127); // if dont find the command with access
+//			}
+//			pid = fork();
+//	}
 	if (!build_cmd(node, data))
 		pid = fork();
 	else
@@ -156,8 +172,30 @@ int	exec_cmd(t_bintree *node, t_data *data)
 int	execute_tree(t_data *data)
 {
 	int	exit_status;
+	int i;
+	char **new_paths;
 
-	data->paths = get_paths(data->envp); //malloc char**
+	data->paths = get_paths(data->envp); //malloc char**		
+	if (!data->paths)
+	{
+		data->paths = malloc(sizeof(char *) * 2);
+		data->paths[0] = ft_strdup(catch_expand(data, "PWD"));
+		data->paths[1] = NULL;
+	}
+	else
+	{
+		i = 0;
+		while(data->paths[i])
+			i++;
+		new_paths = malloc(sizeof(char *)  * (i + 2));
+		i = -1;
+		while (data->paths[++i])
+			new_paths[i] = data->paths[i];
+		new_paths[i] = ft_strdup(catch_expand(data, "PWD"));
+		new_paths[++i] = NULL;
+		free(data->paths);
+		data->paths = new_paths;
+	}
 	data->tree->stdfd[IN] = dup(0);
 	data->tree->stdfd[OUT] = dup(1);
 	exit_status = execute_node(data->tree, data);

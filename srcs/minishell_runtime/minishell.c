@@ -24,6 +24,27 @@ char	*listen_to_user(char *prompt)
 	return (input);
 }
 
+ // int 	add_path_in_path(char *path, t_data *data)
+ // {
+ // 	char *new_path;
+ // 	char 	*tmp;
+
+ // //		tmp = catch_expand("PATH");
+ // //		new_path = ft_strjoin(":", tmp);
+ // //		free(tmp);
+ // //		data->envp = update_envp(ft_strjoin("PATH=", new_path), data->envp);
+ // }
+
+
+void 	update_pwd_in_envp(t_data *data)
+{
+	char wd[1024];
+
+	if (getcwd(wd, 1024))
+		data->envp = set_env(ft_strdup("PWD"), ft_strdup(wd), data->envp);
+}
+
+
 void	init_shell(t_data *data)
 {
 	rl_catch_signals = 0; // Disable readline's signal handling
@@ -39,6 +60,7 @@ int	run_shell(t_data *data)
 	t_token				*cpy;
 	static char			*tmp;
 
+	update_pwd_in_envp(data);
 	while (1)
 	{
 		init_shell(data);

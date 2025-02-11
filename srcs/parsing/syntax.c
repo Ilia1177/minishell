@@ -55,13 +55,11 @@ int	operator_syntax(t_token *prev)
 
 int	rdir_syntax(t_token *curr, int c)
 {
-	char	*sym;
 	int		error;
 	int		i;
 	char	*str;
 
 	error = 0;
-	sym = ft_strchr(curr->input, c);
 	str = curr->input;
 	c = 0;
 	while(*str)

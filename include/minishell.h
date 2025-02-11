@@ -247,6 +247,7 @@ int			echo(t_bintree *node, t_data *data);
 void		exit_minishell(t_bintree *node, t_data *data);
 //export.c
 int			export(t_bintree *node, t_data *data);
+char 		**set_env(char *name, char *value, char **old_envp);
 
 //unset.c
 void		unset(t_bintree *node, t_data *data);
