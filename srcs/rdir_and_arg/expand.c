@@ -52,7 +52,7 @@ int	insert_expand(char **input, int pos, char *exp)
 }
 
 /*******************************************************
- * seek the ENV name in **env and return his index
+ * seek the $ in *str and return his index
  * return -1 if not found
  * *****************************************************/
 int	find_expand(char *str)
@@ -110,7 +110,7 @@ char	*catch_expand(t_data *data, char *str)
 void	expand_str(t_data *data, char **str)
 {
 	char	*new_str;
-	char	*exp;
+	char	*value;
 	int		i;
 	int		flag_free;
 
@@ -119,17 +119,17 @@ void	expand_str(t_data *data, char **str)
 	while (*new_str)
 	{
 		i = find_expand(new_str);
+		if (i == -1)
+			return ;
 		if (is_space(new_str[i + 1]) || !new_str[i + 1])
 			return ;
-		if (i != -1)
-		{
-			exp = catch_expand(data, &new_str[i + 1]);
-			if (new_str[i + 1] == '?')
-				flag_free = 1;
-			i = insert_expand(str, i + 1, exp);
-			new_str += i + ft_strlen(exp);
-			if (flag_free)
-				free (exp);
-		}
+		value = catch_expand(data, &new_str[i + 1]);
+		if (new_str[i + 1] == '?')
+			flag_free = 1;
+		i = insert_expand(str, i + 1, value);
+		new_str = *str;
+		//new_str = new_str + i - 1 + ft_strlen(value);
+		if (flag_free)
+			free (value);
 	}
 }
