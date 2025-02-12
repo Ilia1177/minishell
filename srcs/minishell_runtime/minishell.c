@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 09:00:25 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/12 10:02:41 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	run_shell(t_data *data)
 	t_token				*cpy;
 	static char			*tmp;
 
-	//update_pwd_in_envp(data);
+	update_pwd_in_envp(data);
 	while (1)
 	{
 		init_shell(data);
@@ -65,7 +65,7 @@ int	run_shell(t_data *data)
 		data->user_input = listen_to_user(data->prompt);
 		if (!data->user_input)
 		{
-			ft_printf(2, "[Ctrl-D]\n");
+			//ft_printf(2, "[Ctrl-D]\n");
 			free_tabstr(data->envp);
 			free_minishell(data);
 			rl_clear_history();
@@ -74,7 +74,7 @@ int	run_shell(t_data *data)
 		}
 		else if (data->user_input[0] == '\0')
 		{
-			ft_printf(2, "[ENTER]\n");
+			//ft_printf(2, "[ENTER]\n");
 			free(data->user_input);
 			free(data->prompt);
 			continue ;

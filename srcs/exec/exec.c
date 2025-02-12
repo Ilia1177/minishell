@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 09:09:02 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/12 10:17:02 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	redir(t_bintree *node)
 			if (fd_out == -1)
 			{
 				ft_printf(2, "msh: Shit happened\n");
-				return (1);
+				return (126);
 			}
 			dup2(fd_out, node->stdfd[OUT]);
 			close(fd_out);
@@ -45,7 +45,7 @@ int	redir(t_bintree *node)
 			if (fd_in == -1)
 			{
 				ft_printf(2, "msh: Shit happened\n");
-				return (1);
+				return (126);
 			}
 			dup2(fd_in, node->stdfd[IN]);
 			close(fd_in);
@@ -114,34 +114,40 @@ int	exec_cmd(t_bintree *node, t_data *data)
 	int	pid;
 	int exit_status;
 
-	if (redir(node) == 1)
+	exit_status = redir(node);
+	if (exit_status)
 	{
 		close(node->stdfd[IN]);
 		close(node->stdfd[OUT]);
-		return (1);
+		return (exit_status);
 	}
-	if (node->cmd->args && is_builtin(node->cmd))
+	else if (node->cmd->args && is_builtin(node->cmd))
 	{
 		exit_status = exec_builtin(node, data);
 		close(node->stdfd[IN]);
 		close(node->stdfd[OUT]);
 		return (exit_status);
 	}
-	if (!build_cmd(node, data))
+	else if (!build_cmd(node, data))
 		pid = fork();
 	else
 	{
-		close(node->stdfd[IN]);
-		close(node->stdfd[OUT]);
-		perror("Command does not exist");
+		//close(node->stdfd[IN]);
+		//close(node->stdfd[OUT]);
+		perror("msh: this command is bulshit");
 		return (127); // if dont find the command with access
 	}
 	if (!pid)
 		child_process(node, data);
-	close(node->stdfd[IN]);
-	close(node->stdfd[OUT]);
-	waitpid(-1, &exit_status, 0);
-	data->status = WEXITSTATUS(exit_status);
+	else
+	{
+		close(node->stdfd[IN]);
+		close(node->stdfd[OUT]);
+		waitpid(-1, &exit_status, 0);
+		data->status = WEXITSTATUS(exit_status);
+	}
+	//close(node->stdfd[IN]);
+	//close(node->stdfd[OUT]);
 	if (data->flag)
 		printf("Exit status of %s is %d\n", node->input, data->status);
 	return (exit_status);
