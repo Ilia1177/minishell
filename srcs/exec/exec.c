@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 10:17:02 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/12 10:18:20 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,8 @@ int	exec_cmd(t_bintree *node, t_data *data)
 		pid = fork();
 	else
 	{
-		//close(node->stdfd[IN]);
-		//close(node->stdfd[OUT]);
+		close(node->stdfd[IN]);
+		close(node->stdfd[OUT]);
 		perror("msh: this command is bulshit");
 		return (127); // if dont find the command with access
 	}
