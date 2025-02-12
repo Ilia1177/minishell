@@ -6,18 +6,43 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 11:10:46 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/12 14:53:12 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <errno.h>
 
-int	redir(t_bintree *node)
+static int	open_rdir(t_bintree *node, char *name, t_type_rdir type)
 {
 	int			fd_in;
 	int			fd_out;
+
+	if (type == R_OUT || type == APPEND)
+	{
+		if (type == APPEND)
+			fd_out = open(name, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		else
+			fd_out = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (fd_out == -1)
+			return (1);
+		dup2(fd_out, node->stdfd[OUT]);
+		close(fd_out);
+	}
+	if (type == R_IN || type == HEREDOC)
+	{
+		fd_in = open(name, O_RDONLY, 0644);
+		if (fd_in == -1)
+			return (1);
+		dup2(fd_in, node->stdfd[IN]);
+		close(fd_in);
+	}
+	return (0);
+}
+
+static int	redir(t_bintree *node)
+{
 	int			i;
+	int			status;
 	char		*name;
 	t_type_rdir	type;
 
@@ -26,30 +51,14 @@ int	redir(t_bintree *node)
 	{
 		type = node->cmd->rdir[i].type;
 		name = node->cmd->rdir[i].name;
-		if (type == R_OUT || type == APPEND)
-		{
-			if (type == APPEND)
-				fd_out = open(name, O_CREAT | O_WRONLY | O_APPEND, 0644);
-			else
-				fd_out = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-			if (fd_out == -1)
-				return (errno);
-			dup2(fd_out, node->stdfd[OUT]);
-			close(fd_out);
-		}
-		if (type == R_IN || type == HEREDOC)
-		{
-			fd_in = open(name, O_RDONLY, 0644);
-			if (fd_in == -1)
-				return (errno);
-			dup2(fd_in, node->stdfd[IN]);
-			close(fd_in);
-		}
+		status = open_rdir(node, name, type);
+		if (status)
+			return (status);
 	}
 	return (0);
 }
 
-void	child_process(t_bintree *node, t_data *data)
+static void	child_process(t_bintree *node, t_data *data)
 {
 	dup2(node->stdfd[IN], 0);
 	dup2(node->stdfd[OUT], 1);
@@ -61,7 +70,7 @@ void	child_process(t_bintree *node, t_data *data)
 	exit_minishell(node, data);
 }
 
-int	is_builtin(t_cmd *cmd)
+static int	is_builtin(t_cmd *cmd)
 {
 	if (!ft_strcmp(cmd->args[0], "cd"))
 		return (1);
@@ -80,13 +89,10 @@ int	is_builtin(t_cmd *cmd)
 	return (0);
 }
 
-int	exec_builtin(t_bintree *node, t_data *data)
+static int	exec_builtin(t_bintree *node, t_data *data)
 {
 	if (data->flag)
-	{
-		ft_putstr_fd("exec builtins: ", 2);
-		ft_putendl_fd(node->cmd->args[0], 2);
-	}
+		ft_printf(2, "Execute builtin command: %s\n", node->cmd->args[0]);
 	if (!ft_strcmp(node->cmd->args[0], "cd"))
 		change_dir(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "pwd"))
@@ -129,5 +135,5 @@ int	exec_cmd(t_bintree *node, t_data *data)
 	data->status = WEXITSTATUS(exit_status);
 	if (data->flag)
 		printf("Exit status of %s is %d\n", node->input, data->status);
-	return (exit_status);
+	return (data->status);
 }

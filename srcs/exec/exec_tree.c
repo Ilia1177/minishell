@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:10:29 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 11:10:33 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/12 14:52:38 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ int	execute_node(t_bintree *node, t_data *data)
 	else
 	{
 		exit_status = exec_cmd(node, data);
-		data->status = exit_status;
 	}
 	return (exit_status);
 }

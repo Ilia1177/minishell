@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:37:07 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/12 10:02:41 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/12 15:02:03 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	update_envp(t_data *data, char *str)
 	else
 	{
 		if (error == 1)
-			ft_printf(2, "msh: export : %s\"%s\n", name, WARNING);
+			ft_printf(2, "msh: export: %s\"%s\n", name, WARNING);
 		free(name);
 	}
 	return (error);
@@ -119,5 +119,5 @@ int	export(t_bintree *node, t_data *data)
 		j++;
 	}
 	data->status = status;
-	return (0);
+	return (data->status);
 }

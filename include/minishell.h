@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 11:15:04 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/12 11:18:48 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,17 +171,13 @@ int			is_parenthesis(char c);
 int			cmd_len(char *str);
 int			sep_len(char *str);
 int			ft_nbword(const char *s);
-// void		ft_skip_quote(const char *s, int *index);
 char		**ft_split_token(char const *s);
 
 /****************************************/
 /*                EXEC                  */
 /****************************************/
 //exec.c 
-int			execute_tree(t_data *data);
-int			connect_node(t_bintree *a, t_bintree *b);
-int	exec_cmd(t_bintree *node, t_data *data);
-int			execute_node(t_bintree *node, t_data *data);
+int			exec_cmd(t_bintree *node, t_data *data);
 
 //exec_utils.c
 char		**get_paths(char **env);
@@ -192,6 +188,9 @@ t_cmd		*cmddup(t_cmd *cmd);
 int			update_envp(t_data *data, char *str);
 
 //exec_tree.c
+int			execute_tree(t_data *data);
+int			connect_node(t_bintree *a, t_bintree *b);
+int			execute_node(t_bintree *node, t_data *data);
 
 /****************************************/
 /*               PARSING                */
