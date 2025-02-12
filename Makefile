@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/02/10 17:40:13 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/02/12 11:11:22 by npolack          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,7 @@ SRCS		=	binary_tree/binary_tree.c\
 				builtins/unset.c\
 				exec/exec.c\
 				exec/exec_utils.c\
+				exec/exec_tree.c\
 				minishell_runtime/cleanup.c\
 				minishell_runtime/debug.c\
 				minishell_runtime/signals.c\

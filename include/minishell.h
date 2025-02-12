@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 07:36:15 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/12 11:15:04 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ char		**ft_split_token(char const *s);
 //exec.c 
 int			execute_tree(t_data *data);
 int			connect_node(t_bintree *a, t_bintree *b);
+int	exec_cmd(t_bintree *node, t_data *data);
 int			execute_node(t_bintree *node, t_data *data);
 
 //exec_utils.c
@@ -189,6 +190,8 @@ int			build_cmd(t_bintree *node, t_data *data);
 char		**tab_dup(char **tab);
 t_cmd		*cmddup(t_cmd *cmd);
 int			update_envp(t_data *data, char *str);
+
+//exec_tree.c
 
 /****************************************/
 /*               PARSING                */

@@ -6,11 +6,12 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 10:18:20 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/12 11:10:46 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <errno.h>
 
 int	redir(t_bintree *node)
 {
@@ -32,10 +33,7 @@ int	redir(t_bintree *node)
 			else
 				fd_out = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 			if (fd_out == -1)
-			{
-				ft_printf(2, "msh: Shit happened\n");
-				return (126);
-			}
+				return (errno);
 			dup2(fd_out, node->stdfd[OUT]);
 			close(fd_out);
 		}
@@ -43,10 +41,7 @@ int	redir(t_bintree *node)
 		{
 			fd_in = open(name, O_RDONLY, 0644);
 			if (fd_in == -1)
-			{
-				ft_printf(2, "msh: Shit happened\n");
-				return (126);
-			}
+				return (errno);
 			dup2(fd_in, node->stdfd[IN]);
 			close(fd_in);
 		}
@@ -112,155 +107,27 @@ int	exec_builtin(t_bintree *node, t_data *data)
 int	exec_cmd(t_bintree *node, t_data *data)
 {
 	int	pid;
-	int exit_status;
+	int	exit_status;
 
 	exit_status = redir(node);
-	if (exit_status)
-	{
-		close(node->stdfd[IN]);
-		close(node->stdfd[OUT]);
-		return (exit_status);
-	}
-	else if (node->cmd->args && is_builtin(node->cmd))
-	{
+	if (!exit_status && is_builtin(node->cmd))
 		exit_status = exec_builtin(node, data);
+	else if (!exit_status)
+		exit_status = build_cmd(node, data);
+	if (exit_status || is_builtin(node->cmd))
+	{
 		close(node->stdfd[IN]);
 		close(node->stdfd[OUT]);
 		return (exit_status);
 	}
-	else if (!build_cmd(node, data))
-		pid = fork();
-	else
-	{
-		close(node->stdfd[IN]);
-		close(node->stdfd[OUT]);
-		perror("msh: this command is bulshit");
-		return (127); // if dont find the command with access
-	}
+	pid = fork();
 	if (!pid)
 		child_process(node, data);
-	else
-	{
-		close(node->stdfd[IN]);
-		close(node->stdfd[OUT]);
-		waitpid(-1, &exit_status, 0);
-		data->status = WEXITSTATUS(exit_status);
-	}
-	//close(node->stdfd[IN]);
-	//close(node->stdfd[OUT]);
+	close(node->stdfd[IN]);
+	close(node->stdfd[OUT]);
+	waitpid(-1, &exit_status, 0);
+	data->status = WEXITSTATUS(exit_status);
 	if (data->flag)
 		printf("Exit status of %s is %d\n", node->input, data->status);
-	return (exit_status);
-}
-
-int	execute_tree(t_data *data)
-{
-	int	exit_status;
-//	int i;
-//	char **new_paths;
-
-	data->paths = get_paths(data->envp); //malloc char**		
-//	if (!data->paths)
-//	{
-//		data->paths = malloc(sizeof(char *) * 2);
-//		data->paths[0] = ft_strdup(catch_expand(data, "PWD"));
-//		data->paths[1] = NULL;
-//	}
-//	else
-//	{
-//		i = 0;
-//		while(data->paths[i])
-//			i++;
-//		new_paths = malloc(sizeof(char *)  * (i + 2));
-//		i = -1;
-//		while (data->paths[++i])
-//			new_paths[i] = data->paths[i];
-//		new_paths[i] = ft_strdup(catch_expand(data, "PWD"));
-//		new_paths[++i] = NULL;
-//		free(data->paths);
-//		data->paths = new_paths;
-//	}
-	data->tree->stdfd[IN] = dup(0);
-	data->tree->stdfd[OUT] = dup(1);
-	exit_status = execute_node(data->tree, data);
-	close(data->tree->stdfd[IN]);
-	close(data->tree->stdfd[OUT]);
-	return (exit_status);
-}
-
-int	make_pipe(t_bintree *node, t_data *data)
-{
-	int	exit_status;
-
-	pipe(node->pipefd);	
-	node->left->stdfd[OUT] = dup(node->pipefd[OUT]);
-	node->left->stdfd[IN] = dup(node->stdfd[IN]);
-	close(node->pipefd[OUT]);
-	close(node->stdfd[IN]);
-	exit_status = execute_node(node->left, data);
-	if (node->right)
-	{
-		node->right->stdfd[OUT] = dup(node->stdfd[OUT]);
-		node->right->stdfd[IN] = dup(node->pipefd[IN]);
-		close(node->stdfd[OUT]);
-		close(node->pipefd[IN]);
-		exit_status = execute_node(node->right, data);
-	}
-	return (exit_status);
-}
-
-void	connect_stdio(t_bintree *a, t_bintree *b)
-{
-	b->stdfd[IN] = dup(a->stdfd[IN]);
-	b->stdfd[OUT] = dup(a->stdfd[OUT]);
-}
-
-int	make_operation(t_bintree *node, t_data *data)
-{
-	int	exit_status;
-
-	connect_stdio(node, node->left);
-	exit_status = execute_node(node->left, data);
-	if (!ft_strcmp(node->input, "||"))
-	{
-		if (exit_status && node->right)
-		{
-			connect_stdio(node, node->right);
-			close(node->stdfd[IN]);
-			close(node->stdfd[OUT]);
-			exit_status = execute_node(node->right, data);
-		}
-		else
-		{
-			close(node->stdfd[IN]);
-			close(node->stdfd[OUT]);
-		}
-		return (exit_status);
-	}
-	else if (node->right)
-	{
-		connect_stdio(node, node->right);
-		exit_status = execute_node(node->right, data);
-	}
-	return (exit_status);
-}
-
-int	execute_node(t_bintree *node, t_data *data)
-{
-	int	exit_status;
-
-	if (node->left)
-	{
-		if (node->type == PIPE)
-			exit_status = make_pipe(node, data);
-		else
-			exit_status = make_operation(node, data);
-		return (exit_status);
-	}
-	else
-	{
-		exit_status = exec_cmd(node, data);
-		data->status = exit_status;
-	}
 	return (exit_status);
 }
