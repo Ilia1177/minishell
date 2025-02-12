@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:13:53 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/04 18:14:05 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/12 16:18:19 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,9 +115,9 @@ void	expand_str(t_data *data, char **str)
 	int		flag_free;
 
 	new_str = *str;
-	flag_free = 0;
 	while (*new_str)
 	{
+		flag_free = 0;
 		i = find_expand(new_str);
 		if (i == -1)
 			return ;
