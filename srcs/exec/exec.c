@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 06:25:40 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/12 09:09:02 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ int	redir(t_bintree *node)
 				fd_out = open(name, O_CREAT | O_WRONLY | O_APPEND, 0644);
 			else
 				fd_out = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-			if	(fd_out == -1)
+			if (fd_out == -1)
 			{
-				ft_printf(2, "Shit happened\n");
+				ft_printf(2, "msh: Shit happened\n");
 				return (1);
 			}
 			dup2(fd_out, node->stdfd[OUT]);
@@ -42,9 +42,9 @@ int	redir(t_bintree *node)
 		if (type == R_IN || type == HEREDOC)
 		{
 			fd_in = open(name, O_RDONLY, 0644);
-			if	(fd_in == -1)
+			if (fd_in == -1)
 			{
-				ft_printf(2, "Shit happened\n");
+				ft_printf(2, "msh: Shit happened\n");
 				return (1);
 			}
 			dup2(fd_in, node->stdfd[IN]);
@@ -61,7 +61,7 @@ void	child_process(t_bintree *node, t_data *data)
 	close(node->stdfd[IN]);
 	close(node->stdfd[OUT]);
 	execve(node->cmd->args[0], node->cmd->args, data->envp);
-	perror("This command is not handled");
+	perror("msh: Big shit happened");
 	kill(0, SIGINT);
 	exit_minishell(node, data);
 }
@@ -105,13 +105,7 @@ int	exec_builtin(t_bintree *node, t_data *data)
 	if (!ft_strcmp(node->cmd->args[0], "echo"))
 		echo(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "exit"))
-	{
 		exit_minishell(node, data);
-		/* ft_printf(2, "exit"); */
-		/* free_minishell(data); */
-		/* exit(0); */
-	}
-
 	return (0);
 }
 

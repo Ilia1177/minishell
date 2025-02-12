@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 08:00:27 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/12 09:00:25 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	run_shell(t_data *data)
 	{
 		init_shell(data);
 		tmp = catch_expand(data, "PWD");
-		tmp = ft_strjoin("msh:>", tmp);
+		tmp = ft_strjoin("msh:\xF0\x9F\x92\xBE:", tmp);
 		data->prompt = ft_strjoin(tmp, ">$");
 		free(tmp);
 		data->user_input = listen_to_user(data->prompt);
