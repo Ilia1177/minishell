@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/06 07:13:59 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/12 07:21:48 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,14 +119,27 @@ t_cmd	*cmddup(t_cmd *cmd)
 int	build_cmd(t_bintree *node, t_data *data)
 {
 	char	*cmd_name;
+	char	*pwd;
+	char	*tmp;
 
 	cmd_name = node->cmd->args[0];
 	node->cmd->args[0] = get_full_path(data->paths, cmd_name);
 	if (!node->cmd->args[0])
 	{
-		data->status = 127;
-		node->cmd->args[0] = cmd_name;
-		return (127);
+		tmp = ft_strjoin(catch_expand(data, "PWD"), "/");
+		pwd = ft_strjoin(tmp, cmd_name);
+		free(tmp);
+		if (!access(pwd, X_OK))
+		{
+			node->cmd->args[0] = pwd;
+			free(cmd_name);
+		}
+		else
+		{
+			data->status = 127;
+			node->cmd->args[0] = cmd_name;
+			return (127);
+		}
 	}
 	else
 		free(cmd_name);

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/10 20:28:34 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/12 07:36:15 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,6 +246,7 @@ int			echo(t_bintree *node, t_data *data);
 //exit.c
 void		exit_minishell(t_bintree *node, t_data *data);
 //export.c
+int			update_envp(t_data *data, char *str);
 int			export(t_bintree *node, t_data *data);
 char 		**set_env(char *name, char *value, char **old_envp);
 

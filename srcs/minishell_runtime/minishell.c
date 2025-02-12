@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/10 17:25:09 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/12 08:00:27 by ilia             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,18 @@ char	*listen_to_user(char *prompt)
 	return (input);
 }
 
- // int 	add_path_in_path(char *path, t_data *data)
- // {
- // 	char *new_path;
- // 	char 	*tmp;
-
- // //		tmp = catch_expand("PATH");
- // //		new_path = ft_strjoin(":", tmp);
- // //		free(tmp);
- // //		data->envp = update_envp(ft_strjoin("PATH=", new_path), data->envp);
- // }
-
 
 void 	update_pwd_in_envp(t_data *data)
 {
-	char wd[1024];
+	char	wd[1024];
+	char	*entry;
 
 	if (getcwd(wd, 1024))
-		data->envp = set_env(ft_strdup("PWD"), ft_strdup(wd), data->envp);
+	{
+		entry = ft_strjoin("PWD=", wd);
+		update_envp(data, entry);
+		free(entry);
+	}
 }
 
 
@@ -60,7 +54,7 @@ int	run_shell(t_data *data)
 	t_token				*cpy;
 	static char			*tmp;
 
-	update_pwd_in_envp(data);
+	//update_pwd_in_envp(data);
 	while (1)
 	{
 		init_shell(data);
@@ -71,6 +65,7 @@ int	run_shell(t_data *data)
 		data->user_input = listen_to_user(data->prompt);
 		if (!data->user_input)
 		{
+			ft_printf(2, "[Ctrl-D]\n");
 			free_tabstr(data->envp);
 			free_minishell(data);
 			rl_clear_history();
@@ -79,6 +74,7 @@ int	run_shell(t_data *data)
 		}
 		else if (data->user_input[0] == '\0')
 		{
+			ft_printf(2, "[ENTER]\n");
 			free(data->user_input);
 			free(data->prompt);
 			continue ;
