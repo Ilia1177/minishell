@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 10:02:41 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/12 12:18:05 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ int	run_shell(t_data *data)
 		data->user_input = listen_to_user(data->prompt);
 		if (!data->user_input)
 		{
-			//ft_printf(2, "[Ctrl-D]\n");
 			free_tabstr(data->envp);
 			free_minishell(data);
 			rl_clear_history();
@@ -74,7 +73,6 @@ int	run_shell(t_data *data)
 		}
 		else if (data->user_input[0] == '\0')
 		{
-			//ft_printf(2, "[ENTER]\n");
 			free(data->user_input);
 			free(data->prompt);
 			continue ;
@@ -95,7 +93,11 @@ int	run_shell(t_data *data)
 				printf("\n\n----------- Binary tree :  ----\n");
 				print_tree(data->tree, 0); // print the tree for debug
 			}
-			execute_tree(data);
+			if (execute_tree(data))
+			{
+				errno = data->status;
+				perror("msh:");
+			}
 			free_minishell(data);
 		}
 	}
