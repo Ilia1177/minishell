@@ -41,7 +41,7 @@ static int	format_exit_code(long long number)
 	return (code);
 }
 
-void	exit_number(t_bintree *node)
+void	exit_number(t_data *data, t_bintree *node)
 {
 	int			code;
 	int			error;
@@ -54,9 +54,9 @@ void	exit_number(t_bintree *node)
 	if (error)
 	{
 		ft_printf(2, NR_ARG, node->cmd->args[1]);
-		exit(2);
+		free_minishell(data, 2);
 	}
-	exit(code);
+	free_minishell(data, code);
 }
 
 int	exit_minishell(t_bintree *node, t_data *data)
@@ -64,12 +64,11 @@ int	exit_minishell(t_bintree *node, t_data *data)
 	if (!node->cmd->args[1])
 	{
 		ft_printf(1, "exit\n");
-		free_minishell(data);
-		exit(0);
+		free_minishell(data, 0);
 	}
 	if (ft_isnumber(node->cmd->args[1]) && !node->cmd->args[2])
 	{
-		exit_number(node);
+		exit_number(data, node);
 	}
 	else if (ft_isnumber(node->cmd->args[1]) && node->cmd->args[2])
 	{
@@ -80,7 +79,7 @@ int	exit_minishell(t_bintree *node, t_data *data)
 	{
 		ft_printf(1, "exit\n");
 		ft_printf(2, NR_ARG, node->cmd->args[1]);
-		exit (2);
+		free_minishell(data, 2);
 	}
 	return (1);
 }

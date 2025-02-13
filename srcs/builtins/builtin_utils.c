@@ -96,7 +96,7 @@ int	print_env(t_bintree *node, char **envp, char *format)
 
 	i = 0;
 	if (!envp)
-		return (-1);
+		return (0);
 	else
 	{
 		while (envp[i])

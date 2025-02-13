@@ -53,7 +53,10 @@ static int	redir(t_bintree *node)
 		name = node->cmd->rdir[i].name;
 		status = open_rdir(node, name, type);
 		if (status)
+		{
+			perror("msh");
 			return (status);
+		}
 	}
 	return (0);
 }
@@ -66,7 +69,7 @@ static void	child_process(t_bintree *node, t_data *data)
 	execve(node->cmd->args[0], node->cmd->args, data->envp);
 	perror("msh: Big shit happened");
 	kill(0, SIGINT);
-	exit_minishell(node, data);
+	free_minishell(data, 1);
 }
 
 static int	is_builtin(t_cmd *cmd)
@@ -122,7 +125,7 @@ int	exec_cmd(t_bintree *node, t_data *data)
 		exit_status = build_cmd(node, data);
 	if (exit_status || is_builtin(node->cmd))
 	{
-		data->pid = -1;
+		data->pid = -2;
 		close_fd(node);
 		return (exit_status);
 	}

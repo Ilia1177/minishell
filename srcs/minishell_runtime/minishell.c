@@ -41,44 +41,33 @@ void 	update_pwd_in_envp(t_data *data)
 
 void	init_shell(t_data *data)
 {
+	data->prompt = "msh>$";
 	rl_catch_signals = 0; // Disable readline's signal handling
 	g_signal_caught = 0;
 	data->tree = NULL;
 	data->token_list = NULL;
 	data->paths = NULL;
 	data->user_input = NULL;
+	update_pwd_in_envp(data);
 }
 
 int	run_shell(t_data *data)
 {
 	t_token				*cpy;
-	static char			*tmp;
 
-	update_pwd_in_envp(data);
 	while (1)
 	{
 		init_shell(data);
-		tmp = catch_expand(data, "PWD");
-		tmp = ft_strjoin("msh:\xF0\x9F\x92\xBE:", tmp);
-		data->prompt = ft_strjoin(tmp, ">$");
-		free(tmp);
 		data->user_input = listen_to_user(data->prompt);
 		if (!data->user_input)
-		{
-			free_tabstr(data->envp);
-			free_minishell(data);
-			rl_clear_history();
-			data->status += g_signal_caught;
-			exit(data->status);
-		}
+			free_minishell(data, 0);
 		else if (data->user_input[0] == '\0')
 		{
-			free(data->user_input);
-			free(data->prompt);
+			free_minishell(data, -1);
 			continue ;
 		}
 		if (!tokenize(data))
-			free_minishell(data);
+			free_minishell(data, -1);
 		else
 		{
 			cpy = data->token_list;
@@ -94,9 +83,7 @@ int	run_shell(t_data *data)
 				print_tree(data->tree, 0); // print the tree for debug
 			}
 			data->status = execute_tree(data);
-			/* if (data->status) */
-			/* 	perror("msh"); */
-			free_minishell(data);
+			free_minishell(data, -1);
 		}
 	}
 }
@@ -114,6 +101,6 @@ int	main(int ac, char **argv, char **envp)
 	data.envp = tab_dup(envp);
 	init_shell(&data);
 	run_shell(&data);
-	free_minishell(&data);
+	free_minishell(&data, 0);
 	return (g_signal_caught);
 }

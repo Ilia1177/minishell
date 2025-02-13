@@ -25,14 +25,11 @@ int	execute_tree(t_data *data)
 	close(data->tree->stdfd[IN]);
 	close(data->tree->stdfd[OUT]);
 
-	if (data->pid == -1) 
+	if (data->pid == -2) 
 	{ 
 		data->status = status;
 		while(waitpid(-1, NULL, WUNTRACED) != -1)
 			;
-		/* data->status = WEXITSTATUS(status); */
-		if (status)
-			perror("msh");
 		return (status);
 	}
 	save_status = 0;
@@ -94,15 +91,11 @@ int	make_operation(t_bintree *node, t_data *data)
 		{
 			connect_stdio(node, node->right);
 			close_fd(node);
-			//close(node->stdfd[IN]);
-			//close(node->stdfd[OUT]);
 			exit_status = execute_node(node->right, data);
 		}
 		else
 		{
 			close_fd(node);
-			//close(node->stdfd[IN]);
-			//close(node->stdfd[OUT]);
 		}
 		return (exit_status);
 	}

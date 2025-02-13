@@ -12,13 +12,17 @@
 
 #include "minishell.h"
 
-void	free_minishell(t_data *data)
+void	free_minishell(t_data *data, int exit_code)
 {
-	free(data->prompt);
 	free(data->user_input);
-	//close_all_fd(data->tree);			output error in valgrind (not a good idea ?)
 	free_tree(data->tree);
-	free_elem(data->paths, D_TAB);
+	free_tabstr(data->paths);
+	if (exit_code >= 0)
+	{
+		free_tabstr(data->envp);
+		rl_clear_history();
+		exit(exit_code);
+	}
 }
 
 void	free_tabstr(char **tabstr)

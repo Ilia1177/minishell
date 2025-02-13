@@ -116,17 +116,6 @@ t_cmd	*cmddup(t_cmd *cmd)
 	return (new_cmd);
 }
 
-int is_directory(const char *path)
-{
-    struct stat path_stat;
-
-    if (stat(path, &path_stat) != 0)
-	{
-        perror("stat failed");
-        return 0; // Error occurred, treat as not a directory
-    }
-    return S_ISDIR(path_stat.st_mode);
-}
 
 int	build_cmd(t_bintree *node, t_data *data)
 {
@@ -150,13 +139,10 @@ int	build_cmd(t_bintree *node, t_data *data)
 		}
 		else
 		{
-			if (is_directory(cmd_name))
-			{
-				node->cmd->args[0] = cmd_name;
-				return (126);
-			}
-			ft_printf(2, "CMD not found: %s\n", cmd_name);
+			perror("msg");
 			node->cmd->args[0] = cmd_name;
+			if (errno == EACCES)
+				return (126);
 			return (127);
 		}
 	}
