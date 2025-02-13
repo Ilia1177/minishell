@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/10 20:27:43 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/13 18:17:50 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int	tokenize(t_data *data)
 	ft_lstiter_token(data, &get_redir);
 	ft_lstiter_token(data, &get_expand);
 	ft_lstiter_token(data, &split_args);
+	ft_lstiter_token(data, &wildcards);
 	ft_lstiter_token(data, &unquote_rdir);
 	ft_lstiter_token(data, &unquote);
 	return (1);

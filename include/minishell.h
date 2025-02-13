@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 11:18:48 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/13 16:04:38 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/types.h>
+# include <dirent.h>
 
 # define IN 0
 # define OUT 1
@@ -31,6 +33,7 @@
 # define SYNTERR "MSH: syntax error. try again\n"
 # define TM_ARG "MSH: exit: too many arguments\n"
 # define NR_ARG "MSH: exit: %s: numeric argument required\n"
+# define NMF_MSG "no matches found\n"
 
 
 typedef enum e_type
@@ -281,4 +284,8 @@ int			ft_nb_rdir(char *str);
 int			true_wordlen(char *str);
 int			catch_rdir(t_rdir	*rdir, char *str, t_type_rdir type, int num_rdir);
 void		seek_rdir(char *str, t_rdir **s_rdir, t_data *data);
+
+//wildcards.c
+void	wildcards(t_token *token, t_data *data);
+
 #endif
