@@ -139,7 +139,8 @@ int	build_cmd(t_bintree *node, t_data *data)
 		}
 		else
 		{
-			perror("msg");
+			perror("msh");
+			free(pwd);
 			node->cmd->args[0] = cmd_name;
 			if (errno == EACCES)
 				return (126);
