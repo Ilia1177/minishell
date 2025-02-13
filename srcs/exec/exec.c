@@ -123,16 +123,12 @@ int	exec_cmd(t_bintree *node, t_data *data)
 		exit_status = build_cmd(node, data);
 	if (exit_status || is_builtin(node->cmd))
 	{
-		//close(node->stdfd[IN]);
-		//close(node->stdfd[OUT]);
 		close_fd(node);
 		return (exit_status);
 	}
 	pid = fork();
 	if (!pid)
 		child_process(node, data);
-	/* close(node->stdfd[IN]); */
-	/* close(node->stdfd[OUT]); */
 	close_fd(node);
 	//waitpid(-1, &exit_status, 0);
 	/* data->status = WEXITSTATUS(exit_status); */
