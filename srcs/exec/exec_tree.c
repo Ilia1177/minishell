@@ -22,27 +22,39 @@ int	execute_tree(t_data *data)
 	exit_status = execute_node(data->tree, data);
 	close(data->tree->stdfd[IN]);
 	close(data->tree->stdfd[OUT]);
+	while(waitpid(-1, NULL, WUNTRACED) != -1)
+		;
+	/* while (waitpid(-1, &exit_status, 0)>0) */
+	/* 	; */
+	/* data->status = WEXITSTATUS(exit_status); */
 	return (exit_status);
 }
 
 int	make_pipe(t_bintree *node, t_data *data)
 {
 	int	exit_status;
-
+  
+  printf("-Creating pipe\n");
 	pipe(node->pipefd);	
+	
 	node->left->stdfd[OUT] = dup(node->pipefd[OUT]);
 	node->left->stdfd[IN] = dup(node->stdfd[IN]);
-	close(node->pipefd[OUT]);
-	close(node->stdfd[IN]);
+	//close(node->stdfd[IN]);
+	printf("-Executing left node\n");
 	exit_status = execute_node(node->left, data);
+	//close(node->pipefd[OUT]);
 	if (node->right)
 	{
 		node->right->stdfd[OUT] = dup(node->stdfd[OUT]);
 		node->right->stdfd[IN] = dup(node->pipefd[IN]);
-		close(node->stdfd[OUT]);
-		close(node->pipefd[IN]);
+		printf("-Executing right node\n");
+		//close(node->stdfd[OUT]);
 		exit_status = execute_node(node->right, data);
+		//close(node->pipefd[IN]);
 	}
+	//close(node->stdfd[OUT]);
+	//close(node->stdfd[IN]);i
+	close_fd(node);
 	return (exit_status);
 }
 

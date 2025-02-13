@@ -62,8 +62,9 @@ static void	child_process(t_bintree *node, t_data *data)
 {
 	dup2(node->stdfd[IN], 0);
 	dup2(node->stdfd[OUT], 1);
-	close(node->stdfd[IN]);
-	close(node->stdfd[OUT]);
+	//close(node->stdfd[IN]);
+	//close(node->stdfd[OUT]);
+	close_fd_tree(data->tree);
 	execve(node->cmd->args[0], node->cmd->args, data->envp);
 	perror("msh: Big shit happened");
 	kill(0, SIGINT);
@@ -122,17 +123,19 @@ int	exec_cmd(t_bintree *node, t_data *data)
 		exit_status = build_cmd(node, data);
 	if (exit_status || is_builtin(node->cmd))
 	{
-		close(node->stdfd[IN]);
-		close(node->stdfd[OUT]);
+		//close(node->stdfd[IN]);
+		//close(node->stdfd[OUT]);
+		close_fd(node);
 		return (exit_status);
 	}
 	pid = fork();
 	if (!pid)
 		child_process(node, data);
-	close(node->stdfd[IN]);
-	close(node->stdfd[OUT]);
-	waitpid(-1, &exit_status, 0);
-	data->status = WEXITSTATUS(exit_status);
+	/* close(node->stdfd[IN]); */
+	/* close(node->stdfd[OUT]); */
+	close_fd(node);
+	//waitpid(-1, &exit_status, 0);
+	/* data->status = WEXITSTATUS(exit_status); */
 	if (data->flag)
 		printf("Exit status of %s is %d\n", node->input, data->status);
 	return (data->status);

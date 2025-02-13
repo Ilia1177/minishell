@@ -31,6 +31,7 @@ void	change_dir(t_bintree *node, t_data *data)
 {
 	char	wd[1024];
 	char	*path;
+	char 	*tmp;
 
 	if (!node->cmd->args[1])
 		return ;
@@ -43,8 +44,9 @@ void	change_dir(t_bintree *node, t_data *data)
 	else
 	{
 		getcwd(wd, sizeof(wd));
-		path = ft_strjoin(wd, "/");
-		path = ft_strjoin(path, node->cmd->args[1]);
+		tmp = ft_strjoin(wd, "/");
+		path = ft_strjoin(tmp, node->cmd->args[1]);
+		free(tmp);
 	}
 	if (!chdir(path))
 		update_pwds(data);

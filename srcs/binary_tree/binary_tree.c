@@ -12,6 +12,35 @@
 
 #include "minishell.h"
 
+void	init_fd(t_bintree *node)
+{
+	node->stdfd[IN] = -1;
+	node->stdfd[OUT] = -1;
+	node->pipefd[IN] = -1;
+	node->pipefd[OUT] = -1;
+}
+
+void	close_fd(t_bintree *node)
+{
+	if (node->stdfd[IN] != -1)
+		close(node->stdfd[IN]);
+	if (node->stdfd[OUT] != -1)
+		close(node->stdfd[OUT]);
+	if (node->pipefd[IN] != -1)
+		close(node->pipefd[IN]);
+	if (node->pipefd[OUT] != -1)
+		close(node->pipefd[OUT]);
+}
+
+void close_fd_tree(t_bintree *node)
+{
+	if (node->left)
+		close_fd_tree(node->left);
+	if (node->right)
+		close_fd_tree(node->right);
+	close_fd(node);
+}
+
 t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 {
 	t_bintree	*root;
@@ -22,6 +51,7 @@ t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 	root = malloc(sizeof(t_bintree));
 	root->type = current_token->type;
 	root->input = current_token->input;
+	init_fd(root);
 	if (current_token->type == CMD)
 		root->cmd = current_token->cmd;
 	else

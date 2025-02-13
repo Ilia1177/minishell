@@ -147,6 +147,8 @@ void		print_tree(t_bintree *root, int space);
 /****************************************/
 //binary_tree.c
 t_bintree	*build_tree(t_token **start, int priority);
+void		close_fd(t_bintree *node);
+void 		close_fd_tree(t_bintree *node);
 
 /****************************************/
 /*             TOKENIZE                 */
