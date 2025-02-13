@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 11:18:48 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/13 17:15:39 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "libft.h"
 # include "get_next_line.h"
 # include "ft_printf.h"
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <stdio.h>
 # include <signal.h>
 # include <fcntl.h>
@@ -97,6 +99,7 @@ typedef struct s_bintree
 
 typedef struct s_data
 {
+	pid_t		pid;
 	int			flag;
 	char		*prompt;
 	char		**paths;
@@ -244,18 +247,18 @@ char		*catch_value(char *str);
 int			print_working_dir(t_bintree *node, t_data *data);
 int			print_env(t_bintree *node, char **envp, char *format);
 //change_dir.c
-void		change_dir(t_bintree *node, t_data *data);
+int			change_dir(t_bintree *node, t_data *data);
 //echo.c
 int			echo(t_bintree *node, t_data *data);
 //exit.c
-void		exit_minishell(t_bintree *node, t_data *data);
+int		exit_minishell(t_bintree *node, t_data *data);
 //export.c
 int			update_envp(t_data *data, char *str);
 int			export(t_bintree *node, t_data *data);
 char 		**set_env(char *name, char *value, char **old_envp);
 
 //unset.c
-void		unset(t_bintree *node, t_data *data);
+int			unset(t_bintree *node, t_data *data);
 
 /****************************************/
 /*               RDIR_&&_ARG            */

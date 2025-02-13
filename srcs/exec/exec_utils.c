@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/12 12:13:07 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/13 18:04:53 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,18 @@ t_cmd	*cmddup(t_cmd *cmd)
 	return (new_cmd);
 }
 
+int is_directory(const char *path)
+{
+    struct stat path_stat;
+
+    if (stat(path, &path_stat) != 0)
+	{
+        perror("stat failed");
+        return 0; // Error occurred, treat as not a directory
+    }
+    return S_ISDIR(path_stat.st_mode);
+}
+
 int	build_cmd(t_bintree *node, t_data *data)
 {
 	char	*cmd_name;
@@ -138,7 +150,12 @@ int	build_cmd(t_bintree *node, t_data *data)
 		}
 		else
 		{
-			data->status = 127;
+			if (is_directory(cmd_name))
+			{
+				node->cmd->args[0] = cmd_name;
+				return (126);
+			}
+			ft_printf(2, "CMD not found: %s\n", cmd_name);
 			node->cmd->args[0] = cmd_name;
 			return (127);
 		}

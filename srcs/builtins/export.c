@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:37:07 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/12 15:02:03 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/13 16:06:45 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ int	export(t_bintree *node, t_data *data)
 	int	j;
 	int	status;
 
+	if (node->pipefd[OUT] == -2)
+		return (1);
 	status = 0;
 	j = 1;
 	if (!node->cmd->args[j])

@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:09:29 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/10 17:14:32 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:01:05 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,17 @@ static char	**unset_env(char *name, char **old_envp)
 	return (new_env);
 }
 
-void	unset(t_bintree *node, t_data *data)
+int	unset(t_bintree *node, t_data *data)
 {
 	int	i;
 
 	i = 1;
 	if (!node->cmd->args[i])
-		return ;
+		return (0);
 	while (node->cmd->args[i])
 	{
 		data->envp = unset_env(node->cmd->args[1], data->envp);
 		i++;
 	}
+	return (0);
 }

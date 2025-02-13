@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:18:29 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/06 16:48:34 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:18:19 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	exit_number(t_bintree *node)
 	exit(code);
 }
 
-void	exit_minishell(t_bintree *node, t_data *data)
+int	exit_minishell(t_bintree *node, t_data *data)
 {
 	if (!node->cmd->args[1])
 	{
@@ -74,7 +74,7 @@ void	exit_minishell(t_bintree *node, t_data *data)
 	else if (ft_isnumber(node->cmd->args[1]) && node->cmd->args[2])
 	{
 		ft_printf(2, TM_ARG);
-		data->status = 1;
+		return (1);
 	}
 	else
 	{
@@ -82,4 +82,5 @@ void	exit_minishell(t_bintree *node, t_data *data)
 		ft_printf(2, NR_ARG, node->cmd->args[1]);
 		exit (2);
 	}
+	return (1);
 }

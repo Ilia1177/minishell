@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:10:29 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 14:52:38 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/13 18:55:39 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,43 @@
 
 int	execute_tree(t_data *data)
 {
-	int	exit_status;
+	int	status;
+	int	save_status;
+	pid_t	wpid;
 
 	data->paths = get_paths(data->envp); 
 	data->tree->stdfd[IN] = dup(0);
 	data->tree->stdfd[OUT] = dup(1);
-	exit_status = execute_node(data->tree, data);
+	status = execute_node(data->tree, data);
 	close(data->tree->stdfd[IN]);
 	close(data->tree->stdfd[OUT]);
-	while(waitpid(-1, NULL, WUNTRACED) != -1)
-		;
-	/* while (waitpid(-1, &exit_status, 0)>0) */
-	/* 	; */
-	/* data->status = WEXITSTATUS(exit_status); */
-	return (exit_status);
+
+	if (data->pid == -1) 
+	{ 
+		data->status = status;
+		while(waitpid(-1, NULL, WUNTRACED) != -1)
+			;
+		/* data->status = WEXITSTATUS(status); */
+		if (status)
+			perror("msh");
+		return (status);
+	}
+	save_status = 0;
+	wpid = 0;
+	while (wpid != -1 || errno != ECHILD)
+	{
+		wpid = waitpid(-1, &status, 0);
+		if (wpid == data->pid)
+			save_status = status;
+		continue ;
+	}
+	if (WIFSIGNALED(save_status))
+		status = 128 + WTERMSIG(save_status);
+	else if (WIFEXITED(save_status))
+		status = WEXITSTATUS(save_status);
+	else
+		status = save_status;
+	return (status);
 }
 
 int	make_pipe(t_bintree *node, t_data *data)
@@ -38,9 +61,13 @@ int	make_pipe(t_bintree *node, t_data *data)
 	
 	node->left->stdfd[OUT] = dup(node->pipefd[OUT]);
 	node->left->stdfd[IN] = dup(node->stdfd[IN]);
+	node->left->pipefd[IN] = -2;
+	node->left->pipefd[OUT] = -2;
 	exit_status = execute_node(node->left, data);
 	if (node->right)
 	{
+		node->right->pipefd[IN] = -2;
+		node->right->pipefd[OUT] = -2;
 		node->right->stdfd[OUT] = dup(node->stdfd[OUT]);
 		node->right->stdfd[IN] = dup(node->pipefd[IN]);
 		exit_status = execute_node(node->right, data);
@@ -66,14 +93,16 @@ int	make_operation(t_bintree *node, t_data *data)
 		if (exit_status && node->right)
 		{
 			connect_stdio(node, node->right);
-			close(node->stdfd[IN]);
-			close(node->stdfd[OUT]);
+			close_fd(node);
+			//close(node->stdfd[IN]);
+			//close(node->stdfd[OUT]);
 			exit_status = execute_node(node->right, data);
 		}
 		else
 		{
-			close(node->stdfd[IN]);
-			close(node->stdfd[OUT]);
+			close_fd(node);
+			//close(node->stdfd[IN]);
+			//close(node->stdfd[OUT]);
 		}
 		return (exit_status);
 	}
