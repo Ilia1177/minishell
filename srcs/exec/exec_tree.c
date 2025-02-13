@@ -34,26 +34,17 @@ int	make_pipe(t_bintree *node, t_data *data)
 {
 	int	exit_status;
   
-  printf("-Creating pipe\n");
 	pipe(node->pipefd);	
 	
 	node->left->stdfd[OUT] = dup(node->pipefd[OUT]);
 	node->left->stdfd[IN] = dup(node->stdfd[IN]);
-	//close(node->stdfd[IN]);
-	printf("-Executing left node\n");
 	exit_status = execute_node(node->left, data);
-	//close(node->pipefd[OUT]);
 	if (node->right)
 	{
 		node->right->stdfd[OUT] = dup(node->stdfd[OUT]);
 		node->right->stdfd[IN] = dup(node->pipefd[IN]);
-		printf("-Executing right node\n");
-		//close(node->stdfd[OUT]);
 		exit_status = execute_node(node->right, data);
-		//close(node->pipefd[IN]);
 	}
-	//close(node->stdfd[OUT]);
-	//close(node->stdfd[IN]);i
 	close_fd(node);
 	return (exit_status);
 }
