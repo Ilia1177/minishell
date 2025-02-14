@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/13 18:53:29 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 13:32:27 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ char	*listen_to_user(char *prompt)
 	return (input);
 }
 
-
 void 	update_pwd_in_envp(t_data *data)
 {
 	char	wd[1024];
@@ -38,23 +37,22 @@ void 	update_pwd_in_envp(t_data *data)
 	}
 }
 
-
 void	init_shell(t_data *data)
 {
-	data->prompt = "msh>$";
 	rl_catch_signals = 0; // Disable readline's signal handling
 	g_signal_caught = 0;
 	data->tree = NULL;
 	data->token_list = NULL;
 	data->paths = NULL;
 	data->user_input = NULL;
-	update_pwd_in_envp(data);
 }
 
 int	run_shell(t_data *data)
 {
 	t_token				*cpy;
 
+	data->prompt = "msh>$";
+	update_pwd_in_envp(data);
 	while (1)
 	{
 		init_shell(data);
@@ -99,8 +97,7 @@ int	main(int ac, char **argv, char **envp)
 		data.flag = 1;
 	register_signals();
 	data.envp = tab_dup(envp);
-	init_shell(&data);
 	run_shell(&data);
 	free_minishell(&data, 0);
-	return (g_signal_caught);
+	return (data.status);
 }

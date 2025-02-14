@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 18:27:25 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/14 10:58:48 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 11:38:05 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	catch_name(char **buff, char *str)
 	if (!str)
 		return (-1);
 	len = ft_strnlen(str, '=');
+	if (len == (int)ft_strlen(str))
+		error = 2;
 	name = malloc(sizeof(char) * len + 1);
 	if (!name)
 		return (-1);

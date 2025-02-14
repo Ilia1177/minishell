@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/29 13:55:03 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 12:22:48 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,15 @@ void	free_tabstr(char **tabstr)
 {
 	size_t	i;
 
+	/* ft_printf(2, "tabstr = %p\n", tabstr); */
 	if (!tabstr || !*tabstr)
 		return ;
+	/* print_args(tabstr); */
+	/* ft_printf(2,"\n"); */
 	i = 0;
 	while (tabstr[i])
 	{
-		free (tabstr[i]);
+		free(tabstr[i]);
 		++i;
 	}
 	free (tabstr);

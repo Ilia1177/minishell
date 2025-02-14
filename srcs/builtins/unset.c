@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:09:29 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/13 17:01:05 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 13:02:40 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ static char	**unset_env(char *name, char **old_envp)
 	while (old_envp[++i])
 	{
 		if (i == env_index)
+		{
+			free(old_envp[i]); // recently added (Nil) still leaks...
 			i++;
+		}
 		new_env[++j] = old_envp[i];
 	}
 	new_env[j] = NULL;

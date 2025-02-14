@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:45:59 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/10 17:47:21 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/14 11:21:53 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ void	print_args(char **args)
 {
 	int	i;
 
+	if (!args)
+	{
+		ft_printf(2, "Args Tab = EMPTY\n");
+		return ;
+	}
 	i = 0;
 	while (args[i])
 	{

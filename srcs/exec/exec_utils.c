@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/13 18:04:53 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 13:45:03 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ char	**get_paths(char **env)
 	{
 		if (!ft_strncmp(env[i], "PATH=", 5))
 		{
-			env[i] += 5;
-			paths = ft_split(env[i], ':');
-			env[i] -= 5;
+			if (!env[i][5])
+			 	return (NULL); 
+			paths = ft_split(env[i] + 5, ':');
 			return (paths);
 		}
 		i++;
 	}
-	return (paths);
+	return (NULL);
 }
 
 char	*get_full_path(char **paths, char *str)
@@ -116,38 +116,44 @@ t_cmd	*cmddup(t_cmd *cmd)
 	return (new_cmd);
 }
 
+int	try_with_pwd(t_bintree *node, t_data *data, char *cmd_name)
+{
+	char *tmp;
+	char *pwd;
+
+	tmp = ft_strjoin(catch_expand(data, "PWD"), "/");
+	pwd = ft_strjoin(tmp, cmd_name);
+	free(tmp);
+	if (!access(pwd, X_OK))
+	{
+		node->cmd->args[0] = pwd;
+		free(cmd_name);
+		return (0);
+	}
+	else
+	{
+		perror("msh");
+		free(pwd);
+		node->cmd->args[0] = cmd_name;
+		if (errno == EACCES)
+			return (126);
+	}
+	return (127);
+}
 
 int	build_cmd(t_bintree *node, t_data *data)
 {
 	char	*cmd_name;
-	char	*pwd;
-	char	*tmp;
+	int		status;
 
+	status = 0;
 	if (!ft_strcmp(node->cmd->args[0], "."))
 		return (127);
 	cmd_name = node->cmd->args[0];
 	node->cmd->args[0] = get_full_path(data->paths, cmd_name);
 	if (!node->cmd->args[0])
-	{
-		tmp = ft_strjoin(catch_expand(data, "PWD"), "/");
-		pwd = ft_strjoin(tmp, cmd_name);
-		free(tmp);
-		if (!access(pwd, X_OK))
-		{
-			node->cmd->args[0] = pwd;
-			free(cmd_name);
-		}
-		else
-		{
-			perror("msh");
-			free(pwd);
-			node->cmd->args[0] = cmd_name;
-			if (errno == EACCES)
-				return (126);
-			return (127);
-		}
-	}
+		status = try_with_pwd(node, data, cmd_name);
 	else
 		free(cmd_name);
-	return (0);
+	return (status);
 }
