@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:10:29 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/14 13:28:05 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 13:54:49 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ int	execute_tree(t_data *data)
 	data->tree->stdfd[IN] = dup(0);
 	data->tree->stdfd[OUT] = dup(1);
 	status = execute_node(data->tree, data);
-	close(data->tree->stdfd[IN]);
-	close(data->tree->stdfd[OUT]);
+	close_fd(data->tree);
 	if (data->pid == -2) 
 	{ 
 		data->status = status;

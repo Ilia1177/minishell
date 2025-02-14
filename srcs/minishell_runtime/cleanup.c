@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/14 12:22:48 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 14:05:08 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	free_minishell(t_data *data, int exit_code)
 	free(data->user_input);
 	free_tree(data->tree);
 	free_tabstr(data->paths);
+	//close_fd_tree(data->tree);
 	if (exit_code >= 0)
 	{
 		free_tabstr(data->envp);
