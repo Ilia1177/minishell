@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/13 17:15:39 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 21:13:14 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,7 @@ void		get_redir(t_token *token, t_data *data);
 void		type_token(t_token *token, t_data *data);
 void		split_args(t_token *token, t_data *data);
 void		get_expand(t_token *token, t_data *data);
+int			is_all_space(char *str);
 
 /****************************************/
 /*               BUILTINS               */
@@ -251,7 +252,7 @@ int			change_dir(t_bintree *node, t_data *data);
 //echo.c
 int			echo(t_bintree *node, t_data *data);
 //exit.c
-int		exit_minishell(t_bintree *node, t_data *data);
+int			exit_minishell(t_bintree *node, t_data *data);
 //export.c
 int			update_envp(t_data *data, char *str);
 int			export(t_bintree *node, t_data *data);

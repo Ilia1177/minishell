@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/14 14:05:08 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 21:09:40 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	free_minishell(t_data *data, int exit_code)
 {
+	if (data->flag)
+		ft_printf(2, "cleanup with code of exit %d\n", exit_code);
 	free(data->user_input);
 	free_tree(data->tree);
 	free_tabstr(data->paths);
@@ -30,17 +32,15 @@ void	free_tabstr(char **tabstr)
 {
 	size_t	i;
 
-	/* ft_printf(2, "tabstr = %p\n", tabstr); */
-	if (!tabstr || !*tabstr)
+	if (!tabstr)
 		return ;
-	/* print_args(tabstr); */
-	/* ft_printf(2,"\n"); */
 	i = 0;
 	while (tabstr[i])
 	{
 		free(tabstr[i]);
-		++i;
+		i++;
 	}
+	free(tabstr[i]);
 	free (tabstr);
 }
 
@@ -66,8 +66,10 @@ void	free_leaf(t_bintree *leaf)
 {
 	if (!leaf)
 		return ;
-	free(leaf->input);
-	free_cmd(leaf->cmd);
+	if (leaf->input)
+		free(leaf->input);
+	if (leaf->cmd)
+		free_cmd(leaf->cmd);
 	free(leaf);
 }
 

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/10 20:27:43 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 21:51:58 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ t_token	*build_tokenlist(char **tokens)
 int	tokenize(t_data *data)
 {
 	char	**tokens;
+	//int		status;
 
 	if (!data->user_input)
 		return (0);
@@ -71,10 +72,11 @@ int	tokenize(t_data *data)
 	if (!tokens)
 		return (0);
 	data->token_list = build_tokenlist(tokens);
+	//data->token_list = build_tokenlist(tokens, &status);
 	free_tabstr(tokens);
 	if (!data->token_list)
 	{
-		data->status = 258;
+		data->status = 2;
 		return (0);
 	}
 	ft_lstiter_token(data, &get_redir);

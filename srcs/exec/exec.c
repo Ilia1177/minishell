@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/13 17:45:23 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 21:34:16 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,14 @@ static void	child_process(t_bintree *node, t_data *data)
 	dup2(node->stdfd[OUT], 1);
 	close_fd_tree(data->tree);
 	execve(node->cmd->args[0], node->cmd->args, data->envp);
-	perror("msh: Big shit happened");
-	kill(0, SIGINT);
+	perror("msh: shit happened");
 	free_minishell(data, 1);
 }
 
 static int	is_builtin(t_cmd *cmd)
 {
+	if (!cmd->args[0])
+		return (0);
 	if (!ft_strcmp(cmd->args[0], "cd"))
 		return (1);
 	if (!ft_strcmp(cmd->args[0], "pwd"))
@@ -118,14 +119,19 @@ int	exec_cmd(t_bintree *node, t_data *data)
 {
 	int	exit_status;
 
+	data->pid = -2;
 	exit_status = redir(node);
+	if (!node->input || !node->input[0])
+	{
+		close_fd(node);
+		return (exit_status);
+	}
 	if (!exit_status && is_builtin(node->cmd))
 		exit_status = exec_builtin(node, data);
 	else if (!exit_status)
 		exit_status = build_cmd(node, data);
 	if (exit_status || is_builtin(node->cmd))
 	{
-		data->pid = -2;
 		close_fd(node);
 		return (exit_status);
 	}

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/14 13:32:27 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 21:46:31 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	init_shell(t_data *data)
 
 int	run_shell(t_data *data)
 {
-	t_token				*cpy;
+	t_token	*cpy;
 
 	data->prompt = "msh>$";
 	update_pwd_in_envp(data);
@@ -58,7 +58,7 @@ int	run_shell(t_data *data)
 		init_shell(data);
 		data->user_input = listen_to_user(data->prompt);
 		if (!data->user_input)
-			free_minishell(data, 0);
+			free_minishell(data, data->status);
 		else if (data->user_input[0] == '\0')
 		{
 			free_minishell(data, -1);
@@ -93,8 +93,13 @@ int	main(int ac, char **argv, char **envp)
 	data.flag = 0;
 	data.status = 0;
 	(void)argv;
-	if (ac > 1)
+	if (ac > 1 && !ft_strcmp("-d", argv[1]))
 		data.flag = 1;
+	else if (ac > 1)
+	{
+		ft_printf(2, "invalid option\n");
+		return (2);
+	}
 	register_signals();
 	data.envp = tab_dup(envp);
 	run_shell(&data);
