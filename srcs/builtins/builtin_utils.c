@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 18:27:25 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 14:55:42 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 10:58:48 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ char	*catch_value(char *str)
 	int		i;
 	int		len;
 
+	if (ft_strlen(str) == ft_strnlen(str, '='))
+		return (NULL);
 	str += ft_strnlen(str, '=');
 	len = ft_strlen(++str);
 	value = malloc(sizeof(char) * len + 1);

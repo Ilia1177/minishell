@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:37:07 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/13 16:06:45 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 10:58:48 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,18 @@ char	**set_env(char *name, char *value, char **old_envp)
 	char	**new_env;
 
 	line = new_entry(name, value);
-	i = 0;
 	if (!line)
 		return (old_envp);
 	if (!old_envp)
 	{
-		ft_printf(2,"not old env\n");
-			new_env = malloc(sizeof(char *) * (2));
-			if (!new_env)
-				return (old_envp);
-			new_env[0] = line;
-			new_env[1] = NULL;
-			return (new_env);
+		new_env = malloc(sizeof(char *) * (2));
+		if (!new_env)
+			return (old_envp);
+		new_env[0] = line;
+		new_env[1] = NULL;
+		return (new_env);
 	}
+	i = 0;
 	while (old_envp[i])
 		i++;
 	new_env = malloc(sizeof(char *) * (i + 2));
