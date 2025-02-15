@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:09:29 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/15 10:58:15 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/15 11:18:40 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ int	tablen(char **tab)
 	return (len);
 }
 
+// copy adress of each element of tab, in a new_tab
+// Doesnt copy the element at index if index is >= 0
 char **tabstrcpy(char **tab, int index)
 {
 	char **new_tab;
