@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:37:07 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/14 13:32:58 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/15 10:17:39 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int	update_envp(t_data *data, char *str)
 	int		error;
 
 	error = catch_name(&name, str);
+	ft_printf(2, "name is = %s, error is = %d\n", name, error);
 	if (!error)
 	{
 		value = catch_value(str);
@@ -100,10 +101,10 @@ int	update_envp(t_data *data, char *str)
 	}
 	else
 	{
-		free(name);
 		if (error == 1)
 			ft_printf(2, "msh: export: %s\"%s\n", name, WARNING);
-		else if (error == 2)
+		free(name);
+		if (error == 2)
 			return (0);
 	}
 	return (error);
@@ -114,12 +115,12 @@ int	export(t_bintree *node, t_data *data)
 	int	j;
 	int	status;
 
-	if (node->pipefd[OUT] == -2 || node->pipefd[IN] == -2)
-		return (1);
 	status = 0;
 	j = 1;
 	if (!node->cmd->args[j])
 		print_env(node, data->envp, "declare -x ");
+	else if (node->pipefd[OUT] == -2 || node->pipefd[IN] == -2)
+		return (1);
 	while (node->cmd->args[j])
 	{
 		if (update_envp(data, node->cmd->args[j]))

@@ -6,38 +6,61 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:09:29 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/14 17:19:17 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/15 10:58:15 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	tablen(char **tab)
+{
+	int	len;
+	
+	len = 0;
+	while (tab[len])
+		len++;
+	return (len);
+}
+
+char **tabstrcpy(char **tab, int index)
+{
+	char **new_tab;
+	int		len;
+	int		i;
+	int		offset;
+
+	len = tablen(tab);
+	if (index >= 0)
+		len--;
+	new_tab = malloc(sizeof(char *) * (len + 1));
+	if (!new_tab)
+		return (NULL);
+	i = 0;
+	offset = 0;
+	while (tab[i + offset])
+	{
+		if (i == index)
+			offset++;
+		new_tab[i] = tab[i + offset];
+		if (tab[i + offset])
+			i++;
+	}
+	new_tab[i] = NULL;
+	return (new_tab);
+}
+
 static char	**unset_env(char *name, t_data *data)
 {
-	int		i;
-	int		j;
 	int		env_index;
 	char	**new_env;
 
 	env_index = exist(data->envp, name);
-	if (env_index == -1)
+	if (env_index < 0)
 		return (data->envp);
-	i = 0;
-	while (data->envp[i])
-		i++;
-	new_env = malloc(sizeof(char *) * i);
+	new_env = tabstrcpy(data->envp, env_index);
 	if (!new_env)
 		return (data->envp);
 	free(data->envp[env_index]);
-	i = -1;
-	j = -1;
-	while (data->envp[++i])
-	{
-		if (i == env_index)
-			i++;
-		new_env[++j] = data->envp[i];
-	}
-	new_env[++j] = NULL;
 	free(data->envp);
 	return (new_env);
 }
