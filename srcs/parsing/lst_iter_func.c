@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:31:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/10 20:30:05 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 21:09:01 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,21 @@ void	get_expand(t_token *token, t_data *data)
 	expand_str(data, &token->input);
 }
 
+int	is_all_space(char *str)
+{
+	int	i;
+	int	is_all_space;
+
+	is_all_space = 1;
+	i = 0;
+	while (str[i])
+	{
+		if (!isspace(str[i]))
+			is_all_space = 0;
+		i++;
+	}
+	return (is_all_space);
+}
 // working
 // creat an array of rdir null terminated
 void	get_redir(t_token *token, t_data *data)
@@ -86,6 +101,11 @@ void	get_redir(t_token *token, t_data *data)
 	if (!rdir)
 		return ;
 	seek_rdir(str, &rdir, data);
+	if (!is_all_space(str))
+		token->input = ft_strtrim(str, " "); // to be improved (or not) ?? (if redir is in the middle of the args)
+	else
+		token->input = ft_calloc(1, 1); // if token->input == NULL --> SEGFAULT !!
+	free(str);
 	rdir[nb_rdir].name = NULL;
 	token->cmd->rdir = rdir;
 }

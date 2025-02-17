@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 14:53:12 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 21:34:16 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ static int	redir(t_bintree *node)
 		name = node->cmd->rdir[i].name;
 		status = open_rdir(node, name, type);
 		if (status)
+		{
+			perror("msh");
 			return (status);
+		}
 	}
 	return (0);
 }
@@ -62,17 +65,16 @@ static void	child_process(t_bintree *node, t_data *data)
 {
 	dup2(node->stdfd[IN], 0);
 	dup2(node->stdfd[OUT], 1);
-	//close(node->stdfd[IN]);
-	//close(node->stdfd[OUT]);
 	close_fd_tree(data->tree);
 	execve(node->cmd->args[0], node->cmd->args, data->envp);
-	perror("msh: Big shit happened");
-	kill(0, SIGINT);
-	exit_minishell(node, data);
+	perror("msh: shit happened");
+	free_minishell(data, 1);
 }
 
 static int	is_builtin(t_cmd *cmd)
 {
+	if (!cmd->args[0])
+		return (0);
 	if (!ft_strcmp(cmd->args[0], "cd"))
 		return (1);
 	if (!ft_strcmp(cmd->args[0], "pwd"))
@@ -92,31 +94,38 @@ static int	is_builtin(t_cmd *cmd)
 
 static int	exec_builtin(t_bintree *node, t_data *data)
 {
+	int	status;
+
 	if (data->flag)
 		ft_printf(2, "Execute builtin command: %s\n", node->cmd->args[0]);
 	if (!ft_strcmp(node->cmd->args[0], "cd"))
-		change_dir(node, data);
+		status = change_dir(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "pwd"))
-		print_working_dir(node, data);
+		status = print_working_dir(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "export"))
-		export(node, data);
+		status = export(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "env"))
-		print_env(node, data->envp, "");
+		status = print_env(node, data->envp, "");
 	if (!ft_strcmp(node->cmd->args[0], "unset"))
-		unset(node, data);
+		status = unset(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "echo"))
-		echo(node, data);
+		status = echo(node, data);
 	if (!ft_strcmp(node->cmd->args[0], "exit"))
-		exit_minishell(node, data);
-	return (0);
+		status = exit_minishell(node, data);
+	return (status);
 }
 
 int	exec_cmd(t_bintree *node, t_data *data)
 {
-	int	pid;
 	int	exit_status;
 
+	data->pid = -2;
 	exit_status = redir(node);
+	if (!node->input || !node->input[0])
+	{
+		close_fd(node);
+		return (exit_status);
+	}
 	if (!exit_status && is_builtin(node->cmd))
 		exit_status = exec_builtin(node, data);
 	else if (!exit_status)
@@ -126,13 +135,9 @@ int	exec_cmd(t_bintree *node, t_data *data)
 		close_fd(node);
 		return (exit_status);
 	}
-	pid = fork();
-	if (!pid)
+	data->pid = fork();
+	if (!data->pid)
 		child_process(node, data);
 	close_fd(node);
-	//waitpid(-1, &exit_status, 0);
-	/* data->status = WEXITSTATUS(exit_status); */
-	if (data->flag)
-		printf("Exit status of %s is %d\n", node->input, data->status);
-	return (data->status);
+	return (-1);
 }

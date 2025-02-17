@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/04 19:44:33 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/14 14:01:02 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,26 @@ void	init_fd(t_bintree *node)
 
 void	close_fd(t_bintree *node)
 {
-	if (node->stdfd[IN] != -1)
+	if (node->stdfd[IN] != -1 && node->stdfd[IN] != -2)
+	{
 		close(node->stdfd[IN]);
-	if (node->stdfd[OUT] != -1)
+		node->stdfd[IN] = -1;
+	}
+	if (node->stdfd[OUT] != -1 && node->stdfd[OUT] != -2)
+	{
 		close(node->stdfd[OUT]);
-	if (node->pipefd[IN] != -1)
+		node->stdfd[OUT] = -1;
+	}
+	if (node->pipefd[IN] != -1 && node->pipefd[IN] != -2)
+	{
 		close(node->pipefd[IN]);
-	if (node->pipefd[OUT] != -1)
+		node->pipefd[IN] = -1;
+	}
+	if (node->pipefd[OUT] != -1 && node->pipefd[OUT] != -2)
+	{
 		close(node->pipefd[OUT]);
+		node->pipefd[OUT] = -1;
+	}
 }
 
 void close_fd_tree(t_bintree *node)

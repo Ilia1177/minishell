@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:37:07 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/12 15:02:03 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/15 10:17:39 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,17 @@ char	*new_entry(char *name, char *value)
 	char	*tmp;
 	char	*line;
 
+	if (!name)
+	{
+		free(value);
+		return (NULL);
+	}
 	tmp = name;
 	name = ft_strjoin(name, "=");
-	if (!name)
-		return (tmp);
 	free(tmp);
-	if (!value)
+	if (!name)
+		return (NULL);
+	if (!value || !value[0])
 		line = name;
 	else
 	{
@@ -45,19 +50,18 @@ char	**set_env(char *name, char *value, char **old_envp)
 	char	**new_env;
 
 	line = new_entry(name, value);
-	i = 0;
 	if (!line)
 		return (old_envp);
 	if (!old_envp)
 	{
-		ft_printf(2,"not old env\n");
-			new_env = malloc(sizeof(char *) * (2));
-			if (!new_env)
-				return (old_envp);
-			new_env[0] = line;
-			new_env[1] = NULL;
-			return (new_env);
+		new_env = malloc(sizeof(char *) * (2));
+		if (!new_env)
+			return (old_envp);
+		new_env[0] = line;
+		new_env[1] = NULL;
+		return (new_env);
 	}
+	i = 0;
 	while (old_envp[i])
 		i++;
 	new_env = malloc(sizeof(char *) * (i + 2));
@@ -81,6 +85,7 @@ int	update_envp(t_data *data, char *str)
 	int		error;
 
 	error = catch_name(&name, str);
+	ft_printf(2, "name is = %s, error is = %d\n", name, error);
 	if (!error)
 	{
 		value = catch_value(str);
@@ -99,6 +104,8 @@ int	update_envp(t_data *data, char *str)
 		if (error == 1)
 			ft_printf(2, "msh: export: %s\"%s\n", name, WARNING);
 		free(name);
+		if (error == 2)
+			return (0);
 	}
 	return (error);
 }
@@ -112,6 +119,8 @@ int	export(t_bintree *node, t_data *data)
 	j = 1;
 	if (!node->cmd->args[j])
 		print_env(node, data->envp, "declare -x ");
+	else if (node->pipefd[OUT] == -2 || node->pipefd[IN] == -2)
+		return (1);
 	while (node->cmd->args[j])
 	{
 		if (update_envp(data, node->cmd->args[j]))

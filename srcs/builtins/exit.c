@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:18:29 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/06 16:48:34 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:18:19 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	format_exit_code(long long number)
 	return (code);
 }
 
-void	exit_number(t_bintree *node)
+void	exit_number(t_data *data, t_bintree *node)
 {
 	int			code;
 	int			error;
@@ -54,32 +54,32 @@ void	exit_number(t_bintree *node)
 	if (error)
 	{
 		ft_printf(2, NR_ARG, node->cmd->args[1]);
-		exit(2);
+		free_minishell(data, 2);
 	}
-	exit(code);
+	free_minishell(data, code);
 }
 
-void	exit_minishell(t_bintree *node, t_data *data)
+int	exit_minishell(t_bintree *node, t_data *data)
 {
 	if (!node->cmd->args[1])
 	{
 		ft_printf(1, "exit\n");
-		free_minishell(data);
-		exit(0);
+		free_minishell(data, 0);
 	}
 	if (ft_isnumber(node->cmd->args[1]) && !node->cmd->args[2])
 	{
-		exit_number(node);
+		exit_number(data, node);
 	}
 	else if (ft_isnumber(node->cmd->args[1]) && node->cmd->args[2])
 	{
 		ft_printf(2, TM_ARG);
-		data->status = 1;
+		return (1);
 	}
 	else
 	{
 		ft_printf(1, "exit\n");
 		ft_printf(2, NR_ARG, node->cmd->args[1]);
-		exit (2);
+		free_minishell(data, 2);
 	}
+	return (1);
 }

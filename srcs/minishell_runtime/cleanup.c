@@ -6,33 +6,41 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/01/29 13:55:03 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 21:09:40 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_minishell(t_data *data)
+void	free_minishell(t_data *data, int exit_code)
 {
-	free(data->prompt);
+	if (data->flag)
+		ft_printf(2, "cleanup with code of exit %d\n", exit_code);
 	free(data->user_input);
-	//close_all_fd(data->tree);			output error in valgrind (not a good idea ?)
 	free_tree(data->tree);
-	free_elem(data->paths, D_TAB);
+	free_tabstr(data->paths);
+	//close_fd_tree(data->tree);
+	if (exit_code >= 0)
+	{
+		free_tabstr(data->envp);
+		rl_clear_history();
+		exit(exit_code);
+	}
 }
 
 void	free_tabstr(char **tabstr)
 {
 	size_t	i;
 
-	if (!tabstr || !*tabstr)
+	if (!tabstr)
 		return ;
 	i = 0;
 	while (tabstr[i])
 	{
-		free (tabstr[i]);
-		++i;
+		free(tabstr[i]);
+		i++;
 	}
+	free(tabstr[i]);
 	free (tabstr);
 }
 
@@ -58,8 +66,10 @@ void	free_leaf(t_bintree *leaf)
 {
 	if (!leaf)
 		return ;
-	free(leaf->input);
-	free_cmd(leaf->cmd);
+	if (leaf->input)
+		free(leaf->input);
+	if (leaf->cmd)
+		free_cmd(leaf->cmd);
 	free(leaf);
 }
 

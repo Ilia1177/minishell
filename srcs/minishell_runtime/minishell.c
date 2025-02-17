@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 12:18:05 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 21:46:31 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ char	*listen_to_user(char *prompt)
 	return (input);
 }
 
-
 void 	update_pwd_in_envp(t_data *data)
 {
 	char	wd[1024];
@@ -38,7 +37,6 @@ void 	update_pwd_in_envp(t_data *data)
 	}
 }
 
-
 void	init_shell(t_data *data)
 {
 	rl_catch_signals = 0; // Disable readline's signal handling
@@ -51,34 +49,23 @@ void	init_shell(t_data *data)
 
 int	run_shell(t_data *data)
 {
-	t_token				*cpy;
-	static char			*tmp;
+	t_token	*cpy;
 
+	data->prompt = "msh>$";
 	update_pwd_in_envp(data);
 	while (1)
 	{
 		init_shell(data);
-		tmp = catch_expand(data, "PWD");
-		tmp = ft_strjoin("msh:\xF0\x9F\x92\xBE:", tmp);
-		data->prompt = ft_strjoin(tmp, ">$");
-		free(tmp);
 		data->user_input = listen_to_user(data->prompt);
 		if (!data->user_input)
-		{
-			free_tabstr(data->envp);
-			free_minishell(data);
-			rl_clear_history();
-			data->status += g_signal_caught;
-			exit(data->status);
-		}
+			free_minishell(data, data->status);
 		else if (data->user_input[0] == '\0')
 		{
-			free(data->user_input);
-			free(data->prompt);
+			free_minishell(data, -1);
 			continue ;
 		}
 		if (!tokenize(data))
-			free_minishell(data);
+			free_minishell(data, -1);
 		else
 		{
 			cpy = data->token_list;
@@ -93,12 +80,8 @@ int	run_shell(t_data *data)
 				printf("\n\n----------- Binary tree :  ----\n");
 				print_tree(data->tree, 0); // print the tree for debug
 			}
-			if (execute_tree(data))
-			{
-				errno = data->status;
-				perror("msh:");
-			}
-			free_minishell(data);
+			data->status = execute_tree(data);
+			free_minishell(data, -1);
 		}
 	}
 }
@@ -110,12 +93,16 @@ int	main(int ac, char **argv, char **envp)
 	data.flag = 0;
 	data.status = 0;
 	(void)argv;
-	if (ac > 1)
+	if (ac > 1 && !ft_strcmp("-d", argv[1]))
 		data.flag = 1;
+	else if (ac > 1)
+	{
+		ft_printf(2, "invalid option\n");
+		return (2);
+	}
 	register_signals();
 	data.envp = tab_dup(envp);
-	init_shell(&data);
 	run_shell(&data);
-	free_minishell(&data);
-	return (g_signal_caught);
+	free_minishell(&data, 0);
+	return (data.status);
 }

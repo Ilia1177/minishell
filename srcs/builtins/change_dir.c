@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:24:42 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/10 16:28:32 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/13 17:05:44 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,18 @@ static void	update_pwds(t_data *data)
 	free(new_pwd);
 }
 
-void	change_dir(t_bintree *node, t_data *data)
+int		change_dir(t_bintree *node, t_data *data)
 {
 	char	wd[1024];
 	char	*path;
 	char 	*tmp;
+	int		i;
 
-	if (!node->cmd->args[1])
-		return ;
+	i = 0;
+	while (node->cmd->args[i])
+		i++;
+	if (!node->cmd->args[1] || i > 2)
+		return (1);
 	if (!ft_strcmp(node->cmd->args[1], "-"))
 		path = ft_strdup(catch_expand(data, "OLDPWD"));
 	else if (!ft_strcmp(node->cmd->args[1], "--"))
@@ -56,4 +60,5 @@ void	change_dir(t_bintree *node, t_data *data)
 		data->status = 1;
 	}
 	free(path);
+	return (data->status);
 }

@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 18:27:25 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/12 14:55:42 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 11:38:05 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	catch_name(char **buff, char *str)
 	if (!str)
 		return (-1);
 	len = ft_strnlen(str, '=');
+	if (len == (int)ft_strlen(str))
+		error = 2;
 	name = malloc(sizeof(char) * len + 1);
 	if (!name)
 		return (-1);
@@ -62,6 +64,8 @@ char	*catch_value(char *str)
 	int		i;
 	int		len;
 
+	if (ft_strlen(str) == ft_strnlen(str, '='))
+		return (NULL);
 	str += ft_strnlen(str, '=');
 	len = ft_strlen(++str);
 	value = malloc(sizeof(char) * len + 1);
@@ -96,7 +100,7 @@ int	print_env(t_bintree *node, char **envp, char *format)
 
 	i = 0;
 	if (!envp)
-		return (-1);
+		return (0);
 	else
 	{
 		while (envp[i])

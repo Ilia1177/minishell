@@ -53,11 +53,12 @@ int	operator_syntax(t_token *prev)
 	return (error);
 }
 
-int	rdir_syntax(t_token *curr, int c)
+int	rdir_syntax(t_token *curr)
 {
 	int		error;
 	int		i;
 	char	*str;
+	char	c;
 
 	error = 0;
 	str = curr->input;
@@ -101,12 +102,15 @@ int	cmd_syntax(t_token *prev, t_token *curr)
 	error = 0;
 	if (prev)
 	{
-		if (prev->type == CMD || !ft_strcmp(prev->input, ")"))
+		if (prev->type == CMD)
 			return (1);
+		if (!ft_strcmp(prev->input, ")"))
+		{
+			ft_printf(2, "Use parenthesis for priority ONLY\n");
+			return (1);
+		}
 	}
-	error = rdir_syntax(curr, '<');
-	if (!error)
-		error = rdir_syntax(curr, '>');
+	error = rdir_syntax(curr);
 	return (error);
 }
 

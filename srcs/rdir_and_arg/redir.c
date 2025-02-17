@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:11:19 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/10 20:00:24 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 20:21:25 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,15 @@ int	catch_rdir(t_rdir *rdir, char *str, t_type_rdir type, int num_rdir)
 
 	i = 1;
 	if (type == APPEND)
-		i++;	
+		i++;
 	while (is_space(str[i]))
 		i++;
 	len = true_wordlen(str + i);
-	name = malloc(sizeof(char) * len + 1);
+	name = ft_substr(str, i, len);
+	//name = malloc(sizeof(char) * len + 1);
 	if (!name)
 		return (0);
-	ft_strlcpy(name, str + i, len + 1);
+	//ft_strlcpy(name, str + i, len + 1);
 	rdir[num_rdir].name = name;
 	rdir[num_rdir].type = type;
 	ft_memset(str, ' ', len + i);

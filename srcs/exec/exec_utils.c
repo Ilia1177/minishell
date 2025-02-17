@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/12 12:13:07 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/14 22:08:28 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ char	**get_paths(char **env)
 	{
 		if (!ft_strncmp(env[i], "PATH=", 5))
 		{
-			env[i] += 5;
-			paths = ft_split(env[i], ':');
-			env[i] -= 5;
+			if (!env[i][5])
+				return (NULL);
+			paths = ft_split(env[i] + 5, ':');
 			return (paths);
 		}
 		i++;
 	}
-	return (paths);
+	return (NULL);
 }
 
 char	*get_full_path(char **paths, char *str)
@@ -61,19 +61,12 @@ char	*get_full_path(char **paths, char *str)
 	int		i;
 	char	*full_path;
 	char	*cmd;
-	char	*tmp;
 
 	if (!paths)
 		return (NULL);
-	tmp = malloc(sizeof(char) * (ft_strnlen(str, ' ') + 1));
-	if (!tmp)
+	cmd = ft_strjoin("/", str);
+	if (!cmd)
 		return (NULL);
-	i = -1;
-	while (++i < (int)ft_strnlen(str, ' '))
-		tmp[i] = str[i];
-	tmp[i] = '\0';
-	cmd = ft_strjoin("/", tmp);
-	free(tmp);
 	i = -1;
 	while (paths[++i])
 	{
@@ -116,34 +109,75 @@ t_cmd	*cmddup(t_cmd *cmd)
 	return (new_cmd);
 }
 
+int	try_with_pwd(t_bintree *node, t_data *data, char *cmd_name)
+{
+	char	*tmp;
+	char	*pwd;
+	int		status;
+
+	node->cmd->args[0] = cmd_name;
+	status = 0;
+	tmp = ft_strjoin(catch_expand(data, "PWD"), "/");
+	pwd = ft_strjoin(tmp, cmd_name);
+	free(tmp);
+	if (!pwd)
+		status = 127;
+	else if (!access(pwd, X_OK))
+	{
+		node->cmd->args[0] = pwd;
+		free(cmd_name);
+	}
+	else
+	{
+		node->cmd->args[0] = cmd_name;
+		free(pwd);
+		status = 127;
+	}
+	return (status);
+}
+
+int	is_directory(char *path)
+{
+	struct stat statbuf;
+
+	if (access(path, F_OK) == 0)
+	{
+		if (stat(path, &statbuf) == 0)
+		{
+			if (S_ISDIR(statbuf.st_mode))
+			{
+				ft_printf(2, "Is a directory\n");
+				return (126);
+			}
+		}
+	}
+	return (0);
+}
+
 int	build_cmd(t_bintree *node, t_data *data)
 {
 	char	*cmd_name;
-	char	*pwd;
-	char	*tmp;
+	int		status;
 
-	if (!ft_strcmp(node->cmd->args[0], "."))
+	status = 0;
+	if (!node->cmd->args[0][0])
 		return (127);
 	cmd_name = node->cmd->args[0];
 	node->cmd->args[0] = get_full_path(data->paths, cmd_name);
 	if (!node->cmd->args[0])
-	{
-		tmp = ft_strjoin(catch_expand(data, "PWD"), "/");
-		pwd = ft_strjoin(tmp, cmd_name);
-		free(tmp);
-		if (!access(pwd, X_OK))
-		{
-			node->cmd->args[0] = pwd;
-			free(cmd_name);
-		}
-		else
-		{
-			data->status = 127;
-			node->cmd->args[0] = cmd_name;
-			return (127);
-		}
-	}
+		status = try_with_pwd(node, data, cmd_name);
 	else
 		free(cmd_name);
-	return (0);
+	if (status && is_directory(node->cmd->args[0]))
+		return (126);
+	if (status && !access(node->cmd->args[0], X_OK))
+		return (0);
+	if (errno == EACCES && status == 127)
+	{
+		perror("msh");
+		status = 126;
+	}
+	else if (status == 127)
+		ft_printf(2, "msh: %s: command not found\n", node->cmd->args[0]);
+	return (status);
 }

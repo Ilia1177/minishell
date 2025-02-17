@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/13 16:04:38 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/17 09:57:42 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include "libft.h"
 # include "get_next_line.h"
 # include "ft_printf.h"
+# include <sys/types.h>
+# include <sys/stat.h>
 # include <stdio.h>
 # include <signal.h>
 # include <fcntl.h>
@@ -100,6 +102,7 @@ typedef struct s_bintree
 
 typedef struct s_data
 {
+	pid_t		pid;
 	int			flag;
 	char		*prompt;
 	char		**paths;
@@ -133,7 +136,7 @@ int			listen_to_signal(t_data *data);
 void		free_elem(void *elem, t_mem_type mem);
 void		free_tabstr(char **tabstr);
 void		free_cmd(t_cmd *cmd);
-void		free_minishell(t_data *data);
+void		free_minishell(t_data *data, int exit_code);
 void		free_tree(t_bintree *root);
 void		free_leaf(t_bintree *leaf);
 void		close_all_fd(t_bintree *root);
@@ -236,6 +239,7 @@ void		get_redir(t_token *token, t_data *data);
 void		type_token(t_token *token, t_data *data);
 void		split_args(t_token *token, t_data *data);
 void		get_expand(t_token *token, t_data *data);
+int			is_all_space(char *str);
 
 /****************************************/
 /*               BUILTINS               */
@@ -247,18 +251,18 @@ char		*catch_value(char *str);
 int			print_working_dir(t_bintree *node, t_data *data);
 int			print_env(t_bintree *node, char **envp, char *format);
 //change_dir.c
-void		change_dir(t_bintree *node, t_data *data);
+int			change_dir(t_bintree *node, t_data *data);
 //echo.c
 int			echo(t_bintree *node, t_data *data);
 //exit.c
-void		exit_minishell(t_bintree *node, t_data *data);
+int			exit_minishell(t_bintree *node, t_data *data);
 //export.c
 int			update_envp(t_data *data, char *str);
 int			export(t_bintree *node, t_data *data);
 char 		**set_env(char *name, char *value, char **old_envp);
 
 //unset.c
-void		unset(t_bintree *node, t_data *data);
+int			unset(t_bintree *node, t_data *data);
 
 /****************************************/
 /*               RDIR_&&_ARG            */
