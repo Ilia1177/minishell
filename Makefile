@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/02/13 15:50:02 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/02/18 18:45:49 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ SRCS		=	binary_tree/binary_tree.c\
 				rdir_and_arg/heredoc.c\
 				rdir_and_arg/redir.c\
 				rdir_and_arg/wildcards.c\
+				rdir_and_arg/wildcards_search.c\
 				rdir_and_arg/wildcards_utils.c\
 				tokenize/make_elem.c\
 				tokenize/token_tab.c\
