@@ -19,6 +19,8 @@ int	execute_tree(t_data *data)
 	pid_t	wpid;
 
 	data->paths = get_paths(data->envp); 
+	if (data->flag)
+		ft_printf(2, "PATHS = %p\n", data->paths);
 	data->tree->stdfd[IN] = dup(0);
 	data->tree->stdfd[OUT] = dup(1);
 	status = execute_node(data->tree, data);

@@ -56,13 +56,47 @@ char	**get_paths(char **env)
 	return (NULL);
 }
 
-char	*get_full_path(char **paths, char *str)
+int	find_cmd_in_paths(char *str, t_bintree *node, t_data *data)
 {
 	int		i;
 	char	*full_path;
 	char	*cmd;
 
-	if (!paths)
+	if (!data->paths || !str)
+		return (127);
+	cmd = ft_strjoin("/", str);
+	if (!cmd)
+		return (-1);
+	i = -1;
+	while (data->paths[++i])
+	{
+		full_path = ft_strjoin(data->paths[i], cmd);
+		if (!full_path)
+		{
+			free(cmd);
+			return (-1);
+		}
+		if (!access(full_path, X_OK))
+		{
+			if (data->flag)
+				ft_printf(2, "command found at %s\n", full_path);
+			node->cmd->args[0] = full_path;
+			free(cmd);
+			return (0);
+		}
+		free(full_path);
+	}
+	free(cmd);
+	return (127);
+}
+
+char	*__save_get_full_path(char **paths, char *str)
+{
+	int		i;
+	char	*full_path;
+	char	*cmd;
+
+	if (!paths || !str)
 		return (NULL);
 	cmd = ft_strjoin("/", str);
 	if (!cmd)
@@ -109,30 +143,30 @@ t_cmd	*cmddup(t_cmd *cmd)
 	return (new_cmd);
 }
 
-int	try_with_pwd(t_bintree *node, t_data *data, char *cmd_name)
+int	find_cmd_in_pwd(char *cmd_name, t_bintree *node, t_data *data) 
 {
 	char	*tmp;
 	char	*pwd;
 	int		status;
 
-	node->cmd->args[0] = cmd_name;
+	if (data->flag)
+		ft_printf(2, "Look for command with pwd\n");
+	if (!cmd_name || !cmd_name[0])
+		return (-1);
+	node->cmd->args[0] = NULL;
 	status = 0;
 	tmp = ft_strjoin(catch_expand(data, "PWD"), "/");
 	pwd = ft_strjoin(tmp, cmd_name);
-	free(tmp);
 	if (!pwd)
-		status = 127;
+		status = -1;
 	else if (!access(pwd, X_OK))
 	{
 		node->cmd->args[0] = pwd;
-		free(cmd_name);
+		return (0);
 	}
 	else
-	{
-		node->cmd->args[0] = cmd_name;
-		free(pwd);
 		status = 127;
-	}
+	free(pwd);
 	return (status);
 }
 
@@ -140,6 +174,8 @@ int	is_directory(char *path)
 {
 	struct stat statbuf;
 
+	if (!path)
+		return (0);
 	if (access(path, F_OK) == 0)
 	{
 		if (stat(path, &statbuf) == 0)
@@ -160,18 +196,39 @@ int	build_cmd(t_bintree *node, t_data *data)
 	int		status;
 
 	status = 0;
-	if (!node->cmd->args[0][0])
+	if (!node->cmd->args[0] || !node->cmd->args[0][0])
 		return (127);
-	cmd_name = node->cmd->args[0];
-	node->cmd->args[0] = get_full_path(data->paths, cmd_name);
-	if (!node->cmd->args[0])
-		status = try_with_pwd(node, data, cmd_name);
-	else
-		free(cmd_name);
-	if (status && is_directory(node->cmd->args[0]))
+	if (is_directory(node->cmd->args[0]))
 		return (126);
-	if (status && !access(node->cmd->args[0], X_OK))
-		return (0);
+	cmd_name = node->cmd->args[0];
+//	if (!ft_strncmp(cmd_name, "./", 2) && !access(cmd_name, X_OK))
+//	{
+//		node->cmd->args[0] = ft_strdup(cmd_name);
+//		ft_printf(2, "cmd in pwd = %s\n", node->cmd->args[0]);
+//		free(cmd_name);
+//		return (0);
+//	}
+	if (!ft_strncmp(cmd_name, "./", 2))
+	{
+
+		status = find_cmd_in_pwd(cmd_name + 2, node, data);
+		ft_printf(2, "cmd in pwd = %s\n", node->cmd->args[0]);
+	}
+	else if (!data->paths)
+	{
+
+		status = find_cmd_in_pwd(cmd_name, node, data);
+		ft_printf(2, "cmd in pwd = %s\n", node->cmd->args[0]);
+	}
+	else
+	{
+		status = find_cmd_in_paths(cmd_name, node, data);
+		ft_printf(2, "cmd in paths = %s\n", node->cmd->args[0]);
+	}
+
+
+
+
 	if (errno == EACCES && status == 127)
 	{
 		perror("msh");
@@ -179,5 +236,7 @@ int	build_cmd(t_bintree *node, t_data *data)
 	}
 	else if (status == 127)
 		ft_printf(2, "msh: %s: command not found\n", node->cmd->args[0]);
+	if (data->flag)
+		ft_printf(2, "full commande is %s\n", node->cmd->args[0]);
 	return (status);
 }

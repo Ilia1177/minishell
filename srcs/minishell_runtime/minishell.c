@@ -70,7 +70,7 @@ int	run_shell(t_data *data)
 {
 	t_token	*cpy;
 
-	data->prompt = "msh>$";
+	data->prompt = "msh-4.2$";
 	update_pwd_in_envp(data);
 	while (1)
 	{
