@@ -6,7 +6,7 @@
 #    By: jhervoch <jhervoch@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/23 14:19:41 by jhervoch          #+#    #+#              #
-#    Updated: 2025/02/06 15:13:18 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/02/17 18:28:06 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ SRCS		+= 	$(addprefix $(SRCS_DIR)printf/ft_,printf putcounthex_fd putcountunbr_f
 SRCS		+= 	$(addprefix $(SRCS_DIR)put/ft_,putchar_fd putendl_fd putnbr_fd putstr_fd)
 #STR
 SRCS		+=  $(addprefix $(SRCS_DIR)str/ft_,split strchr strdup striteri strjoin strlcat strlcpy strlen strmapi	\
-			   	strcmp strncmp strnstr strrchr strtrim substr) 
+			   	strcmp strncmp strnstr strrchr strtrim substr strtolower) 
 #GET_NEXT_LINE				
 SRCS		+=  $(addprefix $(SRCS_DIR)ft_,get_next_line)
 

@@ -6,112 +6,324 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:06:48 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/13 18:03:46 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/17 20:19:42 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
-void	wildcards(t_token *token, t_data *data)
+/****************************************************
+ * check if the pattern is present in the filename 
+ * update the file name returns from pattern +1
+ * returns 1 if the pattern found
+ * *************************************************/
+int	middle_search(char **file_str, char *pattern_str, int *nb_find)
 {
-  DIR* dir;
-  struct dirent* dr;
-  char  *str;
-  char **patterns;
-  char  *tofind;
-  char  **args;
-  int   pos_wild;
-  int nb_pat;
-  int i;
-  int nb_find;
-  int   arg_len;
+	char	*tmp_str;
 
-  (void)data;
-  (void)tofind;
-  (void)i; 
-  if (!token->cmd->args[1] || !ft_strchr(token->cmd->args[1],'*'))
-    return ;
+	tmp_str = ft_strnstr(*file_str, pattern_str, ft_strlen(*file_str));
+	if (tmp_str)
+	{
+		tmp_str = ft_substr(tmp_str, 1, ft_strlen(tmp_str));
+		free(*file_str);
+		*file_str = tmp_str;
+		free(tmp_str);
+		/* ft_printf(1, "%s\n", *file_str); */
+		*nb_find += 1;
+		return (1);
+	}
+	free(tmp_str);
+	return (0);
+}
 
-  
-  args = token->cmd->args;
-  str = args[1];
-  arg_len = ft_strlen(str);
-  
-  if (ft_strcmp(str, "*.")== 0 || ft_strcmp(str, ".*")== 0 )
-    printf(NMF_MSG);
- 
-  
-  pos_wild = ft_strnlen(str, '*');
-  printf("pos *:%d\n",pos_wild);
+/****************************************************
+ * check if the file name ending by the pattern
+ * after the last wildcards *
+ * update the file name after substr -> after pattern
+ * returns 1 if the pattern found
+ * *************************************************/
+int	end_search(char **file_str, char *pattern_str, int *nb_find)
+{
+	char	*tmp_str;
 
-  patterns = ft_split(str,'*');
+	tmp_str = ft_substr(*file_str, ft_strlen(*file_str)
+			- ft_strlen(pattern_str), ft_strlen(*file_str));
+	if (tmp_str && !ft_strcmp(tmp_str, pattern_str))
+	{
+		free(*file_str);
+		*file_str = tmp_str;
+		/* ft_printf(1, "%s\n", *file_str); */
+		free(tmp_str);
+		*nb_find += 1;
+		return (1);
+	}
+	free(tmp_str);
+	return (0);
+}
+
+/****************************************************
+ * check if the file name start by the pattern
+ * before the first wildcards *
+ * update the file name after substr -> after pattern
+ * returns 1 if the pattern found
+ * *************************************************/
+int	begin_search(char **file_str, char *pattern_str, int *nb_find)
+{
+	char	*tmp_str;
+
+	if (!ft_strncmp(*file_str, pattern_str, ft_strlen(pattern_str)))
+	{
+		tmp_str = ft_substr(*file_str, ft_strlen(pattern_str),
+				ft_strlen(*file_str));
+		free(*file_str);
+		*file_str = tmp_str;
+		free(tmp_str);
+		/* ft_printf(1, "%s\n", *file_str); */
+		*nb_find += 1;
+		return (1);
+	}
+	return (0);
+}
+
+
+/****************************************************
+ * Sort the current directory list
+ * before the first wildcards *
+ * update the file name after substr -> after pattern
+ * returns 1 if the pattern found
+ * *************************************************/
+void	sort_list_dir(t_list **list)
+{
+	t_list	*current;
+	t_list	*next;
+	char		*curr_str;
+	char		*next_str;
+
+	current = *list;
+	while(current)
+	{
+		next = current->next;
+		while(next)
+		{
+			curr_str = (char *)current->content;
+			next_str = (char *)next->content;
+			if (next && ft_strlowercmp(curr_str, next_str) > 0)
+			{
+				curr_str = (char *)current->content;
+				current->content = next->content;
+				next->content = curr_str;
+			}
+			next = next->next;
+		}
+		current = current->next;
+	}
+}
+
+void	print_lst_dir(t_list *list)
+{
+	t_list	*current;
+
+	current = list;
+	printf("print list dir:");
+	while (current)
+	{
+		printf("%s|", (char *)current->content);
+		current = current->next;
+	}
+	printf("\n");
+}
+
+/****************************************************
+ * build a list of all filename in current directory
+ * *************************************************/
+void	build_list_all_dir(t_list **list)
+{
+	t_list			*elem;
+	DIR				*dir;
+	struct dirent	*dr;
+	char			*file_name;
+
+	dir = opendir(".");
+	if (!dir)
+	{
+		perror("opendir");
+		exit(EXIT_FAILURE);
+	}
+	while ((dr = readdir(dir)))
+	{
+		file_name = ft_strdup(dr->d_name);
+		//printf("---fichier:%s-type:%d", dr->d_name, dr->d_type);
+		elem = ft_lstnew((void *)file_name);
+		ft_lstadd_back(list, elem);
+	}
+	closedir(dir);
+	/* print_lst_dir(*list); */
+	sort_list_dir(list);
+	/* print_lst_dir(*list); */
+}
+
+int 	only_wild(char *str)
+{
+	if (!str)
+		return (0);
+	while (*str)
+	{
+		if (*str != '*')
+			return (0);
+		str++;
+	}
+	return (1);
+}
+/****************************************************
+ * return the file name matching the wildcards pattens
+ * elem of matching files list
+ * *************************************************/
+t_list *matching_file(char *file_name, char **patterns, int nb_pat, char *str)
+{
+	int i;
+	int not_find;
+	int nb_find;
+	char *tmp_name;
+	t_list *elem;
+	/**/
+	elem = NULL;
+ 	i = 0;
+ 	not_find = 1;
+ 	nb_find = 0;
+ 	tmp_name = ft_strdup(file_name);
+	while (patterns[i] && not_find)
+	{
+		if (i == 0 && str[i] != '*')
+			not_find = begin_search(&file_name, patterns[i], &nb_find);
+		else if (i == nb_pat - 1 && str[ft_strlen(str) - 1] != '*')
+			not_find = end_search(&file_name, patterns[i], &nb_find);
+		else
+			not_find = middle_search(&file_name, patterns[i], &nb_find);
+		if (nb_find == nb_pat)
+		{
+			/* ft_printf(1, "TROUVE YOUPI---%s\n", tmp_name); */
+			elem = ft_lstnew((void *)tmp_name);
+		}
+		i++;
+	}
+	if (!not_find)
+		free(tmp_name);
+	return (elem);
+}
+
+/****************************************************
+ * build the list of all files in current directory
+ * matching the wildcards pattern
+ * *************************************************/
+void	build_mf_lst(t_list *list, char **patterns, t_list **mfl, char *str)
+{
+	char	*file_name;
+	t_list	*lst_dir;
+	t_list *match_files_lst;
+	t_list *elem;
+	int nb_pat;
 
   nb_pat=0;
   while (patterns[nb_pat])
     nb_pat++;
-  printf("nb patterns *:%d\n",nb_pat);
-  
-  dir = opendir(".");
-  
-  if (!dir)
-  {
-    perror("opendir");
-    exit(EXIT_FAILURE);
-  }
 
-  
-  while ((dr = readdir(dir)))
-  {
-    i = 0;
-    nb_find = 0;
-    tofind = dr->d_name;
-    //teste commence par aaaa*
-    /* if (!ft_strncmp(dr->d_name, str, pos_wild)) */
-    while (patterns[i])
-    {
-      if ( i == 0 && str[i] != '*')
-      {
-        if (!ft_strncmp(tofind, patterns[i], ft_strlen(patterns[i])))
-        {
-          tofind = ft_substr(tofind,ft_strlen(patterns[i]), ft_strlen(tofind));
-          ft_printf(1,"%s\n", tofind);
-          nb_find++;
-        }
-        else
-          break ;
-      }
-      else if (i == nb_pat -1 && str[arg_len-1] != '*')
-      {
-        tofind = ft_substr(tofind,ft_strlen(tofind)-ft_strlen(patterns[i]), ft_strlen(tofind));
-        if (tofind)
-        {
-          if (!ft_strcmp(tofind, patterns[i]))
-          {
-            ft_printf(1,"end -%s\n", tofind);
-            nb_find++;
-          }
-          else
-            break ;
-        }
-      }
-      else
-      {
-        tofind = ft_strnstr(tofind, patterns[i], ft_strlen(tofind));
-        if (tofind)
-        {
-          tofind = ft_substr(tofind, 1, ft_strlen(tofind));
-          ft_printf(1,"%s\n", tofind );
-          nb_find++;
-        }
-        else
-          break ;
-      }
-      if (nb_find == nb_pat)
-        ft_printf(1,"TROUVE YOUPI---%s\n", dr->d_name );
+	lst_dir = list;
+	/* match_files_lst = NULL; */
+	match_files_lst = *mfl;
+	while (lst_dir)
+	{
+		file_name = ft_strdup((char *)lst_dir->content);
+		elem = matching_file(file_name, patterns, nb_pat, str);
+		if (elem)
+			ft_lstadd_back(&match_files_lst, elem);
+		else
+			free(file_name);
+		lst_dir = lst_dir->next;
+	}
+	*mfl = match_files_lst;
+	/* printf("\nliste args****\n"); */
+	/* print_lst_dir(match_files_lst); */
+	/* return(match_files_lst); */
+}
 
-      i++;
-    }
+/****************************************************
+ * build the list of all files of current directory
+ * except hidden files
+ * *************************************************/
+void	build_list_dir(t_list *list, t_list **mfl)
+{
+	char	*file_name;
+	t_list	*lst_dir;
+	t_list *match_files_lst;
+	t_list *elem;
+
+	lst_dir = list;
+	/* match_files_lst = NULL; */
+	match_files_lst = *mfl;
+	while (lst_dir)
+	{
+		if (*(char *)lst_dir->content != '.')
+		{
+		file_name = ft_strdup((char *)lst_dir->content);
+		elem = ft_lstnew((void *)file_name);
+		ft_lstadd_back(&match_files_lst, elem);
+		}
+		lst_dir = lst_dir->next;
+	}
+	*mfl = match_files_lst;
+	/* printf("\nliste args only****\n"); */
+	/* print_lst_dir(match_files_lst); */
+	/* return(match_files_lst); */
+}
+
+
+/****************************************************
+ * main wildcards function
+ * *************************************************/
+void	wildcards(t_token *token, t_data *data)
+{
+  char **patterns;
+  t_list *list_all_dir;
+  t_list *list_dir;
+	t_list *match_files_lst;
+	int i;
+
+  (void)data;
+	match_files_lst = NULL;
+  //si il n'y a pas de wildcards
+  if (!token->cmd->args[1] || !ft_strchr(token->cmd->args[1],'*')
+  	|| !ft_strcmp(token->cmd->args[1], "*."))
+    return ;
+
+  list_all_dir = NULL;
+  match_files_lst = NULL;
+  list_dir = NULL;
+  build_list_all_dir(&list_all_dir);
+  build_list_dir(list_all_dir, &list_dir);
+
+	i = 1;
+	while (token->cmd->args[i])
+	{
+		printf("ARG[%d]:%s\n", i, token->cmd->args[i]);
+  if (only_wild(token->cmd->args[i]))
+  {
+    printf("QUE DES WILDCARDS\n");
+    build_list_dir(list_all_dir, &match_files_lst);
   }
-  
-  closedir(dir);
+  else
+	{
+  	patterns = ft_split(token->cmd->args[i],'*');
+  	if (token->cmd->args[i][0] == '.')
+  		build_mf_lst(list_all_dir, patterns, &match_files_lst, token->cmd->args[i]);
+  	else
+  		build_mf_lst(list_dir, patterns, &match_files_lst, token->cmd->args[i]);
+  }
+  i++;
+  }
+	print_lst_dir(match_files_lst);
+	free_tabstr(patterns);
+	ft_lstclear(&match_files_lst, free);
+	ft_lstclear(&list_dir, free);
+	ft_lstclear(&list_all_dir, free);
+	
 }

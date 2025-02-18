@@ -16,7 +16,8 @@
 char	*listen_to_user(char *prompt)
 {
 	char	*input;
-
+	
+	rl_outstream = stderr;
 	input = readline(prompt);
 	if (!input)
 		return (NULL);
