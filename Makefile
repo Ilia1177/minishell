@@ -57,6 +57,7 @@ SRCS		=	binary_tree/binary_tree.c\
 				rdir_and_arg/heredoc.c\
 				rdir_and_arg/redir.c\
 				rdir_and_arg/wildcards.c\
+				rdir_and_arg/wildcards_utils.c\
 				tokenize/make_elem.c\
 				tokenize/token_tab.c\
 				tokenize/token_utils.c\

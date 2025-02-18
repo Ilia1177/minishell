@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:06:48 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/17 20:19:42 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/18 14:13:20 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ void	build_list_all_dir(t_list **list)
 	/* print_lst_dir(*list); */
 }
 
-int 	only_wild(char *str)
+int	only_wild(char *str)
 {
 	if (!str)
 		return (0);
@@ -215,7 +215,7 @@ t_list *matching_file(char *file_name, char **patterns, int nb_pat, char *str)
  * build the list of all files in current directory
  * matching the wildcards pattern
  * *************************************************/
-void	build_mf_lst(t_list *list, char **patterns, t_list **mfl, char *str)
+t_list	*build_mf_lst(t_list *list, char **patterns/*, t_list **mfl*/, char *str)
 {
 	char	*file_name;
 	t_list	*lst_dir;
@@ -228,8 +228,8 @@ void	build_mf_lst(t_list *list, char **patterns, t_list **mfl, char *str)
     nb_pat++;
 
 	lst_dir = list;
-	/* match_files_lst = NULL; */
-	match_files_lst = *mfl;
+	match_files_lst = NULL;
+	/* match_files_lst = *mfl; */
 	while (lst_dir)
 	{
 		file_name = ft_strdup((char *)lst_dir->content);
@@ -240,17 +240,16 @@ void	build_mf_lst(t_list *list, char **patterns, t_list **mfl, char *str)
 			free(file_name);
 		lst_dir = lst_dir->next;
 	}
-	*mfl = match_files_lst;
+	/* *mfl = match_files_lst; */
 	/* printf("\nliste args****\n"); */
 	/* print_lst_dir(match_files_lst); */
-	/* return(match_files_lst); */
+	return(match_files_lst);
 }
-
 /****************************************************
  * build the list of all files of current directory
  * except hidden files
  * *************************************************/
-void	build_list_dir(t_list *list, t_list **mfl)
+t_list	*build_list_dir(t_list *list/*, t_list **mfl*/)
 {
 	char	*file_name;
 	t_list	*lst_dir;
@@ -258,8 +257,8 @@ void	build_list_dir(t_list *list, t_list **mfl)
 	t_list *elem;
 
 	lst_dir = list;
-	/* match_files_lst = NULL; */
-	match_files_lst = *mfl;
+	match_files_lst = NULL;
+	/* match_files_lst = *mfl; */
 	while (lst_dir)
 	{
 		if (*(char *)lst_dir->content != '.')
@@ -270,10 +269,10 @@ void	build_list_dir(t_list *list, t_list **mfl)
 		}
 		lst_dir = lst_dir->next;
 	}
-	*mfl = match_files_lst;
+	/* *mfl = match_files_lst; */
 	/* printf("\nliste args only****\n"); */
 	/* print_lst_dir(match_files_lst); */
-	/* return(match_files_lst); */
+	return(match_files_lst);
 }
 
 
@@ -282,48 +281,59 @@ void	build_list_dir(t_list *list, t_list **mfl)
  * *************************************************/
 void	wildcards(t_token *token, t_data *data)
 {
-  char **patterns;
-  t_list *list_all_dir;
-  t_list *list_dir;
+	char	**patterns;
+	t_list	*list_all_dir;
+	t_list *list_dir;
 	t_list *match_files_lst;
 	int i;
 
   (void)data;
 	match_files_lst = NULL;
-  //si il n'y a pas de wildcards
-  if (!token->cmd->args[1] || !ft_strchr(token->cmd->args[1],'*')
-  	|| !ft_strcmp(token->cmd->args[1], "*."))
-    return ;
-
   list_all_dir = NULL;
-  match_files_lst = NULL;
   list_dir = NULL;
   build_list_all_dir(&list_all_dir);
-  build_list_dir(list_all_dir, &list_dir);
+  list_dir = build_list_dir(list_all_dir/*, &list_dir*/);
+  //si il n'y a pas de wildcards
+  /* if (!token->cmd->args[1] || !ft_strchr(token->cmd->args[1],'*') */
+  /* 	|| !ft_strcmp(token->cmd->args[1], "*.")) */
+  /*   return ; */
 
-	i = 1;
-	while (token->cmd->args[i])
+
+	i = 0;
+	while (token->cmd->args[++i])
 	{
-		printf("ARG[%d]:%s\n", i, token->cmd->args[i]);
-  if (only_wild(token->cmd->args[i]))
-  {
-    printf("QUE DES WILDCARDS\n");
-    build_list_dir(list_all_dir, &match_files_lst);
+		/* match_files_lst = NULL; */
+  		if (!token->cmd->args[i] || !ft_strchr(token->cmd->args[i],'*')
+  			|| !ft_strcmp(token->cmd->args[i], "*."))
+  			continue ;
+		else if (only_wild(token->cmd->args[i]))
+		{
+			/* printf("QUE DES WILDCARDS\n"); */
+			match_files_lst = build_list_dir(list_all_dir);
+		}
+		else
+		{
+			patterns = ft_split(token->cmd->args[i],'*');
+			if (token->cmd->args[i][0] == '.')
+				match_files_lst = build_mf_lst(list_all_dir, patterns, token->cmd->args[i]);
+			else
+				match_files_lst = build_mf_lst(list_dir, patterns, token->cmd->args[i]);
+		}
+		/* print_lst_dir(match_files_lst); */
+		if (match_files_lst)
+		{
+			/* printf("-avant -replace ARG[%d]:%s\n", i, token->cmd->args[i]); */
+			i += replacing_wildcards(token, i, match_files_lst);
+			/* printf("-apres -replace n-1 ARG[%d]:%s\n", i-1, token->cmd->args[i-1]); */
+			/* printf("-apres -replace ARG[%d]:%s\n", i, token->cmd->args[i]); */
+		}
+		/* ft_lstclear(&match_files_lst, free); */
+		/* i++; */
   }
-  else
-	{
-  	patterns = ft_split(token->cmd->args[i],'*');
-  	if (token->cmd->args[i][0] == '.')
-  		build_mf_lst(list_all_dir, patterns, &match_files_lst, token->cmd->args[i]);
-  	else
-  		build_mf_lst(list_dir, patterns, &match_files_lst, token->cmd->args[i]);
-  }
-  i++;
-  }
-	print_lst_dir(match_files_lst);
-	free_tabstr(patterns);
-	ft_lstclear(&match_files_lst, free);
-	ft_lstclear(&list_dir, free);
-	ft_lstclear(&list_all_dir, free);
+	/* print_lst_dir(match_files_lst); */
+	/* free_tabstr(patterns); */
+	/* ft_lstclear(&match_files_lst, free); */
+	/* ft_lstclear(&list_dir, free); */
+	/* ft_lstclear(&list_all_dir, free); */
 	
 }

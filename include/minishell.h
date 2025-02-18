@@ -291,5 +291,8 @@ void		seek_rdir(char *str, t_rdir **s_rdir, t_data *data);
 
 //wildcards.c
 void	wildcards(t_token *token, t_data *data);
+//wildcards_utils.c
+int	replacing_wildcards(t_token *token, int index, t_list *mfl);
+
 
 #endif
