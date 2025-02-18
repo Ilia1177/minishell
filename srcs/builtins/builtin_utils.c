@@ -30,56 +30,58 @@ int	print_working_dir(t_bintree *node, t_data *data)
 
 int	catch_name(char **buff, char *str)
 {
-	int		i;
 	int		len;
 	int		error;
 	char	*name;
 
+	len = 0; 
 	error = 0;
-	if (!str)
-		return (-1);
-	len = ft_strnlen(str, '=');
-	if (len == (int)ft_strlen(str))
-		error = 2;
+	*buff = NULL;
+	if (!ft_isalpha(*str))
+		error = 1;
+	while (str[len])
+	{
+		if (str[len] == '+' || str[len] == '=')
+			break ;
+		if (isspace(str[len]) || !ft_isalnum(str[len]))
+			error = 1;
+		len++;
+	}
+	if (!str[len])
+		error = -1;
+	else if (str[len] == '+' && str[len + 1] != '=')
+		error = 1;
 	name = malloc(sizeof(char) * len + 1);
 	if (!name)
 		return (-1);
-	if (ft_isdigit(str[0]) || str[0] == '=')
-		error = 1;
-	i = -1;
-	while (++i < len)
-	{
-		if (is_space(str[i]) || !ft_isalnum(str[i]))
-			error = 1;
-		name[i] = str[i];
-	}
-	name[i] = '\0';
+	ft_strlcpy(name, str, len + 1);
 	*buff = name;
 	return (error);
 }
 
-char	*catch_value(char *str)
-{
-	char	*value;
-	int		i;
-	int		len;
 
-	if (ft_strlen(str) == ft_strnlen(str, '='))
-		return (NULL);
-	str += ft_strnlen(str, '=');
-	len = ft_strlen(++str);
-	value = malloc(sizeof(char) * len + 1);
-	if (!value)
-		return (NULL);
-	i = 0;
-	while (str[i])
-	{
-		value[i] = str[i];
-		i++;
-	}
-	value[i] = '\0';
-	return (value);
-}
+//	char	*catch_value(char *str)
+//	{
+//		char	*value;
+//		int		i;
+//		int		len;
+//
+//		if (ft_strlen(str) == ft_strnlen(str, '='))
+//			return (NULL);
+//		str += ft_strnlen(str, '=');
+//		len = ft_strlen(++str);
+//		value = malloc(sizeof(char) * len + 1);
+//		if (!value)
+//			return (NULL);
+//		i = 0;
+//		while (str[i])
+//		{
+//			value[i] = str[i];
+//			i++;
+//		}
+//		value[i] = '\0';
+//		return (value);
+//	}
 
 int	exist(char **envp, char *name)
 {

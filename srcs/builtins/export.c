@@ -12,55 +12,17 @@
 
 #include "minishell.h"
 
-char	*new_entry(char *name, char *value)
-{
-	char	*tmp;
-	char	*line;
-
-	if (!name)
-	{
-		free(value);
-		return (NULL);
-	}
-	tmp = name;
-	name = ft_strjoin(name, "=");
-	free(tmp);
-	if (!name)
-		return (NULL);
-	if (!value || !value[0])
-		line = name;
-	else
-	{
-		line = ft_strjoin(name, value);
-		free(name);
-		if (!line)
-		{
-			free(value);
-			return (NULL);
-		}
-	}
-	free(value);
-	return (line);
-}
-
-char	**set_env(char *name, char *value, char **old_envp)
+char	**new_to_env(char *name, char *value, char **old_envp)
 {
 	int		i;
 	char	*line;
 	char	**new_env;
 
-	line = new_entry(name, value);
+	if (value[0] == '+')
+		value++;
+	line = ft_strjoin(name, value);
 	if (!line)
 		return (old_envp);
-	if (!old_envp)
-	{
-		new_env = malloc(sizeof(char *) * (2));
-		if (!new_env)
-			return (old_envp);
-		new_env[0] = line;
-		new_env[1] = NULL;
-		return (new_env);
-	}
 	i = 0;
 	while (old_envp[i])
 		i++;
@@ -76,37 +38,52 @@ char	**set_env(char *name, char *value, char **old_envp)
 	return (new_env);
 }
 
-int	update_envp(t_data *data, char *str)
+int	add_to_env(char *name, char *input, t_data *data)
 {
 	char	*tmp;
-	char	*name;
-	char	*value;
 	int		at_index;
+
+	if (!name || !input)
+		return (-1);
+	tmp = NULL;
+	input += ft_strlen(name);
+	at_index = exist(data->envp, name);
+	if (at_index < 0)
+		data->envp = new_to_env(name, input, data->envp);
+	else
+	{
+		tmp = data->envp[at_index];
+		if (at_index >= 0 && *input == '=')
+			data->envp[at_index] = ft_strjoin(name, input);
+		else if (at_index >= 0 && *input == '+')
+			data->envp[at_index] = ft_strjoin(data->envp[at_index], input + 2);
+		if (!data->envp[at_index])
+		{
+			data->envp[at_index] = tmp;	
+			return (-1);
+		}
+		free(tmp);
+	}
+	return (0);
+
+}
+
+int	update_envp(t_data *data, char *str)
+{
+	char	*name;
 	int		error;
 
 	error = catch_name(&name, str);
-	ft_printf(2, "name is = %s, error is = %d\n", name, error);
-	if (!error)
+	if (!error && name)
 	{
-		value = catch_value(str);
-		at_index = exist(data->envp, name);
-		if (at_index >= 0)
-		{
-			tmp = data->envp[at_index];
-			data->envp[at_index] = new_entry(name, value);
-			free(tmp);
-		}
-		else
-			data->envp = set_env(name, value, data->envp);
+		if (add_to_env(name, str, data))
+			error = -1;
 	}
-	else
-	{
-		if (error == 1)
-			ft_printf(2, "msh: export: %s\"%s\n", name, WARNING);
-		free(name);
-		if (error == 2)
-			return (0);
-	}
+	else if (error == 1)
+		ft_printf(2, "msh: export: %s\"%s\n", name, WARNING);
+	else if (error == -1)
+		error = 0;
+	free(name);
 	return (error);
 }
 

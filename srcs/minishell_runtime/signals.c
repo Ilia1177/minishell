@@ -22,10 +22,10 @@ void	handle_signals(int sig, siginfo_t *info, void *ctx)
 	g_signal_caught = sig;
 	if (sig == SIGINT)
 	{
-		ft_putendl_fd(" ^C", 1);
-		rl_replace_line("", 0); // Clear the current input
-		rl_on_new_line();       // Inform readline to start a new line
-		rl_redisplay();         // Redisplay the prompt 
+			ft_printf(2, "\n");
+			rl_replace_line("", 0);
+			rl_on_new_line();
+			rl_redisplay();
 	}
 	else if (sig == SIGQUIT)
 		return ;

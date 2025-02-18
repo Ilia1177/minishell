@@ -140,10 +140,10 @@ void		close_all_fd(t_bintree *root);
 void		ft_free_bugsplit(char **str, int i);
 
 // DEBUG FUNCTION
-void		print_list(t_token *list);
-void		print_rdir(t_token *token);
+void		print_list(t_token *list, t_data *data);
+void		print_rdir(t_token *token, t_data *data);
 void		print_args(char **list);
-void		print_tree(t_bintree *root, int space);
+void		print_tree(t_bintree *root, int space, int start, t_data *data);
 
 /****************************************/
 /*            BINARY TREE               */

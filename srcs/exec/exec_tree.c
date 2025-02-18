@@ -23,9 +23,10 @@ int	execute_tree(t_data *data)
 	data->tree->stdfd[OUT] = dup(1);
 	status = execute_node(data->tree, data);
 	close_fd(data->tree);
+	if (data->flag)
+		ft_printf(2, "Status of exec_tree: %d\n", data->status);
 	if (data->pid == -2) 
 	{ 
-		data->status = status;
 		while(waitpid(-1, NULL, WUNTRACED) != -1)
 			;
 		return (status);

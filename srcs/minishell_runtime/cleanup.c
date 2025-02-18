@@ -15,10 +15,14 @@
 void	free_minishell(t_data *data, int exit_code)
 {
 	if (data->flag)
-		ft_printf(2, "cleanup with code of exit %d\n", exit_code);
+		ft_printf(2, "free_minishell with code of exit: %d\n", exit_code);
 	free(data->user_input);
+	data->user_input = NULL;
 	free_tree(data->tree);
+	data->tree = NULL;
 	free_tabstr(data->paths);
+	data->paths = NULL;
+
 	//close_fd_tree(data->tree);
 	if (exit_code >= 0)
 	{
@@ -86,17 +90,17 @@ void	free_tree(t_bintree *root)
 	return ;
 }
 
-int	is_fd_open(int fd)
-{
-	char	buffer[1];
-
-	if (read(fd, buffer, 0) == -1)
-	{
-		if (errno == EBADF)
-			return (0);
-	}
-	return (1);
-}
+//	int	is_fd_open(int fd)
+//	{
+//		char	buffer[1];
+//
+//		if (read(fd, buffer, 0) == -1)
+//		{
+//			if (errno == EBADF)
+//				return (0);
+//		}
+//		return (1);
+//	}
 
 void	free_cmd(t_cmd *cmd)
 {
@@ -120,23 +124,23 @@ void	free_cmd(t_cmd *cmd)
 	free(cmd);
 }
 
-void	close_all_fd(t_bintree *root)
-{
-	if (!root)
-		return ;
-	if (root->left)
-		close_all_fd(root->left);
-	if (root->right)
-		close_all_fd(root->right);
-	if (is_fd_open(root->stdfd[IN]))
-		close(root->stdfd[IN]);
-	if (is_fd_open(root->stdfd[OUT]))
-		close(root->stdfd[OUT]);
-	if (is_fd_open(root->pipefd[IN]))
-		close(root->pipefd[IN]);
-	if (is_fd_open(root->pipefd[OUT]))
-		close(root->pipefd[OUT]);
-}
+//	void	close_all_fd(t_bintree *root)
+//	{
+//		if (!root)
+//			return ;
+//		if (root->left)
+//			close_all_fd(root->left);
+//		if (root->right)
+//			close_all_fd(root->right);
+//		if (is_fd_open(root->stdfd[IN]))
+//			close(root->stdfd[IN]);
+//		if (is_fd_open(root->stdfd[OUT]))
+//			close(root->stdfd[OUT]);
+//		if (is_fd_open(root->pipefd[IN]))
+//			close(root->pipefd[IN]);
+//		if (is_fd_open(root->pipefd[OUT]))
+//			close(root->pipefd[OUT]);
+//	}
 
 /* free split when token tab failed*/
 void	ft_free_bugsplit(char **str, int i)

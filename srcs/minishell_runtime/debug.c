@@ -12,28 +12,33 @@
 
 #include "minishell.h"
 
-void	print_tree(t_bintree *tree, int space)
+void	print_tree(t_bintree *tree, int space, int start, t_data *data)
 {
-	if (tree == NULL)
+	int i;
+
+	if (tree == NULL || !data || !data->flag)
 		return ;
-	// Increase distance between levels
-	int spacing = 5;
-	space += spacing;
-	// Print the right subtree first
-	print_tree(tree->right, space);
-	// Print the current node with indentation
-	printf("\n");
-	for (int i = spacing; i < space; i++)
-		printf(" ");
-	printf("(%s)\n", tree->input);
-	// Print the left subtree
-	print_tree(tree->left, space);
+	space += 5;
+	if (!start)
+		ft_printf(2, "\n\n----------- Binary tree :  ----\n");
+	print_tree(tree->right, space, -1, data);
+	ft_printf(2, "\n");
+	i = 0;
+	while (++i < space)
+		ft_printf(2, " ");
+	ft_printf(2, "(%s)\n", tree->input);
+	print_tree(tree->left, space, -1, data);
+	if (!start)
+		ft_printf(2, "\n\n-------------------------------\n");
 }
 
-void	print_rdir(t_token *token)
+void	print_rdir(t_token *token, t_data *data)
 {
 	int	i;
 
+	if (!data || !data->flag)
+		return ;
+	ft_printf(2, "\n\n----------- List of tokens is :\n");
 	i = 0;
 	ft_printf(2, "token %s redir :", token->input);
 	while (token->cmd->rdir[i].name)
@@ -44,19 +49,23 @@ void	print_rdir(t_token *token)
 	ft_printf(2, "\n");
 }
 
-void	print_list(t_token *list)
+void	print_list(t_token *list, t_data *data)
 {
 	int	i;
 
+	if (!list || !data || !data->flag)
+		return ;
+	
+	ft_printf(2, "\n\n\n-------- TOKEN LIST IS----\n");
 	i = 0;
 	while (list)
 	{
-		printf("TOKEN nº%d:input = '%s',type = %d", i++, list->input, list->type);
+		ft_printf(2, "TOKEN nº%d:input = '%s',type = %d", i++, list->input, list->type);
 		if (list->type == CMD)
 		{
-			printf (", args = ");
+			ft_printf (2, ", args = ");
 			print_args(list->cmd->args);
-			printf ("\n");
+			ft_printf (2, "\n");
 		}
 		else
 			printf("\n");
