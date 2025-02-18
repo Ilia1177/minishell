@@ -40,12 +40,30 @@ void 	update_pwd_in_envp(t_data *data)
 
 void	init_shell(t_data *data)
 {
-	//rl_catch_signals = 0;
 	g_signal_caught = 0;
 	data->tree = NULL;
 	data->token_list = NULL;
 	data->paths = NULL;
 	data->user_input = NULL;
+}
+
+char	*get_user_input(t_data *data)
+{
+	data->user_input = listen_to_user(data->prompt);
+	if (!data->user_input)
+	{
+		if (data->flag)
+			ft_printf(2, "msh: [Ctrl -D]: signal_caught: %d\n", g_signal_caught);
+		free_minishell(data, data->status);
+	}
+	else if (data->user_input[0] == 0)
+	{
+		if (data->flag)
+			ft_printf(2, "msh: [ENTER]: signal_caught: %d\n", g_signal_caught);
+		free_minishell(data, -1);
+		return (NULL);
+	}
+	return (data->user_input);
 }
 
 int	run_shell(t_data *data)
@@ -57,32 +75,19 @@ int	run_shell(t_data *data)
 	while (1)
 	{
 		init_shell(data);
-		data->user_input = listen_to_user(data->prompt);
-		if (!data->user_input)
-		{
-			if (data->flag)
-				ft_printf(2, "msh: [Ctrl -D]: signal_caught: %d\n", g_signal_caught);
-			free_minishell(data, data->status);
-		}
-		else if (data->user_input[0] == 0)
-		{
-			if (data->flag)
-				ft_printf(2, "msh: [ENTER]: signal_caught: %d\n", g_signal_caught);
-			free_minishell(data, -1);
+		if (!get_user_input(data))
 			continue ;
-		}
-		if (!tokenize(data))
-			free_minishell(data, -1);
-		else
+		if (tokenize(data))
 		{
 			cpy = data->token_list;
 			print_list(data->token_list, data);
 			data->tree = build_tree(&cpy, CMD);
 			print_tree(data->tree, 0, 0, data); // print the tree for debug
 			data->status = execute_tree(data);
-			free_minishell(data, -1);
 		}
+		free_minishell(data, -1);
 	}
+	return (data->status);
 }
 
 int	main(int ac, char **argv, char **envp)
