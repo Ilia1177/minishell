@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 19:23:22 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/06 15:12:50 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/17 18:49:25 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,11 @@ int			ft_tolower(int c);
 char		*ft_strchr(const char *s, int c);
 /* seek and find the last occurence of c in s - if not return NULL*/
 char		*ft_strrchr(const char *s, int c);
+char		*ft_strtolower(char *str);
 /* compare 2 string until n byte return s1-s2*/
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			ft_strcmp(const char *s1, const char *s2);
+int			ft_strlowercmp(const char *s1, const char *s2);
 /*seek and find first intance of c until n byte - if not return NULL*/
 void		*ft_memchr(const void *s, int c, size_t n);
 /* compare 2 buffer until n byte return s1-s2, 0 if n=0*/
