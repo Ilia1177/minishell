@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:37:07 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/15 10:17:39 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/18 19:26:58 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	update_envp(t_data *data, char *str)
 	int		error;
 
 	error = catch_name(&name, str);
-	ft_printf(2, "name is = %s, error is = %d\n", name, error);
+	/* ft_printf(2, "name is = %s, error is = %d\n", name, error); */
 	if (!error)
 	{
 		value = catch_value(str);

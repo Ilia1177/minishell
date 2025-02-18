@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:13:53 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/12 16:18:19 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/18 21:08:40 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	find_expand(char *str)
 			i++;
 			i += ft_strnlen(&str[i], '\'');
 		}
-		else if (str[i] == '$')
+		else if (str[i] == '$' && str[i + 1] && ft_isalnum(str[i + 1]))
 			return (i);
 	}
 	return (-1);
