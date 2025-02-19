@@ -27,36 +27,44 @@ static void	update_pwds(t_data *data)
 	free(new_pwd);
 }
 
-int		change_dir(t_bintree *node, t_data *data)
+char	*make_cd_path(char *dir_name)
 {
 	char	wd[1024];
+	char	*tmp;
 	char	*path;
-	char 	*tmp;
-	int		i;
 
-	i = 0;
-	while (node->cmd->args[i])
-		i++;
-	if (!node->cmd->args[1] || i > 2)
+	path = NULL;
+	tmp = NULL;
+	getcwd(wd, sizeof(wd));
+	tmp = ft_strjoin(wd, "/");
+	path = ft_strjoin(tmp, dir_name);
+	free(tmp);
+	return (path);
+}
+
+int	change_dir(t_bintree *node, t_data *data)
+{
+	char	*path;
+
+	path = NULL;
+	if (node->cmd->args[1] && node->cmd->args[2])
+	{
+		ft_printf(2, TM_ARG, "cd");
 		return (1);
-	if (!ft_strcmp(node->cmd->args[1], "-"))
-		path = ft_strdup(catch_expand(data, "OLDPWD"));
-	else if (!ft_strcmp(node->cmd->args[1], "--"))
+	}
+	else if (!node->cmd->args[1] || !ft_strcmp(node->cmd->args[1], "--"))
 		path = ft_strdup(catch_expand(data, "HOME"));
+	else if (!ft_strcmp(node->cmd->args[1], "-"))
+		path = ft_strdup(catch_expand(data, "OLDPWD"));
 	else if (node->cmd->args[1][0] == '/')
 		path = ft_strdup(node->cmd->args[1]);
 	else
-	{
-		getcwd(wd, sizeof(wd));
-		tmp = ft_strjoin(wd, "/");
-		path = ft_strjoin(tmp, node->cmd->args[1]);
-		free(tmp);
-	}
+		path = make_cd_path(node->cmd->args[1]);
 	if (!chdir(path))
 		update_pwds(data);
 	else
 	{
-		ft_printf(2, "M!N!$H3LL: cd: include: No such file or directory\n");
+		ft_printf(2, NFD_MSG);
 		data->status = 1;
 	}
 	free(path);

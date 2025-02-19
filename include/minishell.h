@@ -33,9 +33,10 @@
 # define TMP 2
 # define WARNING ": not a valid identifier"
 # define SYNTERR "MSH: syntax error. try again\n"
-# define TM_ARG "MSH: exit: too many arguments\n"
+# define TM_ARG "MSH: %s: too many arguments\n"
 # define NR_ARG "MSH: exit: %s: numeric argument required\n"
 # define NMF_MSG "no matches found\n"
+# define NFD_MSG "MSH: cd : No such file or directory\n"
 
 
 typedef enum e_type

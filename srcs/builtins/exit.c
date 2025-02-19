@@ -72,7 +72,7 @@ int	exit_minishell(t_bintree *node, t_data *data)
 	}
 	else if (ft_isnumber(node->cmd->args[1]) && node->cmd->args[2])
 	{
-		ft_printf(2, TM_ARG);
+		ft_printf(2, TM_ARG, "exit");
 		return (1);
 	}
 	else

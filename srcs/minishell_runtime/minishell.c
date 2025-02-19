@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/14 21:46:31 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/18 19:38:08 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*listen_to_user(char *prompt)
 {
 	char	*input;
 	
-	rl_outstream = stderr;
+	/* rl_outstream = stderr; */
 	input = readline(prompt);
 	if (!input)
 		return (NULL);
@@ -25,7 +25,7 @@ char	*listen_to_user(char *prompt)
 	return (input);
 }
 
-void 	update_pwd_in_envp(t_data *data)
+void	update_pwd_in_envp(t_data *data)
 {
 	char	wd[1024];
 	char	*entry;

@@ -45,19 +45,6 @@ void	sort_list_dir(t_list **list)
 	}
 }
 
-/* void	print_lst_dir(t_list *list) */
-/* { */
-/* 	t_list	*current; */
-/**/
-/* 	current = list; */
-/* 	printf("print list dir:"); */
-/* 	while (current) */
-/* 	{ */
-/* 		printf("%s|", (char *)current->content); */
-/* 		current = current->next; */
-/* 	} */
-/* 	printf("\n"); */
-/* } */
 int	only_wild(char *str)
 {
 	if (!str)
@@ -109,33 +96,14 @@ void	wildcards(t_token *token, t_data *data)
 	t_list	*match_files_lst;
 
 	(void)data;
+	if (!token->cmd)
+		return ;
 	match_files_lst = NULL;
 	list_all_dir = NULL;
 	list_dir = NULL;
 	build_list_all_dir(&list_all_dir);
 	list_dir = build_list_dir(list_all_dir);
 	wildcards_arg_loop(token, match_files_lst, list_all_dir, list_dir);
-	/* i = 0; */
-	/* while (token->cmd->args[++i]) */
-	/* { */
-	/* 	if (!token->cmd->args[i] || !ft_strchr(token->cmd->args[i], '*') */
-	/* 		|| !ft_strcmp(token->cmd->args[i], "*.")) */
-	/* 		continue ; */
-	/* 	else if (only_wild(token->cmd->args[i])) */
-	/* 		match_files_lst = build_list_dir(list_all_dir); */
-	/* 	else */
-	/* 	{ */
-	/* 		patterns = ft_split(token->cmd->args[i], '*'); */
-	/* 		if (token->cmd->args[i][0] == '.') */
-	/* 			match_files_lst = build_mf_lst(list_all_dir, patterns, token->cmd->args[i]); */
-	/* 		else */
-	/* 			match_files_lst = build_mf_lst(list_dir, patterns, token->cmd->args[i]); */
-	/* 		free_tabstr(patterns); */
-	/* 	} */
-	/* 	if (match_files_lst) */
-	/* 		i += replacing_wildcards(token, i, match_files_lst); */
-	/* 	ft_lstclear(&match_files_lst, free); */
-	/* } */
 	ft_lstclear(&match_files_lst, free);
 	ft_lstclear(&list_dir, free);
 	ft_lstclear(&list_all_dir, free);
