@@ -25,7 +25,7 @@ char	*listen_to_user(char *prompt)
 	return (input);
 }
 
-void 	update_pwd_in_envp(t_data *data)
+void	update_pwd_in_envp(t_data *data)
 {
 	char	wd[1024];
 	char	*entry;

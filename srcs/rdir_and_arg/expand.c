@@ -71,7 +71,8 @@ int	find_expand(char *str)
 			i++;
 			i += ft_strnlen(&str[i], '\'');
 		}
-		else if (str[i] == '$' && str[i + 1] && ft_isalnum(str[i + 1]))
+		else if (str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1])
+				|| str[i + 1] == '?'))
 			return (i);
 	}
 	return (-1);
