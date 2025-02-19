@@ -12,6 +12,33 @@
 
 #include "minishell.h"
 
+t_cmd	*cmddup(t_cmd *cmd)
+{
+	t_cmd	*new_cmd;
+	t_rdir	*new_rdir;
+	int		i;
+
+	new_cmd = malloc(sizeof(t_cmd));
+	new_cmd->args = tab_dup(cmd->args);
+	i = 0;
+	if (cmd->rdir)
+	{
+		while (cmd->rdir[i].name)
+			i++;
+		new_rdir = malloc(sizeof(t_cmd) * (i + 1));
+		if (!new_rdir)
+			return (NULL);
+		i = 0;
+		while (cmd->rdir[i].name)
+		{
+			new_cmd->rdir[i] = cmd->rdir[i];
+			i++;
+		}
+		new_cmd->rdir[i].name = NULL;
+	}
+	return (new_cmd);
+}
+
 char	**tab_dup(char **tab)
 {
 	char	**new;
@@ -62,6 +89,8 @@ int	find_cmd_in_paths(char *str, t_bintree *node, t_data *data)
 	char	*full_path;
 	char	*cmd;
 
+	if (data->flag)
+		ft_printf(2, "find_cmd_in_path\n");
 	if (!data->paths || !str)
 		return (127);
 	cmd = ft_strjoin("/", str);
@@ -76,7 +105,7 @@ int	find_cmd_in_paths(char *str, t_bintree *node, t_data *data)
 			free(cmd);
 			return (-1);
 		}
-		if (!access(full_path, X_OK))
+		if (!access(full_path, F_OK))
 		{
 			if (data->flag)
 				ft_printf(2, "command found at %s\n", full_path);
@@ -90,58 +119,6 @@ int	find_cmd_in_paths(char *str, t_bintree *node, t_data *data)
 	return (127);
 }
 
-char	*__save_get_full_path(char **paths, char *str)
-{
-	int		i;
-	char	*full_path;
-	char	*cmd;
-
-	if (!paths || !str)
-		return (NULL);
-	cmd = ft_strjoin("/", str);
-	if (!cmd)
-		return (NULL);
-	i = -1;
-	while (paths[++i])
-	{
-		full_path = ft_strjoin(paths[i], cmd);
-		if (!access(full_path, X_OK))
-		{
-			free(cmd);
-			return (full_path);
-		}
-		free(full_path);
-	}
-	free(cmd);
-	return (NULL);
-}
-
-t_cmd	*cmddup(t_cmd *cmd)
-{
-	t_cmd	*new_cmd;
-	t_rdir	*new_rdir;
-	int		i;
-
-	new_cmd = malloc(sizeof(t_cmd));
-	new_cmd->args = tab_dup(cmd->args);
-	i = 0;
-	if (cmd->rdir)
-	{
-		while (cmd->rdir[i].name)
-			i++;
-		new_rdir = malloc(sizeof(t_cmd) * (i + 1));
-		if (!new_rdir)
-			return (NULL);
-		i = 0;
-		while (cmd->rdir[i].name)
-		{
-			new_cmd->rdir[i] = cmd->rdir[i];
-			i++;
-		}
-		new_cmd->rdir[i].name = NULL;
-	}
-	return (new_cmd);
-}
 
 int	find_cmd_in_pwd(char *cmd_name, t_bintree *node, t_data *data) 
 {
@@ -157,9 +134,10 @@ int	find_cmd_in_pwd(char *cmd_name, t_bintree *node, t_data *data)
 	status = 0;
 	tmp = ft_strjoin(catch_expand(data, "PWD"), "/");
 	pwd = ft_strjoin(tmp, cmd_name);
+	free(tmp);
 	if (!pwd)
 		status = -1;
-	else if (!access(pwd, X_OK))
+	else if (!access(pwd, F_OK))
 	{
 		node->cmd->args[0] = pwd;
 		return (0);
@@ -198,37 +176,22 @@ int	build_cmd(t_bintree *node, t_data *data)
 	status = 0;
 	if (!node->cmd->args[0] || !node->cmd->args[0][0])
 		return (127);
-	if (is_directory(node->cmd->args[0]))
-		return (126);
 	cmd_name = node->cmd->args[0];
-//	if (!ft_strncmp(cmd_name, "./", 2) && !access(cmd_name, X_OK))
-//	{
-//		node->cmd->args[0] = ft_strdup(cmd_name);
-//		ft_printf(2, "cmd in pwd = %s\n", node->cmd->args[0]);
-//		free(cmd_name);
-//		return (0);
-//	}
-	if (!ft_strncmp(cmd_name, "./", 2))
-	{
-
-		status = find_cmd_in_pwd(cmd_name + 2, node, data);
-		ft_printf(2, "cmd in pwd = %s\n", node->cmd->args[0]);
-	}
-	else if (!data->paths)
-	{
-
+	if (is_directory(cmd_name))
+		return (126);
+	// look for executable in current dir if it is a path or formated with ./script at begining of cmd_name
+	else if (!ft_strncmp(cmd_name, "./", 2) || ft_strchr(cmd_name, '/'))
 		status = find_cmd_in_pwd(cmd_name, node, data);
-		ft_printf(2, "cmd in pwd = %s\n", node->cmd->args[0]);
-	}
+	// look for executable in current dir formated script with PATH unset
+	else if (!data->paths)
+		status = find_cmd_in_pwd(cmd_name, node, data);
+	// look for the executable in paths in others cases
 	else
-	{
 		status = find_cmd_in_paths(cmd_name, node, data);
-		ft_printf(2, "cmd in paths = %s\n", node->cmd->args[0]);
-	}
-
-
-
-
+	if (status)
+		node->cmd->args[0] = cmd_name;
+	else
+		free(cmd_name);
 	if (errno == EACCES && status == 127)
 	{
 		perror("msh");
