@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 16:47:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/10 17:53:57 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/19 18:50:54 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "parsing.h"
 
 void	ft_lstdelone_token(t_token *lst, void (*del)(void*))
 {
@@ -41,61 +42,6 @@ void	ft_lstclear_token(t_token **lst, void (*del)(void*))
 	*lst = NULL;
 }
 
-//	void	ft_lst_split_dup(t_token **lst, int (*f)(char *, char *, char *), char *cmp)
-//	{
-//		t_token	*current;
-//		t_token	*new;
-//		t_token	*next;
-//		char	dup[2];
-//		int		nb_cmp;
-//
-//		current = *lst;
-//		dup[0] = '\0';
-//		dup[1] = '\0';
-//		while (current)
-//		{
-//			nb_cmp = (*f)(current->input, cmp, dup);
-//			if (ft_strchr(current->input, '\"'))
-//				nb_cmp = 0;
-//			next = current->next;
-//			while (nb_cmp-- > 0)
-//			{
-//				new = make_token(dup);
-//				current->input = ft_strdup(dup);
-//				new->next = current->next;
-//				current->next = new;
-//				next = new->next;
-//			}
-//			current = next;
-//		}
-//	}
-
-//	int	ft_count_dup(char *s1, char *s2, char *dup)
-//	{
-//		int	i;
-//		int	j;
-//		int	count;
-//
-//		count = 0;
-//		i = 0;
-//		while (s1[i])
-//		{
-//			j = -1;
-//			while (s2[++j])
-//			{
-//				while (s1[i] && s1[i] == s2[j])
-//				{
-//					count++;
-//					i++;
-//					dup[0] = s2[j];
-//				}
-//			}
-//			if (s1[i])
-//				i++;
-//		}
-//		return (count);
-//	}
-
 void	iter_split_args(char *input, t_token **iter_token, int nb_args)
 {
 	int		i;
@@ -116,5 +62,22 @@ void	iter_split_args(char *input, t_token **iter_token, int nb_args)
 		ft_strlcpy(token->cmd->args[i], input, arg_len(input) + 1);
 		input += arg_len(input);
 		i++;
+	}
+}
+
+void	split_args(t_token *token, t_data *data)
+{
+	int		nb_args;
+	char	*input;
+
+	(void)data;
+	if (token->type == CMD && token->cmd)
+	{
+		input = token->input;
+		nb_args = ft_nb_args(token->input);
+		token->cmd->args = ft_calloc(nb_args + 1, sizeof(char *));
+		if (!token->cmd->args)
+			return ;
+		iter_split_args(input, &token, nb_args);
 	}
 }

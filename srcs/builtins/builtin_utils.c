@@ -6,11 +6,12 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 18:27:25 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/14 11:38:05 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 18:01:06 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
 
 int	print_working_dir(t_bintree *node, t_data *data)
 {
@@ -34,7 +35,7 @@ int	catch_name(char **buff, char *str)
 	int		error;
 	char	*name;
 
-	len = 0; 
+	len = 0;
 	error = 0;
 	*buff = NULL;
 	if (!ft_isalpha(*str))
@@ -58,7 +59,6 @@ int	catch_name(char **buff, char *str)
 	*buff = name;
 	return (error);
 }
-
 
 //	char	*catch_value(char *str)
 //	{

@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:13:53 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/18 21:08:40 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:12:20 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "rdir_and_arg.h"
 
 int	expand_size(char *str, int pos)
 {
@@ -129,7 +130,6 @@ void	expand_str(t_data *data, char **str)
 			flag_free = 1;
 		i = insert_expand(str, i + 1, value);
 		new_str = *str;
-		//new_str = new_str + i - 1 + ft_strlen(value);
 		if (flag_free)
 			free (value);
 	}

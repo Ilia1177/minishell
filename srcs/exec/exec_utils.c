@@ -6,11 +6,13 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/14 22:08:28 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 19:23:18 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "rdir_and_arg.h"
+#include "exec.h"
 
 t_cmd	*cmddup(t_cmd *cmd)
 {
@@ -60,29 +62,6 @@ char	**tab_dup(char **tab)
 	return (new);
 }
 
-char	**get_paths(char **env)
-{
-	char	**paths;
-	int		i;
-
-	if (!env)
-		return (NULL);
-	paths = NULL;
-	i = 0;
-	while (env[i])
-	{
-		if (!ft_strncmp(env[i], "PATH=", 5))
-		{
-			if (!env[i][5])
-				return (NULL);
-			paths = ft_split(env[i] + 5, ':');
-			return (paths);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
 int	find_cmd_in_paths(char *str, t_bintree *node, t_data *data)
 {
 	int		i;
@@ -119,8 +98,7 @@ int	find_cmd_in_paths(char *str, t_bintree *node, t_data *data)
 	return (127);
 }
 
-
-int	find_cmd_in_pwd(char *cmd_name, t_bintree *node, t_data *data) 
+int	find_cmd_in_pwd(char *cmd_name, t_bintree *node, t_data *data)
 {
 	char	*tmp;
 	char	*pwd;
@@ -146,26 +124,6 @@ int	find_cmd_in_pwd(char *cmd_name, t_bintree *node, t_data *data)
 		status = 127;
 	free(pwd);
 	return (status);
-}
-
-int	is_directory(char *path)
-{
-	struct stat statbuf;
-
-	if (!path)
-		return (0);
-	if (access(path, F_OK) == 0)
-	{
-		if (stat(path, &statbuf) == 0)
-		{
-			if (S_ISDIR(statbuf.st_mode))
-			{
-				ft_printf(2, "Is a directory\n");
-				return (126);
-			}
-		}
-	}
-	return (0);
 }
 
 int	build_cmd(t_bintree *node, t_data *data)

@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:50:24 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/04 19:50:46 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:08:39 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "tokenize.h"
 
 t_cmd	*make_cmd(void)
 {

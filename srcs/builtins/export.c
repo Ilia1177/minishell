@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:37:07 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/18 19:26:58 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/19 18:03:59 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
 
 char	**new_to_env(char *name, char *value, char **old_envp)
 {
@@ -59,13 +60,12 @@ int	add_to_env(char *name, char *input, t_data *data)
 			data->envp[at_index] = ft_strjoin(data->envp[at_index], input + 2);
 		if (!data->envp[at_index])
 		{
-			data->envp[at_index] = tmp;	
+			data->envp[at_index] = tmp;
 			return (-1);
 		}
 		free(tmp);
 	}
 	return (0);
-
 }
 
 int	update_envp(t_data *data, char *str)

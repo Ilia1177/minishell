@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:45:59 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/14 21:30:15 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 18:06:49 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	print_tree(t_bintree *tree, int space, int start, t_data *data)
 {
-	int i;
+	int	i;
 
 	if (tree == NULL || !data || !data->flag)
 		return ;
@@ -55,7 +55,6 @@ void	print_list(t_token *list, t_data *data)
 
 	if (!list || !data || !data->flag)
 		return ;
-	
 	ft_printf(2, "\n\n\n-------- TOKEN LIST IS----\n");
 	i = 0;
 	while (list)

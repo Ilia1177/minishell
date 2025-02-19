@@ -6,11 +6,14 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/17 09:55:56 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/19 18:39:21 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "rdir_and_arg.h"
+#include "tokenize.h"
+#include "parsing.h"
 
 t_token	*add_back_tokenlist(t_token **head, t_token **lst, char *tokens)
 {
@@ -47,21 +50,12 @@ t_token	*build_tokenlist(char **tokens)
 		if (!curr_token)
 			return (NULL);
 	}
-	/* if (!ft_strcmp(curr_token->input, ")") || !ft_strcmp(curr_token->input, "(")) */
-	/* 	return (head) ; */
-	/* else if (curr_token->type == OPERATOR) */
-	/* { */
-	/* 	ft_lstclear_token(&head, &free); */
-	/* 	ft_printf(2, SYNTERR); */
-	/* 	return (NULL); */
-	/* } */
 	return (head);
 }
 
 int	tokenize(t_data *data)
 {
 	char	**tokens;
-	//int		status;
 
 	if (!data->user_input)
 		return (0);
@@ -72,7 +66,6 @@ int	tokenize(t_data *data)
 	if (!tokens)
 		return (0);
 	data->token_list = build_tokenlist(tokens);
-	//data->token_list = build_tokenlist(tokens, &status);
 	free_tabstr(tokens);
 	if (!data->token_list)
 	{

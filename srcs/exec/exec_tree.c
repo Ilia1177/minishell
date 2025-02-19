@@ -6,19 +6,20 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:10:29 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/14 13:54:49 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 19:22:57 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "exec.h"
 
 int	execute_tree(t_data *data)
 {
-	int	status;
-	int	save_status;
+	int		status;
+	int		save_status;
 	pid_t	wpid;
 
-	data->paths = get_paths(data->envp); 
+	data->paths = get_paths(data->envp);
 	if (data->flag)
 		ft_printf(2, "PATHS = %p\n", data->paths);
 	data->tree->stdfd[IN] = dup(0);
@@ -27,9 +28,9 @@ int	execute_tree(t_data *data)
 	close_fd(data->tree);
 	if (data->flag)
 		ft_printf(2, "Status of exec_tree: %d\n", data->status);
-	if (data->pid == -2) 
-	{ 
-		while(waitpid(-1, NULL, WUNTRACED) != -1)
+	if (data->pid == -2)
+	{
+		while (waitpid(-1, NULL, WUNTRACED) != -1)
 			;
 		return (status);
 	}
@@ -54,9 +55,8 @@ int	execute_tree(t_data *data)
 int	make_pipe(t_bintree *node, t_data *data)
 {
 	int	exit_status;
-  
-	pipe(node->pipefd);	
-	
+
+	pipe(node->pipefd);
 	node->left->stdfd[OUT] = dup(node->pipefd[OUT]);
 	node->left->stdfd[IN] = dup(node->stdfd[IN]);
 	node->left->pipefd[IN] = -2;

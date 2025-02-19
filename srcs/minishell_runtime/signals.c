@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 09:36:13 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/06 14:57:17 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/19 18:53:18 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	handle_signals(int sig, siginfo_t *info, void *ctx)
 {
 	(void)info;
 	(void)ctx;
-
 	g_signal_caught = sig;
 	if (sig == SIGINT)
 	{

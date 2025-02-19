@@ -6,15 +6,16 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:32:20 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/10 17:35:35 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/19 18:02:07 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
 
-static int is_option(char *str)
+static int	is_option(char *str)
 {
-	int 	i;
+	int	i;
 
 	if (!str)
 		return (0);
@@ -40,7 +41,7 @@ int	echo(t_bintree *node, t_data *data)
 		return (0);
 	i = 1;
 	while (is_option(node->cmd->args[i]))
-			i++;
+		i++;
 	while (node->cmd->args[i])
 	{
 		ft_printf(node->stdfd[OUT], "%s", node->cmd->args[i]);

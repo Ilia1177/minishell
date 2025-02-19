@@ -6,12 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:43:06 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/18 18:44:28 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:59:32 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+#include "rdir_and_arg.h"
 
 /****************************************************
  * check if the pattern is present in the filename 

@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:06:48 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/18 19:12:58 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:59:32 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "rdir_and_arg.h"
 
 /****************************************************
  * Sort the current directory list

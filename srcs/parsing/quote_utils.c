@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:40:34 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/09 10:20:57 by ilia             ###   ########.fr       */
+/*   Updated: 2025/02/19 17:48:43 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "parsing.h"
 
 int	skip_quote(char *str, char quote)
 {

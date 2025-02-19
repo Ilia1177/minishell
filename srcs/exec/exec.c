@@ -6,60 +6,13 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/14 21:34:16 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 19:15:33 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static int	open_rdir(t_bintree *node, char *name, t_type_rdir type)
-{
-	int			fd_in;
-	int			fd_out;
-
-	if (type == R_OUT || type == APPEND)
-	{
-		if (type == APPEND)
-			fd_out = open(name, O_CREAT | O_WRONLY | O_APPEND, 0644);
-		else
-			fd_out = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (fd_out == -1)
-			return (1);
-		dup2(fd_out, node->stdfd[OUT]);
-		close(fd_out);
-	}
-	if (type == R_IN || type == HEREDOC)
-	{
-		fd_in = open(name, O_RDONLY, 0644);
-		if (fd_in == -1)
-			return (1);
-		dup2(fd_in, node->stdfd[IN]);
-		close(fd_in);
-	}
-	return (0);
-}
-
-static int	redir(t_bintree *node)
-{
-	int			i;
-	int			status;
-	char		*name;
-	t_type_rdir	type;
-
-	i = -1;
-	while (node->cmd->rdir[++i].name)
-	{
-		type = node->cmd->rdir[i].type;
-		name = node->cmd->rdir[i].name;
-		status = open_rdir(node, name, type);
-		if (status)
-		{
-			perror("msh");
-			return (status);
-		}
-	}
-	return (0);
-}
+#include "exec.h"
+#include "builtins.h"
 
 static void	child_process(t_bintree *node, t_data *data)
 {

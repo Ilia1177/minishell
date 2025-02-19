@@ -6,11 +6,13 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:11:19 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/14 20:21:25 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 18:39:51 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "rdir_and_arg.h"
+#include "parsing.h"
 
 int	ft_nb_rdir(char *str)
 {
@@ -92,10 +94,8 @@ int	catch_rdir(t_rdir *rdir, char *str, t_type_rdir type, int num_rdir)
 		i++;
 	len = true_wordlen(str + i);
 	name = ft_substr(str, i, len);
-	//name = malloc(sizeof(char) * len + 1);
 	if (!name)
 		return (0);
-	//ft_strlcpy(name, str + i, len + 1);
 	rdir[num_rdir].name = name;
 	rdir[num_rdir].type = type;
 	ft_memset(str, ' ', len + i);

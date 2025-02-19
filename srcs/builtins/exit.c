@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:18:29 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/13 17:18:19 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 17:59:31 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
 
 static int	ft_isnumber(char *str)
 {

@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:51:50 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/10 18:57:48 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 18:43:56 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "parsing.h"
 
 int	parenthesis_syntax(t_token *prev, t_token *curr)
 {
@@ -63,9 +64,8 @@ int	rdir_syntax(t_token *curr)
 	error = 0;
 	str = curr->input;
 	c = 0;
-	while(*str)
+	while (*str)
 	{
-
 		if (*str == '>' || *str == '<')
 		{
 			i = 0;
@@ -141,52 +141,4 @@ int	catch_syntax_error(t_token *prev, t_token *curr)
 	if (error)
 		ft_printf(2, SYNTERR);
 	return (error);
-}
-
-int	check_closing_quote(char *str)
-{
-	char	quote;
-	int		close;
-
-	close = 1;
-	while (*str)
-	{
-		if (ft_isquote(*str))
-		{
-			quote = *str;
-			str++;
-			while (*str && *str != quote)
-				str++;
-			if (!*str)
-				close = 0;
-		}
-		if (*str)
-			str++;
-	}
-	if (!close)
-		ft_printf(2, SYNTERR);
-	return (close);
-}
-
-int	open_parenthesis(char *str)
-{
-	int	open;
-
-	open = 0;
-	while (*str)
-	{
-		if (*str == '(')
-			open += 1;
-		else if (*str == ')')
-			open -= 1;
-		if (ft_isquote(*str))
-			str += skip_quote(str, *str);
-		else
-			str++;	
-	}
-	if (open > 0)
-		ft_printf(2, SYNTERR);
-	if (open < 0)
-		ft_printf(2, SYNTERR);
-	return (open);
 }

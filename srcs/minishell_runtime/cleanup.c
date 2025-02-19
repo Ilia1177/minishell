@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/14 21:09:40 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 19:09:24 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "parsing.h"
 
 void	free_minishell(t_data *data, int exit_code)
 {
@@ -22,7 +23,6 @@ void	free_minishell(t_data *data, int exit_code)
 	data->tree = NULL;
 	free_tabstr(data->paths);
 	data->paths = NULL;
-
 	//close_fd_tree(data->tree);
 	if (exit_code >= 0)
 	{
@@ -88,67 +88,4 @@ void	free_tree(t_bintree *root)
 		free_tree(root->right);
 	free_leaf(root);
 	return ;
-}
-
-//	int	is_fd_open(int fd)
-//	{
-//		char	buffer[1];
-//
-//		if (read(fd, buffer, 0) == -1)
-//		{
-//			if (errno == EBADF)
-//				return (0);
-//		}
-//		return (1);
-//	}
-
-void	free_cmd(t_cmd *cmd)
-{
-	int	i;
-
-	if (!cmd)
-		return ;
-	free_tabstr(cmd->args);
-	i = -1;
-	if (cmd->rdir)
-	{
-		while (cmd->rdir[++i].name)
-		{
-			if (cmd->rdir->type == HEREDOC)
-				unlink(cmd->rdir[i].name);
-			else
-				free(cmd->rdir[i].name);
-		}
-		free(cmd->rdir);
-	}
-	free(cmd);
-}
-
-//	void	close_all_fd(t_bintree *root)
-//	{
-//		if (!root)
-//			return ;
-//		if (root->left)
-//			close_all_fd(root->left);
-//		if (root->right)
-//			close_all_fd(root->right);
-//		if (is_fd_open(root->stdfd[IN]))
-//			close(root->stdfd[IN]);
-//		if (is_fd_open(root->stdfd[OUT]))
-//			close(root->stdfd[OUT]);
-//		if (is_fd_open(root->pipefd[IN]))
-//			close(root->pipefd[IN]);
-//		if (is_fd_open(root->pipefd[OUT]))
-//			close(root->pipefd[OUT]);
-//	}
-
-/* free split when token tab failed*/
-void	ft_free_bugsplit(char **str, int i)
-{
-	while (i >= 0)
-	{
-		free(str[i]);
-		i--;
-	}
-	free(str);
 }

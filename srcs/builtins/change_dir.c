@@ -6,11 +6,13 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:24:42 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/13 17:05:44 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 17:59:21 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "rdir_and_arg.h"
+#include "builtins.h"
 
 static void	update_pwds(t_data *data)
 {

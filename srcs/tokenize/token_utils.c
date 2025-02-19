@@ -6,41 +6,46 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:26:02 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/10 17:51:46 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/19 18:38:36 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "tokenize.h"
+#include "parsing.h"
 
-int	ft_issep(char c)
+int	cmd_len(char *str)
 {
-	const char	*sep = "|&()";
+	int	len;
 
-	while (*sep)
+	len = 0;
+	while (!ft_issep(str[len]) && str[len])
 	{
-		if (*sep == c)
-			return (1);
-		sep++;
+		if (ft_isquote(str[len]))
+			len += skip_quote((char *)(str + len), str[len]);
+		else
+			len++;
 	}
-	return (0);
+	return (len);
 }
 
-int	is_space(char c)
+int	sep_len(char *str)
 {
-	if ((c >= 9 && c <= 13) || c == ' ')
-		return (1);
-	return (0);
-}
+	int		len;
+	char	tmp_sep;
 
-int	ft_isquote(char c)
-{
-	const char	*quote = "'\"";
-
-	while (*quote)
+	len = 0;
+	if (str[len] == ')' || str[len] == '(')
 	{
-		if (*quote == c)
-			return (1);
-		quote++;
+		len++;
+		while (isspace(str[len]))
+			len++;
+		return (len);
 	}
-	return (0);
+	tmp_sep = str[len];
+	while (ft_issep(str[len]) && str[len] == tmp_sep && len < 2)
+		len++;
+	while (isspace(str[len]) && len > 0)
+		len++;
+	return (len);
 }

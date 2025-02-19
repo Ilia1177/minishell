@@ -6,11 +6,14 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:31:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/14 21:09:01 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 18:52:10 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "rdir_and_arg.h"
+#include "tokenize.h"
+#include "parsing.h"
 
 void	unquote_rdir(t_token *token, t_data *data)
 {
@@ -67,21 +70,6 @@ void	get_expand(t_token *token, t_data *data)
 	expand_str(data, &token->input);
 }
 
-int	is_all_space(char *str)
-{
-	int	i;
-	int	is_all_space;
-
-	is_all_space = 1;
-	i = 0;
-	while (str[i])
-	{
-		if (!isspace(str[i]))
-			is_all_space = 0;
-		i++;
-	}
-	return (is_all_space);
-}
 // working
 // creat an array of rdir null terminated
 void	get_redir(t_token *token, t_data *data)
@@ -108,23 +96,6 @@ void	get_redir(t_token *token, t_data *data)
 	free(str);
 	rdir[nb_rdir].name = NULL;
 	token->cmd->rdir = rdir;
-}
-
-void	split_args(t_token *token, t_data *data)
-{
-	int		nb_args;
-	char	*input;
-
-	(void)data;
-	if (token->type == CMD && token->cmd)
-	{
-		input = token->input;
-		nb_args = ft_nb_args(token->input);
-		token->cmd->args = ft_calloc(nb_args + 1, sizeof(char *));
-		if (!token->cmd->args)
-			return ;
-		iter_split_args(input, &token, nb_args);
-	}
 }
 
 void	type_token(t_token *token, t_data *data)

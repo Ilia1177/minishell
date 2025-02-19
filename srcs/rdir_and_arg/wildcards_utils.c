@@ -6,11 +6,12 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:10:42 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/18 18:56:59 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/19 16:59:32 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "rdir_and_arg.h"
 
 /****************************************************
  * replacing wildcards args with matching files
@@ -76,6 +77,10 @@ void	build_list_all_dir(t_list **list)
 /****************************************************
  * return the file name matching the wildcards pattens
  * elem of matching files list
+ * @param file_name name of file
+ * @param patterns the wildcard pattern
+ * @paran nb_pat number of string separate by *
+ * @param str the wildcard input
  * *************************************************/
 t_list	*matching_file(char *file_name, char **patterns, int nb_pat, char *str)
 {

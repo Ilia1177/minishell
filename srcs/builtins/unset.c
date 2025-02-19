@@ -6,16 +6,17 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 17:09:29 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/15 11:18:40 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/19 18:04:44 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
 
 int	tablen(char **tab)
 {
 	int	len;
-	
+
 	len = 0;
 	while (tab[len])
 		len++;
@@ -24,9 +25,9 @@ int	tablen(char **tab)
 
 // copy adress of each element of tab, in a new_tab
 // Doesnt copy the element at index if index is >= 0
-char **tabstrcpy(char **tab, int index)
+char	**tabstrcpy(char **tab, int index)
 {
-	char **new_tab;
+	char	**new_tab;
 	int		len;
 	int		i;
 	int		offset;
