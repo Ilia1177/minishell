@@ -159,6 +159,6 @@ int	build_cmd(t_bintree *node, t_data *data)
 	else if (status == 127)
 		ft_printf(2, "msh: %s: command not found\n", node->cmd->args[0]);
 	else if (is_directory(node->cmd->args[0]))
-		ft_printf(2, "msh: is a directory\n");
+		ft_printf(2, "msh: Is a directory\n");
 	return (status);
 }

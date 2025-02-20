@@ -74,7 +74,7 @@ int	find_expand(char *str)
 			i += ft_strnlen(&str[i], '\'');
 		}
 		else if (str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1])
-				|| str[i + 1] == '?' || ft_isquote(str[i + 1])))
+				|| str[i + 1] == '?' || (ft_isquote(str[i + 1]) && quoted < 0)))
 			return (i);
 	}
 	return (-1);
@@ -117,23 +117,34 @@ void	expand_str(t_data *data, char **str)
 	int		i;
 	int		flag_free;
 	int		size;
+	int		quoted;
+	int		j;
 
+	quoted = -1;
 	new_str = *str;
 	while (*new_str)
 	{
 		flag_free = 0;
 		i = find_expand(new_str);
+		j = -1;
+		while (i>0 && ++j< i)
+		{
+			if (new_str[j] == '\"' )
+				quoted *= -1;
+		}
 		if (i == -1)
 			return ;
 		if (is_space(new_str[i + 1]) || !new_str[i + 1])
 			return ;
-		if (new_str[i + 1] == '\'' || new_str[i + 1 ] == '\"')
+		if ((new_str[i + 1] == '\'' || new_str[i + 1 ] == '\"') /*&& quoted < 0*/)
 		{
 			size = ft_strlen(new_str);
 			new_str[i] = '\0';
 			ft_strlcat(new_str,new_str + i + 1, size);
-			return ;
+		 	/* return ; */
 		}
+		else
+		{
 		value = catch_expand(data, &new_str[i + 1]);
 		if (new_str[i + 1] == '?')
 			flag_free = 1;
@@ -141,5 +152,6 @@ void	expand_str(t_data *data, char **str)
 		new_str = *str;
 		if (flag_free)
 			free (value);
+		}
 	}
 }

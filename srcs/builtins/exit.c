@@ -60,8 +60,18 @@ void	exit_number(t_data *data, t_bintree *node)
 	free_minishell(data, code);
 }
 
+/****************************************************
+ * Exit builtins with exit status
+ * 1st-[if] whithout arg - exit
+ * 2nd-[if] only one arg of number
+ * 3rd-[if] first arg is number and has a second
+ * 4-[else] more than  one arg and first is not number
+ * *************************************************/
 int	exit_minishell(t_bintree *node, t_data *data)
 {
+	int			error;
+	
+	error = 0;
 	if (!node->cmd->args[1])
 	{
 		ft_printf(1, "exit\n");
@@ -73,6 +83,12 @@ int	exit_minishell(t_bintree *node, t_data *data)
 	}
 	else if (ft_isnumber(node->cmd->args[1]) && node->cmd->args[2])
 	{
+		ft_atoller(node->cmd->args[1], &error);
+		if(error)
+		{
+			ft_printf(2, NR_ARG, node->cmd->args[1]);
+			free_minishell(data, 2);
+		}
 		ft_printf(2, TM_ARG, "exit");
 		return (1);
 	}
