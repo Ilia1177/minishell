@@ -73,7 +73,6 @@ int	is_directory(char *path)
 		{
 			if (S_ISDIR(statbuf.st_mode))
 			{
-				ft_printf(2, "msh: Is a directory\n");
 				return (126);
 			}
 		}

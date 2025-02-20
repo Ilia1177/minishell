@@ -44,44 +44,19 @@ int	catch_name(char **buff, char *str)
 	{
 		if (str[len] == '+' || str[len] == '=')
 			break ;
-		if (isspace(str[len]) || !ft_isalnum(str[len]))
+		if (!ft_isalnum(str[len]) && str[len] != '_')
 			error = 1;
 		len++;
 	}
-	if (!str[len])
-		error = -1;
-	else if (str[len] == '+' && str[len + 1] != '=')
-		error = 1;
+	if (!error && !str[len])
+		error = 2;
 	name = malloc(sizeof(char) * len + 1);
 	if (!name)
-		return (-1);
+		return (2);
 	ft_strlcpy(name, str, len + 1);
 	*buff = name;
 	return (error);
 }
-
-//	char	*catch_value(char *str)
-//	{
-//		char	*value;
-//		int		i;
-//		int		len;
-//
-//		if (ft_strlen(str) == ft_strnlen(str, '='))
-//			return (NULL);
-//		str += ft_strnlen(str, '=');
-//		len = ft_strlen(++str);
-//		value = malloc(sizeof(char) * len + 1);
-//		if (!value)
-//			return (NULL);
-//		i = 0;
-//		while (str[i])
-//		{
-//			value[i] = str[i];
-//			i++;
-//		}
-//		value[i] = '\0';
-//		return (value);
-//	}
 
 int	exist(char **envp, char *name)
 {

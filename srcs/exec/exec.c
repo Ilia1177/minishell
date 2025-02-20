@@ -72,6 +72,8 @@ int	exec_cmd(t_bintree *node, t_data *data)
 {
 	int	exit_status;
 
+	if (data->flag)
+		ft_printf(2, "--> exec_cmd\n");
 	data->pid = -2;
 	exit_status = redir(node);
 	if (!node->input || !node->input[0])
