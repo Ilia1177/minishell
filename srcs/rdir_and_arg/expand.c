@@ -20,7 +20,8 @@ int	expand_size(char *str, int pos)
 	if (str[pos] == '?')
 		return (1);
 	var_len = 0;
-	while (str[pos + var_len] && ft_isalnum(str[pos + var_len]))
+	while (str[pos + var_len] && (ft_isalnum(str[pos + var_len])
+			|| str[pos + var_len] == '_'))
 		var_len++;
 	return (var_len);
 }
@@ -73,7 +74,7 @@ int	find_expand(char *str)
 			i += ft_strnlen(&str[i], '\'');
 		}
 		else if (str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1])
-				|| str[i + 1] == '?'))
+				|| str[i + 1] == '?' || ft_isquote(str[i + 1])))
 			return (i);
 	}
 	return (-1);
@@ -95,7 +96,7 @@ char	*catch_expand(t_data *data, char *str)
 		return (ft_itoa(data->status));
 	expand = NULL;
 	len = 0;
-	while (str[len] && ft_isalnum(str[len]))
+	while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
 		len++;
 	i = 0;
 	while (data->envp && data->envp[i] && ft_strncmp(data->envp[i], str, len))
@@ -115,6 +116,7 @@ void	expand_str(t_data *data, char **str)
 	char	*value;
 	int		i;
 	int		flag_free;
+	int		size;
 
 	new_str = *str;
 	while (*new_str)
@@ -125,6 +127,13 @@ void	expand_str(t_data *data, char **str)
 			return ;
 		if (is_space(new_str[i + 1]) || !new_str[i + 1])
 			return ;
+		if (new_str[i + 1] == '\'' || new_str[i + 1 ] == '\"')
+		{
+			size = ft_strlen(new_str);
+			new_str[i] = '\0';
+			ft_strlcat(new_str,new_str + i + 1, size);
+			return ;
+		}
 		value = catch_expand(data, &new_str[i + 1]);
 		if (new_str[i + 1] == '?')
 			flag_free = 1;

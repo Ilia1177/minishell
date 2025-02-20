@@ -105,11 +105,11 @@ nil:fclean $(OBJS) $(MINISHELL_NIL_OBJ) $(LIBFT)
 
 $(OBJS_DIR)/%.o	: $(SRCS_DIR)/%.c 
 	@mkdir -p $(dir $@)
-	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
+	@$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(MINISHELL_OBJ) : $(MINISHELL_SRC)
 	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
+	@$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(MINISHELL_JM_OBJ) : $(MINISHELL_JM_SRC)
 	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
@@ -120,10 +120,10 @@ $(MINISHELL_NIL_OBJ) : $(MINISHELL_NIL_SRC)
 
 $(NAME)			:  $(OBJS) $(MINISHELL_OBJ) $(LIBFT)
 	@mkdir -p bin
-	$(CC) $(C_FLAGS) $(INCLUDE) $^ $(RLLIB) -o $@
+	@$(CC) $(C_FLAGS) $(INCLUDE) $^ $(RLLIB) -o $@
 
 $(LIBFT)		:
-	make -C libft
+	@make -C libft --no-print-directory
 
 clean			:
 	@make clean -C libft

@@ -12,6 +12,7 @@
 
 #include "libft.h"
 #include <stdint.h>
+#include <stdio.h>
 
 static int	ft_isspace(char c)
 {
@@ -20,28 +21,41 @@ static int	ft_isspace(char c)
 	return (0);
 }
 
-int64_t	ft_atoller(const char *nptr, int *error)
+void	is_neg(const char *nptr, int64_t *sign, int64_t *neg)
 {
-	int64_t	sign;
-	int64_t nbr;
-
-	nbr = 0;
-	sign = 1;
-	*error = 0;
-	while (*nptr && ft_isspace(*nptr))
-		nptr++;
+	*neg = 0;
+	*sign = 1;
 	if (*nptr == '-' || *nptr == '+')
 	{
 		if (*nptr == '-')
-			sign = -1;
-		nptr++;
+		{
+			*sign = -1;
+			*neg = 1;
+		}
 	}
+}
+
+int64_t	ft_atoller(const char *nptr, int *error)
+{
+	int64_t	sign;
+	int64_t	nbr;
+	int64_t	neg;
+	int64_t	digit;
+
+	nbr = 0;
+	*error = 0;
+	while (*nptr && ft_isspace(*nptr))
+		nptr++;
+	is_neg(nptr, &sign, &neg);
+	if (neg)
+		nptr++;
 	while (*nptr && ft_isdigit(*nptr))
 	{
-		nbr *= 10;
-		nbr += *nptr - '0';
-		if (nbr < 0 || (nbr * sign) < LLONG_MIN || (nbr * sign) > LLONG_MAX)
+		digit = *nptr - '0';
+		if ((nbr > LLONG_MAX / 10)
+			|| ((nbr == LLONG_MAX / 10) && (digit > LLONG_MAX % 10 + neg)))
 			*error = 1;
+		nbr = nbr * 10 + digit;
 		nptr++;
 	}
 	return (nbr * sign);
