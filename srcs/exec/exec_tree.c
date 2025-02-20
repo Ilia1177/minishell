@@ -21,13 +21,13 @@ int	execute_tree(t_data *data)
 
 	data->paths = get_paths(data->envp);
 	if (data->flag)
-		ft_printf(2, "PATHS = %p\n", data->paths);
+		ft_printf(2, "--> execute_tree\nPATHS = %p\n", data->paths);
 	data->tree->stdfd[IN] = dup(0);
 	data->tree->stdfd[OUT] = dup(1);
 	status = execute_node(data->tree, data);
 	close_fd(data->tree);
 	if (data->flag)
-		ft_printf(2, "Status of exec_tree: %d\n", data->status);
+		ft_printf(2, "execute_tree: status: %d\n", status);
 	if (data->pid == -2)
 	{
 		while (waitpid(-1, NULL, WUNTRACED) != -1)
@@ -49,6 +49,8 @@ int	execute_tree(t_data *data)
 		status = WEXITSTATUS(save_status);
 	else
 		status = save_status;
+	if (data->flag)
+		ft_printf(2, "execute_tree: child_status: %d\n", status);
 	return (status);
 }
 
@@ -95,9 +97,7 @@ int	make_operation(t_bintree *node, t_data *data)
 			exit_status = execute_node(node->right, data);
 		}
 		else
-		{
 			close_fd(node);
-		}
 		return (exit_status);
 	}
 	else if (node->right)
@@ -112,6 +112,8 @@ int	execute_node(t_bintree *node, t_data *data)
 {
 	int	exit_status;
 
+	if (data->flag)
+		ft_printf(2, "--> execute_node\n");
 	if (node->left)
 	{
 		if (node->type == PIPE)
@@ -121,8 +123,8 @@ int	execute_node(t_bintree *node, t_data *data)
 		return (exit_status);
 	}
 	else
-	{
 		exit_status = exec_cmd(node, data);
-	}
+	if (data->flag)
+		ft_printf(2, "status: %d\n");
 	return (exit_status);
 }

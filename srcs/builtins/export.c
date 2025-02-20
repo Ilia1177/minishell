@@ -61,7 +61,7 @@ int	add_to_env(char *name, char *input, t_data *data)
 		if (!data->envp[at_index])
 		{
 			data->envp[at_index] = tmp;
-			return (-1);
+			return (1);
 		}
 		free(tmp);
 	}
@@ -75,13 +75,10 @@ int	update_envp(t_data *data, char *str)
 
 	error = catch_name(&name, str);
 	if (!error && name)
-	{
-		if (add_to_env(name, str, data))
-			error = -1;
-	}
+		error = add_to_env(name, str, data);
 	else if (error == 1)
 		ft_printf(2, "msh: export: %s\"%s\n", name, WARNING);
-	else if (error == -1)
+	else if (error == 2)
 		error = 0;
 	free(name);
 	return (error);

@@ -67,11 +67,13 @@ int	find_cmd_in_paths(char *str, t_bintree *node, t_data *data)
 	int		i;
 	char	*full_path;
 	char	*cmd;
+	int		status;
 
 	if (data->flag)
-		ft_printf(2, "find_cmd_in_path\n");
+		ft_printf(2, "--> find_cmd_in_paths\n");
 	if (!data->paths || !str)
 		return (127);
+	status = 0;
 	cmd = ft_strjoin("/", str);
 	if (!cmd)
 		return (-1);
@@ -80,22 +82,24 @@ int	find_cmd_in_paths(char *str, t_bintree *node, t_data *data)
 	{
 		full_path = ft_strjoin(data->paths[i], cmd);
 		if (!full_path)
+			break ;
+		if (!access(full_path, F_OK | X_OK))
 		{
 			free(cmd);
-			return (-1);
-		}
-		if (!access(full_path, F_OK))
-		{
-			if (data->flag)
-				ft_printf(2, "command found at %s\n", full_path);
 			node->cmd->args[0] = full_path;
-			free(cmd);
 			return (0);
 		}
+		else if (errno == EACCES || is_directory(full_path))
+		{
+			free(cmd);
+			return (126);
+		}
+		else
+			status = 127;
 		free(full_path);
 	}
 	free(cmd);
-	return (127);
+	return (status);
 }
 
 int	find_cmd_in_pwd(char *cmd_name, t_bintree *node, t_data *data)
@@ -105,59 +109,56 @@ int	find_cmd_in_pwd(char *cmd_name, t_bintree *node, t_data *data)
 	int		status;
 
 	if (data->flag)
-		ft_printf(2, "Look for command with pwd\n");
+		ft_printf(2, "--> find_cmd_in_pwd\n");
 	if (!cmd_name || !cmd_name[0])
 		return (-1);
+	if (is_directory(cmd_name))
+		return (126);
 	node->cmd->args[0] = NULL;
 	status = 0;
 	tmp = ft_strjoin(catch_expand(data, "PWD"), "/");
 	pwd = ft_strjoin(tmp, cmd_name);
 	free(tmp);
 	if (!pwd)
-		status = -1;
-	else if (!access(pwd, F_OK))
+		status = 1;
+	else if (!access(pwd, F_OK | X_OK))
 	{
 		node->cmd->args[0] = pwd;
 		return (0);
 	}
+	else if (errno == EACCES || is_directory(pwd))
+		status = 126;
 	else
 		status = 127;
 	free(pwd);
 	return (status);
 }
 
+//if (status = 0) commande will be execute by execve
 int	build_cmd(t_bintree *node, t_data *data)
 {
 	char	*cmd_name;
 	int		status;
 
 	status = 0;
-	if (!node->cmd->args[0] || !node->cmd->args[0][0])
+	if (!node->cmd || !node->cmd->args[0] || !node->cmd->args[0][0])
 		return (127);
 	cmd_name = node->cmd->args[0];
-	if (is_directory(cmd_name))
-		return (126);
-	// look for executable in current dir if it is a path or formated with ./script at begining of cmd_name
-	else if (!ft_strncmp(cmd_name, "./", 2) || ft_strchr(cmd_name, '/'))
+	if (ft_strchr(cmd_name, '/') || !data->paths)
 		status = find_cmd_in_pwd(cmd_name, node, data);
-	// look for executable in current dir formated script with PATH unset
-	else if (!data->paths)
-		status = find_cmd_in_pwd(cmd_name, node, data);
-	// look for the executable in paths in others cases
-	else
+	else if (data->paths)
 		status = find_cmd_in_paths(cmd_name, node, data);
 	if (status)
 		node->cmd->args[0] = cmd_name;
-	else
+	else if (access(cmd_name, F_OK | X_OK))
 		free(cmd_name);
-	if (errno == EACCES && status == 127)
-	{
+	else
+		status = 0;
+	if (status == 126 && !is_directory(node->cmd->args[0]))
 		perror("msh");
-		status = 126;
-	}
 	else if (status == 127)
 		ft_printf(2, "msh: %s: command not found\n", node->cmd->args[0]);
-	if (data->flag)
-		ft_printf(2, "full commande is %s\n", node->cmd->args[0]);
+	else if (is_directory(node->cmd->args[0]))
+		ft_printf(2, "msh: is a directory\n");
 	return (status);
 }
