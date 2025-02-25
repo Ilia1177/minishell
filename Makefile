@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/02/19 19:16:09 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/02/25 19:40:42 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,7 @@ SRCS		=	binary_tree/binary_tree.c\
 				parsing/syntax.c\
 				parsing/syntax_utils.c\
 				rdir_and_arg/expand.c\
+				rdir_and_arg/expand_utils.c\
 				rdir_and_arg/heredoc.c\
 				rdir_and_arg/redir.c\
 				rdir_and_arg/wildcards.c\

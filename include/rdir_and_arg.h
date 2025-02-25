@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 15:34:48 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 17:01:05 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 19:40:06 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ int		insert_expand(char **input, int pos, char *exp);
 int		find_expand(char *str);
 char	*catch_expand(t_data *data, char *str);
 void	expand_str(t_data *data, char **str);
+
+//expand_utils.c
+char	*return_expand(t_data *data, char *new_str, char **str, int *i);
+
 /***********HEREDOC****************/
 //heredoc.c
 char	*get_here_doc(char *lim, t_data *data);
@@ -50,7 +54,7 @@ int		begin_search(char **file_str, char *pattern_str, int *nb_find);
 //wildcards_utils.c
 int		replacing_wildcards(t_token *token, int index, t_list *mfl);
 void	build_list_all_dir(t_list **list);
-t_list	*matching_file(char **file_name, char **patterns, int nb_pat, char *str);
+t_list	*matching_file(char **f_name, char **patterns, int nb_pat, char *str);
 t_list	*build_mf_lst(t_list *list, char **patterns, char *str);
 t_list	*build_list_dir(t_list *list);
 
