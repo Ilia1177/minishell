@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/19 19:23:18 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 21:52:20 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,21 +144,30 @@ int	build_cmd(t_bintree *node, t_data *data)
 	if (!node->cmd || !node->cmd->args[0] || !node->cmd->args[0][0])
 		return (127);
 	cmd_name = node->cmd->args[0];
-	if (ft_strchr(cmd_name, '/') || !data->paths)
+
+
+	if (!data->paths && ft_strncmp("/", cmd_name, 1))
+	{
+		cmd_name = ft_strjoin("./", cmd_name);
+		free(node->cmd->args[0]);
 		status = find_cmd_in_pwd(cmd_name, node, data);
-	else if (data->paths)
-		status = find_cmd_in_paths(cmd_name, node, data);
-	if (status)
+	}
+	else if (!ft_strncmp("/", cmd_name, 1) && !access(cmd_name, F_OK | X_OK))
+	{
 		node->cmd->args[0] = cmd_name;
-	else if (access(cmd_name, F_OK | X_OK))
-		free(cmd_name);
-	else
 		status = 0;
+	}
+	else 
+	{
+		status = find_cmd_in_paths(cmd_name, node, data);
+		if (status && !ft_strncmp("./", cmd_name, 2))
+			status = find_cmd_in_pwd(cmd_name, node, data);
+	}
 	if (status == 126 && !is_directory(node->cmd->args[0]))
 		perror("msh");
 	else if (status == 127)
 		ft_printf(2, "msh: %s: command not found\n", node->cmd->args[0]);
 	else if (is_directory(node->cmd->args[0]))
-		ft_printf(2, "msh: Is a directory\n");
+		ft_printf(2, "msh: is a directory\n");
 	return (status);
 }
