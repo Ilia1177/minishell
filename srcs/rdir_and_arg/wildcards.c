@@ -59,6 +59,19 @@ int	only_wild(char *str)
 	return (1);
 }
 
+int	is_wildcard(char *str)
+{
+	if (!str || !ft_strchr(str, '*') || !ft_strcmp(str, "*."))
+		return (0);
+	return (1);
+}
+
+/****************************************************
+ * loop each args
+ * @param mfl - match_files_lst
+ * @param lad - list_all_dir
+ * @param ld - list_dir
+ * *************************************************/
 void	wildcards_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 {
 	char	**patterns;
@@ -67,8 +80,7 @@ void	wildcards_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 	i = 0;
 	while (token->cmd->args[++i])
 	{
-		if (!token->cmd->args[i] || !ft_strchr(token->cmd->args[i], '*')
-			|| !ft_strcmp(token->cmd->args[i], "*."))
+		if (!is_wildcard(token->cmd->args[i]))
 			continue ;
 		else if (only_wild(token->cmd->args[i]))
 			mfl = build_list_dir(lad);
@@ -82,8 +94,10 @@ void	wildcards_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 			free_tabstr(patterns);
 		}
 		if (mfl)
+		{
 			i += replacing_wildcards(token, i, mfl);
-		ft_lstclear(&mfl, free);
+			ft_lstclear(&mfl, free);
+		}
 	}
 }
 

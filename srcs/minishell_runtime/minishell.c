@@ -30,6 +30,7 @@ void	update_pwd_in_envp(t_data *data)
 
 void	init_shell(t_data *data)
 {
+	/* rl_catch_signals = 0; */
 	g_signal_caught = 0;
 	data->tree = NULL;
 	data->token_list = NULL;
@@ -43,9 +44,9 @@ int	run_shell(t_data *data)
 
 	data->prompt = "msh-4.2$";
 	update_pwd_in_envp(data);
+	init_shell(data);
 	while (1)
 	{
-		init_shell(data);
 		if (!get_user_input(data))
 			continue ;
 		if (tokenize(data))
@@ -57,6 +58,7 @@ int	run_shell(t_data *data)
 			data->status = execute_tree(data);
 		}
 		free_minishell(data, -1);
+		init_shell(data);
 	}
 	return (data->status);
 }

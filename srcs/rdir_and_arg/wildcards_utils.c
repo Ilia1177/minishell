@@ -82,7 +82,7 @@ void	build_list_all_dir(t_list **list)
  * @paran nb_pat number of string separate by *
  * @param str the wildcard input
  * *************************************************/
-t_list	*matching_file(char *file_name, char **patterns, int nb_pat, char *str)
+t_list	*matching_file(char **file_name, char **patterns, int nb_pat, char *str)
 {
 	int		i;
 	int		not_find;
@@ -94,15 +94,15 @@ t_list	*matching_file(char *file_name, char **patterns, int nb_pat, char *str)
 	i = -1;
 	not_find = 1;
 	nb_find = 0;
-	tmp_name = ft_strdup(file_name);
+	tmp_name = ft_strdup(*file_name);
 	while (patterns[++i] && not_find)
 	{
 		if (i == 0 && str[i] != '*')
-			not_find = begin_search(&file_name, patterns[i], &nb_find);
+			not_find = begin_search(file_name, patterns[i], &nb_find);
 		else if (i == nb_pat - 1 && str[ft_strlen(str) - 1] != '*')
-			not_find = end_search(&file_name, patterns[i], &nb_find);
+			not_find = end_search(file_name, patterns[i], &nb_find);
 		else
-			not_find = middle_search(&file_name, patterns[i], &nb_find);
+			not_find = middle_search(file_name, patterns[i], &nb_find);
 		if (nb_find == nb_pat)
 			elem = ft_lstnew((void *)tmp_name);
 	}
@@ -130,13 +130,13 @@ t_list	*build_mf_lst(t_list *list, char **patterns, char *str)
 	match_files_lst = NULL;
 	while (lst_dir)
 	{
+		file_name = NULL;
 		file_name = ft_strdup((char *)lst_dir->content);
-		elem = matching_file(file_name, patterns, nb_pat, str);
+		elem = matching_file(&file_name, patterns, nb_pat, str);
 		if (elem)
 			ft_lstadd_back(&match_files_lst, elem);
-		else
-			free(file_name);
 		lst_dir = lst_dir->next;
+		free(file_name);
 	}
 	return (match_files_lst);
 }

@@ -27,12 +27,11 @@ int	middle_search(char **file_str, char *pattern_str, int *nb_find)
 	{
 		tmp_str = ft_substr(tmp_str, 1, ft_strlen(tmp_str));
 		free(*file_str);
-		*file_str = tmp_str;
+		*file_str = ft_strdup(tmp_str);
 		free(tmp_str);
 		*nb_find += 1;
 		return (1);
 	}
-	free(tmp_str);
 	return (0);
 }
 
@@ -51,7 +50,7 @@ int	end_search(char **file_str, char *pattern_str, int *nb_find)
 	if (tmp_str && !ft_strcmp(tmp_str, pattern_str))
 	{
 		free(*file_str);
-		*file_str = tmp_str;
+		*file_str = ft_strdup(tmp_str);
 		free(tmp_str);
 		*nb_find += 1;
 		return (1);
@@ -75,7 +74,7 @@ int	begin_search(char **file_str, char *pattern_str, int *nb_find)
 		tmp_str = ft_substr(*file_str, ft_strlen(pattern_str),
 				ft_strlen(*file_str));
 		free(*file_str);
-		*file_str = tmp_str;
+		*file_str = ft_strdup(tmp_str);
 		free(tmp_str);
 		*nb_find += 1;
 		return (1);

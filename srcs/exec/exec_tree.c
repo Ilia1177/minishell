@@ -25,6 +25,8 @@ int	execute_tree(t_data *data)
 	data->tree->stdfd[IN] = dup(0);
 	data->tree->stdfd[OUT] = dup(1);
 	status = execute_node(data->tree, data);
+	if (g_signal_caught)
+		status += g_signal_caught;
 	close_fd(data->tree);
 	if (data->flag)
 		ft_printf(2, "execute_tree: status: %d\n", status);

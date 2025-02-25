@@ -60,3 +60,17 @@ int	is_all_space(char *str)
 	}
 	return (is_all_space);
 }
+
+int	input_has_pipe(t_bintree *tree)
+{
+	int		has_pipe;
+
+	if (tree == NULL)
+		return (0);
+	has_pipe = 0;
+	has_pipe += input_has_pipe(tree->right);
+	has_pipe += input_has_pipe(tree->left);
+	if (tree->type == PIPE)
+		has_pipe += 1;
+	return (has_pipe);
+}
