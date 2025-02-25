@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 17:46:14 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 18:52:00 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 21:29:54 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ int			check_closing_quote(char *str);
 //syntax_utils.c
 int			check_closing_quote(char *str);
 int			open_parenthesis(char *str);
+int			rdir_len(char *str);
+int			check_rdir_name(char *str, int *error, int iterator);
 
 /***********QUOTE_UTILS****************/
 //quote_utils.c

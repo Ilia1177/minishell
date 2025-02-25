@@ -6,21 +6,19 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 16:37:01 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 18:49:28 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 21:30:21 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_issep(char c)
+int	ft_ischarset(char c, char *charset)
 {
-	const char	*sep = "|&()";
-
-	while (*sep)
+	while (*charset)
 	{
-		if (*sep == c)
+		if (*charset == c)
 			return (1);
-		sep++;
+		charset++;
 	}
 	return (0);
 }

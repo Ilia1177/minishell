@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:20:15 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 18:39:33 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:57:30 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ int	ft_nbword(const char *s)
 	nb_word = 0;
 	while (s[i])
 	{
-		if (ft_issep(s[i]))
+		if (ft_ischarset(s[i], "|&()"))
 			i += sep_len((char *)s + i);
-		else if (!ft_issep(s[i]))
+		else if (!ft_ischarset(s[i], "|&()"))
 			i += cmd_len((char *)s + i);
 		nb_word++;
 	}
@@ -37,7 +37,7 @@ static size_t	ft_wordlen(const char *s)
 	int		len;
 
 	len = 0;
-	if (ft_issep(s[len]))
+	if (ft_ischarset(s[len], "|&()"))
 		len += sep_len((char *)s);
 	else
 		len += cmd_len((char *)s);
