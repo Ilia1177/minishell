@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/25 21:52:20 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/25 22:06:59 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,15 +144,13 @@ int	build_cmd(t_bintree *node, t_data *data)
 	if (!node->cmd || !node->cmd->args[0] || !node->cmd->args[0][0])
 		return (127);
 	cmd_name = node->cmd->args[0];
-
-
 	if (!data->paths && ft_strncmp("/", cmd_name, 1))
 	{
 		cmd_name = ft_strjoin("./", cmd_name);
 		free(node->cmd->args[0]);
 		status = find_cmd_in_pwd(cmd_name, node, data);
 	}
-	else if (!ft_strncmp("/", cmd_name, 1) && !access(cmd_name, F_OK | X_OK))
+	else if (!ft_strncmp("/", cmd_name, 1) && !access(cmd_name, X_OK))
 	{
 		node->cmd->args[0] = cmd_name;
 		status = 0;

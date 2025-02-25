@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/25 20:55:38 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/25 22:01:09 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int	run_shell(t_data *data)
 
 	data->prompt = "msh-4.2$";
 	update_pwd_in_envp(data);
+	init_shell(data);
 	while (1)
 	{
-		init_shell(data);
 		if (!get_user_input(data))
 			continue ;
 		if (g_signal_caught)
@@ -60,6 +60,7 @@ int	run_shell(t_data *data)
 			data->status = execute_tree(data);
 		}
 		free_minishell(data, -1);
+		init_shell(data);
 	}
 	return (data->status);
 }
