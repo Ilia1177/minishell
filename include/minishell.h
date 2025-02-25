@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/19 19:11:20 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:49:44 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ char		*listen_to_user(char *prompt);
 char		*get_user_input(t_data *data);
 
 //utils.c
-int			ft_issep(char c);
+int			ft_ischarset(char c, char *charset);
 int			ft_isquote(char c);
 int			is_space(char c);
 int			is_all_space(char *str);

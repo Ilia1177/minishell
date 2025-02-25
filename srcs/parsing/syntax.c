@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:51:50 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 18:43:56 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 21:20:05 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,35 +56,18 @@ int	operator_syntax(t_token *prev)
 
 int	rdir_syntax(t_token *curr)
 {
-	int		error;
 	int		i;
 	char	*str;
-	char	c;
+	int		error;
 
-	error = 0;
 	str = curr->input;
-	c = 0;
-	while (*str)
+	error = 0;
+	while (*str && error != 2)
 	{
 		if (*str == '>' || *str == '<')
 		{
-			i = 0;
-			c = *str;
-			while (str[i] == c)
-				i++;
-			if (i > 2)
-				return (2);
-			while (isspace(str[i]))
-				i++;
-			if (ft_isquote(str[i]))
-				i += skip_quote(str + i, str[i]);
-			else if (!ft_isprint(str[i]))
-				return (2);
-			else
-			{
-				while (isprint(str[i]) && !ft_isquote(str[i]))
-					i++;
-			}
+			i = rdir_len(str);
+			i = check_rdir_name(str, &error, i);
 			str += i;
 		}
 		else if (ft_isquote(*str))

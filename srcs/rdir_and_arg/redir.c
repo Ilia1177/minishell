@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 11:11:19 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 18:39:51 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 20:52:41 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	true_wordlen(char *str)
 	int	len;
 
 	len = 0;
-	while (str[len] && !is_space(str[len]) && !ft_issep(str[len]))
+	while (str[len] && !is_space(str[len]) && !ft_ischarset(str[len], "|&()"))
 	{
 		if (ft_isquote(str[len]))
 			len += skip_quote(str + len, str[len]);
