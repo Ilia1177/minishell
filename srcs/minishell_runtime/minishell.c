@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/19 19:03:39 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 17:37:47 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	update_pwd_in_envp(t_data *data)
 
 void	init_shell(t_data *data)
 {
+
 	g_signal_caught = 0;
 	data->tree = NULL;
 	data->token_list = NULL;
@@ -48,6 +49,8 @@ int	run_shell(t_data *data)
 		init_shell(data);
 		if (!get_user_input(data))
 			continue ;
+		if (g_signal_caught)
+			data->status = 128 + g_signal_caught;
 		if (tokenize(data))
 		{
 			cpy = data->token_list;

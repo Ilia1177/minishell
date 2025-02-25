@@ -6,34 +6,19 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:10:29 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/19 19:22:57 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 17:50:57 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "exec.h"
 
-int	execute_tree(t_data *data)
+int	get_child_status(t_data *data)
 {
-	int		status;
-	int		save_status;
-	pid_t	wpid;
+	int	save_status;
+	int	status;
+	int	wpid;
 
-	data->paths = get_paths(data->envp);
-	if (data->flag)
-		ft_printf(2, "--> execute_tree\nPATHS = %p\n", data->paths);
-	data->tree->stdfd[IN] = dup(0);
-	data->tree->stdfd[OUT] = dup(1);
-	status = execute_node(data->tree, data);
-	close_fd(data->tree);
-	if (data->flag)
-		ft_printf(2, "execute_tree: status: %d\n", status);
-	if (data->pid == -2)
-	{
-		while (waitpid(-1, NULL, WUNTRACED) != -1)
-			;
-		return (status);
-	}
 	save_status = 0;
 	wpid = 0;
 	while (wpid != -1 || errno != ECHILD)
@@ -50,7 +35,30 @@ int	execute_tree(t_data *data)
 	else
 		status = save_status;
 	if (data->flag)
-		ft_printf(2, "execute_tree: child_status: %d\n", status);
+		ft_printf(2, "child_status: %d\n", status);
+	return (status);
+}
+
+int	execute_tree(t_data *data)
+{
+	int		status;
+
+	data->paths = get_paths(data->envp);
+	if (data->flag)
+		ft_printf(2, "--> execute_tree\nPATHS = %p\n", data->paths);
+	data->tree->stdfd[IN] = dup(0);
+	data->tree->stdfd[OUT] = dup(1);
+	status = execute_node(data->tree, data);
+	close_fd(data->tree);
+	if (data->flag)
+		ft_printf(2, "execute_tree: status: %d\n", status);
+	if (data->pid == -2)
+	{
+		while (waitpid(-1, NULL, WUNTRACED) != -1)
+			;
+		return (status);
+	}
+	status = get_child_status(data);
 	return (status);
 }
 

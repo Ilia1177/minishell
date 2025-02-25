@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/19 19:15:33 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 17:42:22 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ int	exec_cmd(t_bintree *node, t_data *data)
 {
 	int	exit_status;
 
-	if (data->flag)
-		ft_printf(2, "--> exec_cmd\n");
 	data->pid = -2;
 	exit_status = redir(node);
 	if (!node->input || !node->input[0])
