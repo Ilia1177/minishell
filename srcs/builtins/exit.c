@@ -15,6 +15,8 @@
 
 static int	ft_isnumber(char *str)
 {
+	while (is_space(*str))
+		str++;
 	if (!ft_isdigit(*str) && *str != '-' && *str != '+')
 		return (0);
 	str++;
@@ -42,22 +44,51 @@ static int	format_exit_code(long long number)
 	return (code);
 }
 
-void	exit_number(t_data *data, t_bintree *node)
+/****************************************************
+ * exit minishell only if there isnot pipe
+ * @param print_code - 1, 2 or 3
+ * 1 - print Exit
+ * 2 - print NR_ARG
+ * 3 - print Exit and NR_ARG
+ * @param exit_code is the exit status
+ * sent to free_minishell function or Update data->status
+ * *************************************************/
+int	safe_exit(t_data *data, t_bintree *node, int exit_code, int print_code)
+{
+	int	has_pipe;
+
+	has_pipe = 0;
+	if (print_code == 1 || print_code == 3)
+	{
+		if (node->cmd->rdir == NULL)
+			ft_printf(node->stdfd[OUT], "exit\n");
+	}
+	if (print_code == 2 || print_code == 3)
+		ft_printf(2, NR_ARG, node->cmd->args[1]);
+	has_pipe = input_has_pipe(data->tree);
+	if (!has_pipe)
+		free_minishell(data, exit_code);
+	return (exit_code);
+}
+
+int	exit_number(t_data *data, t_bintree *node)
 {
 	int			code;
 	int			error;
 	long long	number;
 
 	error = 0;
-	ft_printf(1, "exit\n");
+	if (node->cmd->rdir->type != R_OUT)
+		ft_printf(node->stdfd[OUT], "exit\n");
 	number = ft_atoller(node->cmd->args[1], &error);
 	code = format_exit_code(number);
 	if (error)
 	{
-		ft_printf(2, NR_ARG, node->cmd->args[1]);
-		free_minishell(data, 2);
+		safe_exit(data, node, 2, 2);
+		return (2);
 	}
-	free_minishell(data, code);
+	safe_exit(data, node, code, 0);
+	return (code);
 }
 
 /****************************************************
@@ -70,33 +101,21 @@ void	exit_number(t_data *data, t_bintree *node)
 int	exit_minishell(t_bintree *node, t_data *data)
 {
 	int			error;
-	
+
 	error = 0;
 	if (!node->cmd->args[1])
-	{
-		ft_printf(1, "exit\n");
-		free_minishell(data, 0);
-	}
+		return (safe_exit(data, node, 0, 1));
 	if (ft_isnumber(node->cmd->args[1]) && !node->cmd->args[2])
-	{
-		exit_number(data, node);
-	}
+		return (exit_number(data, node));
 	else if (ft_isnumber(node->cmd->args[1]) && node->cmd->args[2])
 	{
 		ft_atoller(node->cmd->args[1], &error);
-		if(error)
-		{
-			ft_printf(2, NR_ARG, node->cmd->args[1]);
-			free_minishell(data, 2);
-		}
+		if (error)
+			return (safe_exit(data, node, 2, 1));
 		ft_printf(2, TM_ARG, "exit");
 		return (1);
 	}
 	else
-	{
-		ft_printf(1, "exit\n");
-		ft_printf(2, NR_ARG, node->cmd->args[1]);
-		free_minishell(data, 2);
-	}
+		return (safe_exit(data, node, 2, 3));
 	return (1);
 }

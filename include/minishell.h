@@ -134,6 +134,7 @@ int			ft_issep(char c);
 int			ft_isquote(char c);
 int			is_space(char c);
 int			is_all_space(char *str);
+int			input_has_pipe(t_bintree *tree);
 /***********SIGNAL***************/
 //signals.c
 int			register_signals(void);

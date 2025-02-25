@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:13:53 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 17:12:20 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/25 19:38:38 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,45 +113,24 @@ char	*catch_expand(t_data *data, char *str)
 void	expand_str(t_data *data, char **str)
 {
 	char	*new_str;
-	char	*value;
 	int		i;
-	int		flag_free;
 	int		size;
-	int		quoted;
-	int		j;
 
-	quoted = -1;
 	new_str = *str;
 	while (*new_str)
 	{
-		flag_free = 0;
 		i = find_expand(new_str);
-		j = -1;
-		while (i>0 && ++j< i)
-		{
-			if (new_str[j] == '\"' )
-				quoted *= -1;
-		}
-		if (i == -1)
+		if (i == -1 || is_space(new_str[i + 1]) || !new_str[i + 1])
 			return ;
-		if (is_space(new_str[i + 1]) || !new_str[i + 1])
-			return ;
-		if ((new_str[i + 1] == '\'' || new_str[i + 1 ] == '\"') /*&& quoted < 0*/)
+		if ((new_str[i + 1] == '\'' || new_str[i + 1] == '\"'))
 		{
 			size = ft_strlen(new_str);
 			new_str[i] = '\0';
-			ft_strlcat(new_str,new_str + i + 1, size);
-		 	/* return ; */
+			ft_strlcat(new_str, new_str + i + 1, size);
 		}
 		else
 		{
-		value = catch_expand(data, &new_str[i + 1]);
-		if (new_str[i + 1] == '?')
-			flag_free = 1;
-		i = insert_expand(str, i + 1, value);
-		new_str = *str;
-		if (flag_free)
-			free (value);
+			new_str = return_expand(data, &new_str[i + 1], str, &i);
 		}
 	}
 }

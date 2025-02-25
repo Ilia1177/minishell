@@ -25,13 +25,10 @@ void	is_neg(const char *nptr, int64_t *sign, int64_t *neg)
 {
 	*neg = 0;
 	*sign = 1;
-	if (*nptr == '-' || *nptr == '+')
+	if (*nptr == '-')
 	{
-		if (*nptr == '-')
-		{
-			*sign = -1;
-			*neg = 1;
-		}
+		*sign = -1;
+		*neg = 1;
 	}
 }
 
@@ -47,7 +44,7 @@ int64_t	ft_atoller(const char *nptr, int *error)
 	while (*nptr && ft_isspace(*nptr))
 		nptr++;
 	is_neg(nptr, &sign, &neg);
-	if (neg)
+	if (neg || *nptr == '+')
 		nptr++;
 	while (*nptr && ft_isdigit(*nptr))
 	{
