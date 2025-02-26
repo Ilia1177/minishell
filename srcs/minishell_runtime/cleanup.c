@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 19:09:24 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/26 11:31:17 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	free_minishell(t_data *data, int exit_code)
 		ft_printf(2, "free_minishell with code of exit: %d\n", exit_code);
 	free(data->user_input);
 	data->user_input = NULL;
-	close_fd_tree(data->tree);
+	//close_fd_tree(data->tree);
 	free_tree(data->tree);
 	data->tree = NULL;
 	free_tabstr(data->paths);
