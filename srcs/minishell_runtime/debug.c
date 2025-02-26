@@ -43,7 +43,8 @@ void	print_rdir(t_token *token, t_data *data)
 	ft_printf(2, "token %s redir :", token->input);
 	while (token->cmd->rdir[i].name)
 	{
-		ft_printf(2, "name ='%s' type ='%d'\n", token->cmd->rdir[i].name, token->cmd->rdir[i].type);
+		ft_printf(2, "name ='%s' type ='%d'\n",
+			token->cmd->rdir[i].name, token->cmd->rdir[i].type);
 		i++;
 	}
 	ft_printf(2, "\n");
@@ -59,7 +60,8 @@ void	print_list(t_token *list, t_data *data)
 	i = 0;
 	while (list)
 	{
-		ft_printf(2, "TOKEN nº%d:input = '%s',type = %d", i++, list->input, list->type);
+		ft_printf(2, "TOKEN nº%d:input = '%s',type = %d", i++,
+			list->input, list->type);
 		if (list->type == CMD)
 		{
 			ft_printf (2, ", args = ");
@@ -68,7 +70,6 @@ void	print_list(t_token *list, t_data *data)
 		}
 		else
 			printf("\n");
-		/* printf("in_rdir = %6s, out_rdir = %6s, append = %6s, heredoc = %6s\n\n", list->cmd->in_rdir, list->cmd->out_rdir, list->cmd->append, list->cmd->heredoc); */
 		list = list->next;
 	}
 }

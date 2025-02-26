@@ -15,7 +15,8 @@ RESET = \033[0;39m
 CYAN = \e[5;36m
 COLOR = \e[38;5;206m
 
-NAME = bin/minishell
+NAME 		= bin/minishell
+NAME_BONUS 	= bin/minishell_bonus
 
 OS := $(shell uname)
 
@@ -90,12 +91,17 @@ msg				:
 
 all				: $(NAME) 
 
+bonus			: $(NAME_BONUS)
 
 $(OBJS_DIR)/%.o	: $(SRCS_DIR)/%.c 
 	@mkdir -p $(dir $@)
 	@$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
 $(NAME)			:  $(OBJS) $(LIBFT)
+	@mkdir -p bin
+	@$(CC) $(C_FLAGS) $(INCLUDE) $^ $(RLLIB) -o $@
+
+$(NAME_BONUS)			:  $(OBJS) $(LIBFT)
 	@mkdir -p bin
 	@$(CC) $(C_FLAGS) $(INCLUDE) $^ $(RLLIB) -o $@
 

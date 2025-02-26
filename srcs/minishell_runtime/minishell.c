@@ -56,7 +56,7 @@ int	run_shell(t_data *data)
 			cpy = data->token_list;
 			print_list(data->token_list, data);
 			data->tree = build_tree(&cpy, CMD);
-			print_tree(data->tree, 0, 0, data); // print the tree for debug
+			print_tree(data->tree, 0, 0, data);
 			data->status = execute_tree(data);
 		}
 		free_minishell(data, -1);
