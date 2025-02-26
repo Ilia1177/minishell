@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 21:16:03 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/26 21:16:08 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 21:23:54 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	close_fd(t_bintree *node)
 	}
 }
 
-void close_fd_tree(t_bintree *node)
+void	close_fd_tree(t_bintree *node)
 {
 	if (node->left)
 		close_fd_tree(node->left);

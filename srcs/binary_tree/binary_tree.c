@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/26 21:16:18 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 21:23:45 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,12 @@ t_bintree	*build_tree(t_token **head, int priority)
 	t_bintree	*new_root;
 	t_bintree	*old_root;
 
-	ft_printf(2, "build_tree with head: %s\n", (*head)->input);
 	curr = *head;
 	if (!curr)
 		return (NULL);
 	while (curr)
 	{
-		if(handle_parenthesis(&curr, &new_root, &old_root))
+		if (handle_parenthesis(&curr, &new_root, &old_root))
 			break ;
 		else if (curr->type == PIPE && priority == PIPE)
 			break ;
@@ -97,7 +96,6 @@ t_bintree	*build_tree(t_token **head, int priority)
 			new_root = make_operator(&curr, old_root);
 		old_root = new_root;
 	}
-	ft_printf(2, "return root: %s\n", new_root->input);
 	*head = curr;
 	return (new_root);
 }

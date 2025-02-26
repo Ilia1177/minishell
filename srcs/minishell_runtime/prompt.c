@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 18:55:34 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/26 21:08:04 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:25:55 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*listen_to_user(char *prompt)
 {
 	char	*input;
 
-	/* rl_outstream = stderr; */
+	rl_outstream = stderr;
 	input = readline(prompt);
 	if (!input)
 		return (NULL);
