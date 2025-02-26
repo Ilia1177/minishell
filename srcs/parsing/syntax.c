@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 19:51:50 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/25 21:20:05 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/26 18:58:31 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,7 @@ int	catch_syntax_error(t_token *prev, t_token *curr)
 	int	error;
 
 	error = 0;
-	if (!curr)
-		return (-1);
-	else if (!prev)
+	if (!prev && curr)
 	{
 		if (curr->type != CMD && ft_strcmp(curr->input, "("))
 			error = 1;
