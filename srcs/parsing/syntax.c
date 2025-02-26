@@ -13,7 +13,7 @@
 #include "minishell.h"
 #include "parsing.h"
 
-int	parenthesis_syntax(t_token *prev, t_token *curr)
+static int	parenthesis_syntax(t_token *prev, t_token *curr)
 {
 	int	error;
 
@@ -40,7 +40,7 @@ int	parenthesis_syntax(t_token *prev, t_token *curr)
 	return (error);
 }
 
-int	operator_syntax(t_token *prev)
+static int	operator_syntax(t_token *prev)
 {
 	int	error;
 
@@ -54,7 +54,7 @@ int	operator_syntax(t_token *prev)
 	return (error);
 }
 
-int	rdir_syntax(t_token *curr)
+static int	rdir_syntax(t_token *curr)
 {
 	int		i;
 	char	*str;
@@ -78,7 +78,7 @@ int	rdir_syntax(t_token *curr)
 	return (error);
 }
 
-int	cmd_syntax(t_token *prev, t_token *curr)
+static int	cmd_syntax(t_token *prev, t_token *curr)
 {
 	int	error;
 

@@ -28,11 +28,7 @@ void		split_args(t_token *token, t_data *data);
 
 /*****************SYNTAX*****************/
 //syntax.c
-int			parenthesis_syntax(t_token *prev, t_token *curr);
 int			catch_syntax_error(t_token *prev, t_token *curr);
-int			syntax_error(char *str);
-int			open_parenthesis(char *str);
-int			check_closing_quote(char *str);
 
 //syntax_utils.c
 int			check_closing_quote(char *str);

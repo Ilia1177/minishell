@@ -77,7 +77,7 @@ static void	wild_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 	char	**patterns;
 	int		i;
 
-	i = 0;
+	i = -1;
 	while (token->cmd->args[++i])
 	{
 		if (!is_wildcard(token->cmd->args[i]))

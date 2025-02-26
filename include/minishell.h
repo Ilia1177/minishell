@@ -150,8 +150,8 @@ int			listen_to_signal(t_data *data);
 void		free_elem(void *elem, t_mem_type mem);
 void		free_tabstr(char **tabstr);
 void		free_minishell(t_data *data, int exit_code);
-void		free_tree(t_bintree *root);
-void		free_leaf(t_bintree *leaf);
+//void		free_tree(t_bintree *root);
+//void		free_leaf(t_bintree *leaf);
 // void		close_all_fd(t_bintree *root);
 
 //cleanup_supp.c
