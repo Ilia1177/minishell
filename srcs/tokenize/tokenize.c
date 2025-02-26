@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/26 18:07:06 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 18:19:46 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static t_token	*build_tokenlist(char **tokens)
 		if (!curr_token)
 			return (NULL);
 	}
-	if (curr_token->type != CMD)
+	if (curr_token && curr_token->type != CMD)
 	{
 		ft_lstclear_token(&head, &free);
 		ft_printf(2, SYNTERR);
