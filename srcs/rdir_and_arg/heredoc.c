@@ -75,13 +75,16 @@ static int	check_lim(char **old_lim)
 {
 	int		quoted;
 	char	*lim;
+	char	*tmp;
 
 	lim = *old_lim;
 	quoted = 0;
 	if (*lim == '\"' || *lim == '\'')
 	{
 		quoted = 1;
-		lim = remove_quote(lim);
+		tmp = remove_quote(lim);
+		free(lim);
+		lim = tmp;
 	}
 	*old_lim = lim;
 	return (quoted);
@@ -106,7 +109,7 @@ char	*get_here_doc(char *lim, t_data *data)
 		return (NULL);
 	quoted = check_lim(&lim);
 	str = listen_to_user("> ");
-	while (ft_strcmp(str, lim))
+	while (str && ft_strcmp(str, lim))
 	{
 		if (!quoted)
 			expand_str(data, &str);
