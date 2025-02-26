@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 18:55:34 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 18:57:04 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/26 10:14:50 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ char	*listen_to_user(char *prompt)
 char	*get_user_input(t_data *data)
 {
 	data->user_input = listen_to_user(data->prompt);
+	if (data->flag)
+		ft_printf(2, "get_user_input: out of readline\n");
 	if (!data->user_input)
 	{
 		if (data->flag)

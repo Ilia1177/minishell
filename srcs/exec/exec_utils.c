@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/25 22:06:59 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 11:16:23 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,17 +149,18 @@ int	build_cmd(t_bintree *node, t_data *data)
 		cmd_name = ft_strjoin("./", cmd_name);
 		free(node->cmd->args[0]);
 		status = find_cmd_in_pwd(cmd_name, node, data);
+		if (!status)
+			free(cmd_name);
 	}
-	else if (!ft_strncmp("/", cmd_name, 1) && !access(cmd_name, X_OK))
-	{
-		node->cmd->args[0] = cmd_name;
+	else if (ft_strchr(cmd_name, '/') && !access(cmd_name, X_OK))
 		status = 0;
-	}
 	else 
 	{
 		status = find_cmd_in_paths(cmd_name, node, data);
 		if (status && !ft_strncmp("./", cmd_name, 2))
 			status = find_cmd_in_pwd(cmd_name, node, data);
+		if (!status)
+			free(cmd_name);
 	}
 	if (status == 126 && !is_directory(node->cmd->args[0]))
 		perror("msh");
