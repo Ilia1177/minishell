@@ -25,6 +25,7 @@ static char	*random_name(int nb_char)
 	int		fd;
 	char	buf[1];
 	char	*str;
+	char	*name;
 
 	str = malloc(sizeof(char) * (nb_char + 1));
 	fd = open("/dev/urandom", O_RDONLY);
@@ -40,7 +41,9 @@ static char	*random_name(int nb_char)
 	}
 	str[nb_char] = '\0';
 	close(fd);
-	return (str);
+	name = ft_strjoin("/tmp/sh-thd-", str);
+	free(str);
+	return (name);
 }
 
 /****************************************************
@@ -98,7 +101,6 @@ char	*get_here_doc(char *lim, t_data *data)
 	int		quoted;
 
 	name = random_name(10);
-	name = ft_strjoin("/tmp/sh-thd-", name);
 	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (NULL);
@@ -109,6 +111,7 @@ char	*get_here_doc(char *lim, t_data *data)
 		if (!quoted)
 			expand_str(data, &str);
 		ft_printf(fd, "%s\n", str);
+		free(str);
 		str = NULL;
 		str = listen_to_user("> ");
 	}
