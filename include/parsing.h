@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 17:46:14 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/25 21:29:54 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:07:18 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ char		*remove_quote(char *str);
 void		unquote_rdir(t_token *token, t_data *data);
 void		unquote(t_token *token, t_data *data);
 void		get_redir(t_token *token, t_data *data);
-//void		type_token(t_token *token, t_data *data);
 void		get_expand(t_token *token, t_data *data);
-int			is_all_space(char *str);
 
 #endif

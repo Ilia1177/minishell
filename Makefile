@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/02/26 21:17:27 by npolack          ###   ########.fr        #
+#    Updated: 2025/02/26 21:18:46 by npolack          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,9 +47,11 @@ SRCS		=	binary_tree/binary_tree.c\
 				exec/exec_tree.c\
 				exec/exec_utils.c\
 				exec/exec_utils_supp.c\
+				exec/exec_utils_supp2.c\
 				minishell_runtime/cleanup.c\
 				minishell_runtime/cleanup_supp.c\
 				minishell_runtime/debug.c\
+				minishell_runtime/minishell.c\
 				minishell_runtime/prompt.c\
 				minishell_runtime/signals.c\
 				minishell_runtime/utils.c\
@@ -73,13 +75,6 @@ SRCS		=	binary_tree/binary_tree.c\
 
 SRCS		:= $(addprefix $(SRCS_DIR)/, $(SRCS))
 
-MINISHELL_SRC := $(SRCS_DIR)/minishell_runtime/minishell.c
-MINISHELL_JM_SRC := $(SRCS_DIR)/minishell-jm.c
-MINISHELL_NIL_SRC := $(SRCS_DIR)/minishell-nil.c
-MINISHELL_OBJ := $(OBJS_DIR)/minishell.o
-MINISHELL_JM_OBJ := $(OBJS_DIR)/minishell-jm.o
-MINISHELL_NIL_OBJ := $(OBJS_DIR)/minishell-nil.o
-
 OBJS		= $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
 DEPS = $(OBJS:%.o=%.d)
 
@@ -95,32 +90,12 @@ msg				:
 
 all				: $(NAME) 
 
-jm: $(OBJS) $(MINISHELL_JM_OBJ) $(LIBFT)
-	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) $^ $(RLLIB) -o $@
-	@echo "Compiled with minishell-jm.c"
-
-nil:fclean $(OBJS) $(MINISHELL_NIL_OBJ) $(LIBFT)
-	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) $^ $(RLLIB) -o $@
-	@echo "Compiled with minishell-nil.c"
 
 $(OBJS_DIR)/%.o	: $(SRCS_DIR)/%.c 
 	@mkdir -p $(dir $@)
 	@$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
 
-$(MINISHELL_OBJ) : $(MINISHELL_SRC)
-	@mkdir -p $(OBJS_DIR)
-	@$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
-
-$(MINISHELL_JM_OBJ) : $(MINISHELL_JM_SRC)
-	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
-
-$(MINISHELL_NIL_OBJ) : $(MINISHELL_NIL_SRC)
-	@mkdir -p $(OBJS_DIR)
-	$(CC) $(C_FLAGS) $(INCLUDE) -MMD -c $< -o $@
-
-$(NAME)			:  $(OBJS) $(MINISHELL_OBJ) $(LIBFT)
+$(NAME)			:  $(OBJS) $(LIBFT)
 	@mkdir -p bin
 	@$(CC) $(C_FLAGS) $(INCLUDE) $^ $(RLLIB) -o $@
 
