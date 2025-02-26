@@ -13,7 +13,7 @@
 #include "minishell.h"
 #include "exec.h"
 
-static int	get_child_status(t_data *data)
+int	get_child_status(t_data *data)
 {
 	int	save_status;
 	int	status;
@@ -82,12 +82,6 @@ int	make_pipe(t_bintree *node, t_data *data)
 	}
 	close_fd(node);
 	return (exit_status);
-}
-
-void	connect_stdio(t_bintree *a, t_bintree *b)
-{
-	b->stdfd[IN] = dup(a->stdfd[IN]);
-	b->stdfd[OUT] = dup(a->stdfd[OUT]);
 }
 
 int	make_operation(t_bintree *node, t_data *data)
