@@ -46,7 +46,7 @@ void	sort_list_dir(t_list **list)
 	}
 }
 
-int	only_wild(char *str)
+static int	only_wild(char *str)
 {
 	if (!str)
 		return (0);
@@ -59,7 +59,7 @@ int	only_wild(char *str)
 	return (1);
 }
 
-int	is_wildcard(char *str)
+static int	is_wildcard(char *str)
 {
 	if (!str || !ft_strchr(str, '*') || !ft_strcmp(str, "*."))
 		return (0);
@@ -72,7 +72,7 @@ int	is_wildcard(char *str)
  * @param lad - list_all_dir
  * @param ld - list_dir
  * *************************************************/
-void	wildcards_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
+static void	wild_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 {
 	char	**patterns;
 	int		i;
@@ -118,7 +118,7 @@ void	wildcards(t_token *token, t_data *data)
 	list_dir = NULL;
 	build_list_all_dir(&list_all_dir);
 	list_dir = build_list_dir(list_all_dir);
-	wildcards_arg_loop(token, match_files_lst, list_all_dir, list_dir);
+	wild_arg_loop(token, match_files_lst, list_all_dir, list_dir);
 	ft_lstclear(&match_files_lst, free);
 	ft_lstclear(&list_dir, free);
 	ft_lstclear(&list_all_dir, free);

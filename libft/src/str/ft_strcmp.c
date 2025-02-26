@@ -31,5 +31,6 @@ int	ft_strlowercmp(const char *s1, const char *s2)
 	while ((unsigned char)ft_tolower(s1[i]) && (unsigned char)ft_tolower(s2[i])
 		&& (unsigned char)ft_tolower(s1[i]) == (unsigned char)ft_tolower(s2[i]))
 		i++;
-	return ((unsigned char)ft_tolower(s1[i]) - (unsigned char)ft_tolower(s2[i]));
+	return ((unsigned char)ft_tolower(s1[i])
+		- (unsigned char)ft_tolower(s2[i]));
 }

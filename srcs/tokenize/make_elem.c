@@ -25,7 +25,7 @@ t_cmd	*make_cmd(void)
 	return (cmd);
 }
 
-t_type	get_type(char *str)
+static t_type	get_type(char *str)
 {
 	t_type	type;
 

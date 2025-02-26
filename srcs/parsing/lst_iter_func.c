@@ -72,6 +72,9 @@ void	get_expand(t_token *token, t_data *data)
 
 // working
 // creat an array of rdir null terminated
+//token->input = ft_strtrim(str, " ");
+//// to be improved (or not) ?? (if redir is in the middle of the args)
+//token->input = ft_calloc(1, 1); // if token->input == NULL --> SEGFAULT !!
 void	get_redir(t_token *token, t_data *data)
 {
 	char	*str;
@@ -90,30 +93,30 @@ void	get_redir(t_token *token, t_data *data)
 		return ;
 	seek_rdir(str, &rdir, data);
 	if (!is_all_space(str))
-		token->input = ft_strtrim(str, " "); // to be improved (or not) ?? (if redir is in the middle of the args)
+		token->input = ft_strtrim(str, " ");
 	else
-		token->input = ft_calloc(1, 1); // if token->input == NULL --> SEGFAULT !!
+		token->input = ft_calloc(1, 1);
 	free(str);
 	rdir[nb_rdir].name = NULL;
 	token->cmd->rdir = rdir;
 }
 
-void	type_token(t_token *token, t_data *data)
-{
-	(void)data;
-	if (!ft_strcmp(token->input, "|"))
-		token->type = PIPE;
-	else if (!ft_strcmp(token->input, "||"))
-		token->type = OPERATOR;
-	else if (!ft_strcmp(token->input, "&&"))
-		token->type = OPERATOR;
-	else if (!ft_strcmp(token->input, "("))
-		token->type = OPERATOR;
-	else if (!ft_strcmp(token->input, ")"))
-		token->type = OPERATOR;
-	else
-	{
-		token->type = CMD;
-		token->cmd = make_cmd();
-	}
-}
+/* void	type_token(t_token *token, t_data *data) */
+/* { */
+/* 	(void)data; */
+/* 	if (!ft_strcmp(token->input, "|")) */
+/* 		token->type = PIPE; */
+/* 	else if (!ft_strcmp(token->input, "||")) */
+/* 		token->type = OPERATOR; */
+/* 	else if (!ft_strcmp(token->input, "&&")) */
+/* 		token->type = OPERATOR; */
+/* 	else if (!ft_strcmp(token->input, "(")) */
+/* 		token->type = OPERATOR; */
+/* 	else if (!ft_strcmp(token->input, ")")) */
+/* 		token->type = OPERATOR; */
+/* 	else */
+/* 	{ */
+/* 		token->type = CMD; */
+/* 		token->cmd = make_cmd(); */
+/* 	} */
+/* } */

@@ -19,9 +19,7 @@
 
 /***********EXPAND****************/
 //expand.c
-int		expand_size(char *str, int pos);
 int		insert_expand(char **input, int pos, char *exp);
-int		find_expand(char *str);
 char	*catch_expand(t_data *data, char *str);
 void	expand_str(t_data *data, char **str);
 
@@ -31,14 +29,12 @@ char	*return_expand(t_data *data, char *new_str, char **str, int *i);
 /***********HEREDOC****************/
 //heredoc.c
 char	*get_here_doc(char *lim, t_data *data);
-char	*random_name(int nb_char);
 int		catch_heredoc(t_rdir *rdir, char *str, t_data *data, int num_rdir);
 
 /***********RDIR****************/
 //redir.c
 int		ft_nb_rdir(char *str);
 int		true_wordlen(char *str);
-int		catch_rdir(t_rdir *rdir, char *str, t_type_rdir type, int num_rdir);
 void	seek_rdir(char *str, t_rdir **s_rdir, t_data *data);
 
 /***********WILDCARDS****************/

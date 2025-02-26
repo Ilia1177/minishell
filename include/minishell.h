@@ -89,10 +89,13 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+/*************************
+ * @param stdfd[2] - in 0 - out 1 - tmp 2
+**************************/
 typedef struct s_bintree
 {
-	int					stdfd[2]; // standar input(0)/output(1)/tmp_fd(2)
-	int					pipefd[2]; // pipefd
+	int					stdfd[2];
+	int					pipefd[2];
 	t_cmd				*cmd;
 	char				*input;
 	t_type				type;
@@ -135,6 +138,7 @@ int			ft_isquote(char c);
 int			is_space(char c);
 int			is_all_space(char *str);
 int			input_has_pipe(t_bintree *tree);
+
 /***********SIGNAL***************/
 //signals.c
 int			register_signals(void);

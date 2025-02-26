@@ -24,7 +24,6 @@ int			arg_len(char *str);
 //lst_utils.c
 void		ft_lstdelone_token(t_token *lst, void (*del)(void*));
 void		ft_lstclear_token(t_token **lst, void (*del)(void*));
-void		iter_split_args(char *input, t_token **iter_token, int nb_args);
 void		split_args(t_token *token, t_data *data);
 
 /*****************SYNTAX*****************/
@@ -54,7 +53,7 @@ char		*remove_quote(char *str);
 void		unquote_rdir(t_token *token, t_data *data);
 void		unquote(t_token *token, t_data *data);
 void		get_redir(t_token *token, t_data *data);
-void		type_token(t_token *token, t_data *data);
+//void		type_token(t_token *token, t_data *data);
 void		get_expand(t_token *token, t_data *data);
 int			is_all_space(char *str);
 
