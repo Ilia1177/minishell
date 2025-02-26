@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/02/25 19:40:42 by jhervoch         ###   ########.fr        #
+#    Updated: 2025/02/26 21:17:27 by npolack          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,6 +36,7 @@ OBJS_DIR	= objs
 C_FLAGS		= -Wall -Wextra -Werror -g
 
 SRCS		=	binary_tree/binary_tree.c\
+				binary_tree/binary_tree_fd.c\
 				builtins/builtin_utils.c\
 				builtins/change_dir.c\
 				builtins/echo.c\
