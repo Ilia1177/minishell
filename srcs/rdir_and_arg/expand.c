@@ -13,7 +13,7 @@
 #include "minishell.h"
 #include "rdir_and_arg.h"
 
-int	expand_size(char *str, int pos)
+static int	expand_size(char *str, int pos)
 {
 	int		var_len;
 
@@ -57,7 +57,7 @@ int	insert_expand(char **input, int pos, char *exp)
  * seek the $ in *str and return his index
  * return -1 if not found
  * *****************************************************/
-int	find_expand(char *str)
+static int	find_expand(char *str)
 {
 	int	i;
 	int	quoted;

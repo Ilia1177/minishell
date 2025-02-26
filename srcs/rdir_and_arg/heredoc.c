@@ -19,7 +19,7 @@
  * return a char str generate with dev/urandom
  * cast in char the buffer to build the string
  * *************************************************/
-char	*random_name(int nb_char)
+static char	*random_name(int nb_char)
 {
 	int		i;
 	int		fd;
@@ -68,7 +68,7 @@ int	catch_heredoc(t_rdir *rdir, char *str, t_data *data, int num_rdir)
 	return (len + i);
 }
 
-int	check_lim(char **old_lim)
+static int	check_lim(char **old_lim)
 {
 	int		quoted;
 	char	*lim;

@@ -56,6 +56,28 @@ int	true_wordlen(char *str)
 	return (len);
 }
 
+// working true_wordlen to be replaced
+static int	catch_rdir(t_rdir *rdir, char *str, t_type_rdir type, int num_rdir)
+{
+	char	*name;
+	int		i;
+	int		len;
+
+	i = 1;
+	if (type == APPEND)
+		i++;
+	while (is_space(str[i]))
+		i++;
+	len = true_wordlen(str + i);
+	name = ft_substr(str, i, len);
+	if (!name)
+		return (0);
+	rdir[num_rdir].name = name;
+	rdir[num_rdir].type = type;
+	ft_memset(str, ' ', len + i);
+	return (len + i);
+}
+
 void	seek_rdir(char *str, t_rdir **s_rdir, t_data *data)
 {
 	int		i;
@@ -78,26 +100,4 @@ void	seek_rdir(char *str, t_rdir **s_rdir, t_data *data)
 		else if (*str)
 			str++;
 	}
-}
-
-// working true_wordlen to be replaced
-int	catch_rdir(t_rdir *rdir, char *str, t_type_rdir type, int num_rdir)
-{
-	char	*name;
-	int		i;
-	int		len;
-
-	i = 1;
-	if (type == APPEND)
-		i++;
-	while (is_space(str[i]))
-		i++;
-	len = true_wordlen(str + i);
-	name = ft_substr(str, i, len);
-	if (!name)
-		return (0);
-	rdir[num_rdir].name = name;
-	rdir[num_rdir].type = type;
-	ft_memset(str, ' ', len + i);
-	return (len + i);
 }

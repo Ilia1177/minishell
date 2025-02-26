@@ -13,17 +13,42 @@
 #include "minishell.h"
 #include "parsing.h"
 
+// free each node of the tree;
+static void	free_leaf(t_bintree *leaf)
+{
+	if (!leaf)
+		return ;
+	if (leaf->input)
+		free(leaf->input);
+	if (leaf->cmd)
+		free_cmd(leaf->cmd);
+	free(leaf);
+}
+
+// free the all tree
+static void	free_tree(t_bintree *root)
+{
+	if (!root)
+		return ;
+	if (root->left)
+		free_tree(root->left);
+	if (root->right)
+		free_tree(root->right);
+	free_leaf(root);
+	return ;
+}
+
 void	free_minishell(t_data *data, int exit_code)
 {
 	if (data->flag)
 		ft_printf(2, "free_minishell with code of exit: %d\n", exit_code);
 	free(data->user_input);
 	data->user_input = NULL;
+	close_fd_tree(data->tree);
 	free_tree(data->tree);
 	data->tree = NULL;
 	free_tabstr(data->paths);
 	data->paths = NULL;
-	//close_fd_tree(data->tree);
 	if (exit_code >= 0)
 	{
 		free_tabstr(data->envp);
@@ -48,44 +73,19 @@ void	free_tabstr(char **tabstr)
 	free (tabstr);
 }
 
-void	free_elem(void *elem, t_mem_type mem)
-{
-	t_token	*lst;
-
-	if (!elem)
-		return ;
-	lst = elem;
-	if (mem == PTR)
-		free(elem);
-	else if (mem == D_TAB)
-	{
-		free_tabstr(elem);
-	}
-	else if (mem == LST)
-		ft_lstclear_token(&lst, &free);
-}
-
-// free each node of the tree;
-void	free_leaf(t_bintree *leaf)
-{
-	if (!leaf)
-		return ;
-	if (leaf->input)
-		free(leaf->input);
-	if (leaf->cmd)
-		free_cmd(leaf->cmd);
-	free(leaf);
-}
-
-// free the all tree
-void	free_tree(t_bintree *root)
-{
-	if (!root)
-		return ;
-	if (root->left)
-		free_tree(root->left);
-	if (root->right)
-		free_tree(root->right);
-	free_leaf(root);
-	return ;
-}
+/* void	free_elem(void *elem, t_mem_type mem) */
+/* { */
+/* 	t_token	*lst; */
+/**/
+/* 	if (!elem) */
+/* 		return ; */
+/* 	lst = elem; */
+/* 	if (mem == PTR) */
+/* 		free(elem); */
+/* 	else if (mem == D_TAB) */
+/* 	{ */
+/* 		free_tabstr(elem); */
+/* 	} */
+/* 	else if (mem == LST) */
+/* 		ft_lstclear_token(&lst, &free); */
+/* } */

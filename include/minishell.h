@@ -89,10 +89,13 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+/*************************
+ * @param stdfd[2] - in 0 - out 1 - tmp 2
+**************************/
 typedef struct s_bintree
 {
-	int					stdfd[2]; // standar input(0)/output(1)/tmp_fd(2)
-	int					pipefd[2]; // pipefd
+	int					stdfd[2];
+	int					pipefd[2];
 	t_cmd				*cmd;
 	char				*input;
 	t_type				type;
@@ -135,6 +138,7 @@ int			ft_isquote(char c);
 int			is_space(char c);
 int			is_all_space(char *str);
 int			input_has_pipe(t_bintree *tree);
+
 /***********SIGNAL***************/
 //signals.c
 int			register_signals(void);
@@ -146,8 +150,8 @@ int			listen_to_signal(t_data *data);
 void		free_elem(void *elem, t_mem_type mem);
 void		free_tabstr(char **tabstr);
 void		free_minishell(t_data *data, int exit_code);
-void		free_tree(t_bintree *root);
-void		free_leaf(t_bintree *leaf);
+//void		free_tree(t_bintree *root);
+//void		free_leaf(t_bintree *leaf);
 // void		close_all_fd(t_bintree *root);
 
 //cleanup_supp.c

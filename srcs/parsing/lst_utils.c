@@ -42,7 +42,7 @@ void	ft_lstclear_token(t_token **lst, void (*del)(void*))
 	*lst = NULL;
 }
 
-void	iter_split_args(char *input, t_token **iter_token, int nb_args)
+static void	iter_split_args(char *input, t_token **iter_token, int nb_args)
 {
 	int		i;
 	t_token	*token;

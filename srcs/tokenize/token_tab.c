@@ -14,7 +14,7 @@
 #include "tokenize.h"
 #include "parsing.h"
 
-int	ft_nbword(const char *s)
+static int	ft_nbword(const char *s)
 {
 	int	i;
 	int	nb_word;
@@ -44,7 +44,7 @@ static size_t	ft_wordlen(const char *s)
 	return (len);
 }
 
-char	*build_input(const char *s)
+static char	*build_input(const char *s)
 {
 	char	*tmp;
 	char	*str;

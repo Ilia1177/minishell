@@ -15,7 +15,7 @@
 #include "tokenize.h"
 #include "parsing.h"
 
-t_token	*add_back_tokenlist(t_token **head, t_token **lst, char *tokens)
+static t_token	*add_back_tokenlist(t_token **head, t_token **lst, char *tokens)
 {
 	t_token	*curr_token;
 	t_token	*prev_token;
@@ -34,7 +34,7 @@ t_token	*add_back_tokenlist(t_token **head, t_token **lst, char *tokens)
 	return (curr_token);
 }
 
-t_token	*build_tokenlist(char **tokens)
+static t_token	*build_tokenlist(char **tokens)
 {
 	int		i;
 	t_token	*head;
@@ -53,6 +53,12 @@ t_token	*build_tokenlist(char **tokens)
 	return (head);
 }
 
+/****************************************************
+ * Tokenize the user input
+ * make linked list of token
+ * with several function that iter of this list
+ * like filter
+ * *************************************************/
 int	tokenize(t_data *data)
 {
 	char	**tokens;
