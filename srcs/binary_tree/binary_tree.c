@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/26 21:23:45 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 23:15:40 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,9 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 	}
 	else if (!ft_strcmp(current_token->input, ")"))
 	{
-		current_token = current_token->next;
-		*token = current_token;
+		tmp = current_token;
+		*token = current_token->next;
+		ft_lstdelone_token(tmp, &free);
 		return (-1);
 	}
 	return (0);
