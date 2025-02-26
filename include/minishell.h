@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/26 15:51:55 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 21:13:27 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int			input_has_pipe(t_bintree *tree);
 int			register_signals(void);
 void		handle_signals(int sig, siginfo_t *info, void *ctx);
 int			listen_to_signal(t_data *data);
-int		register_sig2(void);
+int			register_sig2(void);
 
 /***********FREE AND EXIT****************/
 //cleanup.c

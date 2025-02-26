@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 14:45:27 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/26 12:06:43 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 20:52:58 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	free_minishell(t_data *data, int exit_code)
 		ft_printf(2, "free_minishell with code of exit: %d\n", exit_code);
 	free(data->user_input);
 	data->user_input = NULL;
-	//close_fd_tree(data->tree);
 	free_tree(data->tree);
 	data->tree = NULL;
 	free_tabstr(data->paths);
@@ -72,20 +71,3 @@ void	free_tabstr(char **tabstr)
 	free(tabstr[i]);
 	free (tabstr);
 }
-
-/* void	free_elem(void *elem, t_mem_type mem) */
-/* { */
-/* 	t_token	*lst; */
-/**/
-/* 	if (!elem) */
-/* 		return ; */
-/* 	lst = elem; */
-/* 	if (mem == PTR) */
-/* 		free(elem); */
-/* 	else if (mem == D_TAB) */
-/* 	{ */
-/* 		free_tabstr(elem); */
-/* 	} */
-/* 	else if (mem == LST) */
-/* 		ft_lstclear_token(&lst, &free); */
-/* } */

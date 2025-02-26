@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/26 16:31:44 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 20:07:09 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,106 +14,14 @@
 #include "rdir_and_arg.h"
 #include "exec.h"
 
-t_cmd	*cmddup(t_cmd *cmd)
-{
-	t_cmd	*new_cmd;
-	t_rdir	*new_rdir;
-	int		i;
-
-	new_cmd = malloc(sizeof(t_cmd));
-	new_cmd->args = tab_dup(cmd->args);
-	i = 0;
-	if (cmd->rdir)
-	{
-		while (cmd->rdir[i].name)
-			i++;
-		new_rdir = malloc(sizeof(t_cmd) * (i + 1));
-		if (!new_rdir)
-			return (NULL);
-		i = 0;
-		while (cmd->rdir[i].name)
-		{
-			new_cmd->rdir[i] = cmd->rdir[i];
-			i++;
-		}
-		new_cmd->rdir[i].name = NULL;
-	}
-	return (new_cmd);
-}
-
-char	**tab_dup(char **tab)
-{
-	char	**new;
-	int		i;
-
-	i = 0;
-	if (!tab)
-		return (NULL);
-	while (tab[i])
-		i++;
-	new = malloc(sizeof(char *) * (i + 1));
-	i = 0;
-	while (tab[i])
-	{
-		new[i] = ft_strdup(tab[i]);
-		i++;
-	}
-	new[i] = NULL;
-	return (new);
-}
-
-int	find_cmd_in_paths(char *str, t_bintree *node, t_data *data)
-{
-	int		i;
-	char	*full_path;
-	char	*cmd;
-	int		status;
-
-	if (data->flag)
-		ft_printf(2, "--> find_cmd_in_paths\n");
-	if (!data->paths || !str)
-		return (127);
-	status = 0;
-	cmd = ft_strjoin("/", str);
-	if (!cmd)
-		return (-1);
-	i = -1;
-	while (data->paths[++i])
-	{
-		full_path = ft_strjoin(data->paths[i], cmd);
-		if (!full_path)
-			break ;
-		if (!access(full_path, F_OK | X_OK))
-		{
-			free(cmd);
-			node->cmd->args[0] = full_path;
-			return (0);
-		}
-		else if (errno == EACCES || is_directory(full_path))
-		{
-			free(cmd);
-			return (126);
-		}
-		else
-			status = 127;
-		free(full_path);
-	}
-	free(cmd);
-	return (status);
-}
-
 int	find_cmd_in_pwd(char *cmd_name, t_bintree *node, t_data *data)
 {
 	char	*tmp;
 	char	*pwd;
 	int		status;
 
-	if (data->flag)
-		ft_printf(2, "--> find_cmd_in_pwd\n");
 	if (!cmd_name || !cmd_name[0])
 		return (-1);
-	if (is_directory(cmd_name))
-		return (126);
 	node->cmd->args[0] = NULL;
 	status = 0;
 	tmp = ft_strjoin(catch_expand(data, "PWD"), "/");
@@ -126,12 +34,44 @@ int	find_cmd_in_pwd(char *cmd_name, t_bintree *node, t_data *data)
 		node->cmd->args[0] = pwd;
 		return (0);
 	}
-	else if (errno == EACCES || is_directory(pwd))
+	else if (errno == EACCES || is_directory(pwd) || is_directory(cmd_name))
 		status = 126;
 	else
 		status = 127;
 	free(pwd);
 	return (status);
+}
+
+static void	print_status(t_bintree *node, char *cmd_name, int status)
+{
+	if (status == 2)
+		ft_printf(2, FAR_MSG, node->cmd->args[0]);
+	else if (errno == ENOENT && ft_strchr(cmd_name, '/'))
+		ft_printf(2, NOENT_MSG, node->cmd->args[0]);
+	else if (status == 127)
+		ft_printf(2, CMDNF_MSG, node->cmd->args[0]);
+	else if (status == 126 && !is_directory(cmd_name))
+		ft_printf(2, PERMD_MSG, node->cmd->args[0]);
+	else if (status == 126)
+		ft_printf(2, ISDIR_MSG, node->cmd->args[0]);
+}
+
+static void	find_cmd(t_bintree *node, t_data *data, char *cmd_name, int *status)
+{
+	if (!data->paths)
+		*status = find_cmd_in_pwd(cmd_name, node, data);
+	else
+		*status = find_cmd_in_paths(cmd_name, node, data);
+}
+
+static void	access_command(char *cmd_name, int *status)
+{
+	if (!access(cmd_name, X_OK | F_OK) && !is_directory(cmd_name))
+		*status = 0;
+	else if (errno == EACCES || is_directory(cmd_name))
+		*status = 126;
+	else
+		*status = 127;
 }
 
 int	build_cmd(t_bintree *node, t_data *data)
@@ -146,34 +86,14 @@ int	build_cmd(t_bintree *node, t_data *data)
 	if (!ft_strcmp(cmd_name, "."))
 		status = 2;
 	else if (!ft_strcmp(cmd_name, ".."))
-		status = 127;	
-	else if (ft_strchr(cmd_name, '/')) 
-	{
-		if (!access(cmd_name, X_OK | F_OK) && !is_directory(cmd_name))
-			status = 0;
-		else if (errno == EACCES || is_directory(cmd_name))
-			status = 126;
-		else
-			status = 127;
-	}
+		status = 127;
+	else if (ft_strchr(cmd_name, '/'))
+		access_command(cmd_name, &status);
 	else
-	{
-		if (!data->paths)
-			status = find_cmd_in_pwd(cmd_name, node, data);
-		else
-			status = find_cmd_in_paths(cmd_name, node, data);
-	}
-	if (status == 2)
-		ft_printf(2, FAR_MSG, node->cmd->args[0]);
-	if (errno == ENOENT && ft_strchr(cmd_name, '/'))
-		ft_printf(2, NOENT_MSG, node->cmd->args[0]);
-	else if (status == 127)
-		ft_printf(2, CMDNF_MSG, node->cmd->args[0]);
-	else if (status == 126 && !is_directory(cmd_name))
-		ft_printf(2, PERMD_MSG, node->cmd->args[0]);
-	else if (status == 126)
-		ft_printf(2, ISDIR_MSG, node->cmd->args[0]);
-	if (!status && !ft_strchr(cmd_name, '/') && ft_strcmp(cmd_name, "..") && ft_strcmp(cmd_name, ".."))
+		find_cmd(node, data, cmd_name, &status);
+	print_status(node, cmd_name, status);
+	if (!status && !ft_strchr(cmd_name, '/')
+		&& ft_strcmp(cmd_name, "..") && ft_strcmp(cmd_name, ".."))
 		free(cmd_name);
 	return (status);
 }

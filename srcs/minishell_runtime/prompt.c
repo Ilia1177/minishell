@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 18:55:34 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/26 17:44:22 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 21:08:04 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*listen_to_user(char *prompt)
 
 char	*get_user_input(t_data *data)
 {
-	char *input;
+	char	*input;
 
 	input = listen_to_user(data->prompt);
 	if (data->flag)
@@ -46,7 +46,8 @@ char	*get_user_input(t_data *data)
 		free_minishell(data, -1);
 		return (NULL);
 	}
-	data->user_input = ft_strtrim(input, "\r\f\v\n\t ");
+	if (!is_all_space(input))
+		data->user_input = ft_strtrim(input, "\r\f\v\n\t ");
 	free(input);
 	return (data->user_input);
 }

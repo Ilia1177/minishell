@@ -14,6 +14,12 @@
 #include "exec.h"
 #include "builtins.h"
 
+void	connect_stdio(t_bintree *a, t_bintree *b)
+{
+	b->stdfd[IN] = dup(a->stdfd[IN]);
+	b->stdfd[OUT] = dup(a->stdfd[OUT]);
+}
+
 static void	child_process(t_bintree *node, t_data *data)
 {
 	dup2(node->stdfd[IN], 0);
