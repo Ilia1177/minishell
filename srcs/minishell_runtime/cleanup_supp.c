@@ -36,7 +36,7 @@ void	free_cmd(t_cmd *cmd)
 	{
 		while (cmd->rdir[++i].name)
 		{
-			if (cmd->rdir->type == HEREDOC)
+			if (cmd->rdir[i].type == HEREDOC)
 			{
 				unlink(cmd->rdir[i].name);
 				free(cmd->rdir[i].name);
