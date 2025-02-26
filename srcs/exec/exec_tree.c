@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:10:29 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/26 22:46:04 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 23:01:36 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,12 @@ int	make_operation(t_bintree *node, t_data *data)
 		if (exit_status)
 		{
 			connect_stdio(node, node->right);
-			close_fd(node);
 			exit_status = execute_node(node->right, data);
 		}
 	}
 	else if (!exit_status)
 	{
 		connect_stdio(node, node->right);
-		close_fd(node);
 		exit_status = execute_node(node->right, data);
 	}
 	close_fd(node);
