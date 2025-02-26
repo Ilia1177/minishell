@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 19:07:33 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 19:08:58 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:12:24 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ void	free_cmd(t_cmd *cmd)
 		while (cmd->rdir[++i].name)
 		{
 			if (cmd->rdir->type == HEREDOC)
+			{
 				unlink(cmd->rdir[i].name);
+				free(cmd->rdir[i].name);
+			}
 			else
 				free(cmd->rdir[i].name);
 		}
