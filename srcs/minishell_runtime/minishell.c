@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/25 22:01:09 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 15:52:58 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	run_shell(t_data *data)
 			data->status = 128 + g_signal_caught;
 		if (tokenize(data))
 		{
+			register_sig2();
 			cpy = data->token_list;
 			print_list(data->token_list, data);
 			data->tree = build_tree(&cpy, CMD);
@@ -61,6 +62,7 @@ int	run_shell(t_data *data)
 		}
 		free_minishell(data, -1);
 		init_shell(data);
+		register_signals();
 	}
 	return (data->status);
 }

@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/26 12:55:36 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 16:31:44 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ int	find_cmd_in_pwd(char *cmd_name, t_bintree *node, t_data *data)
 }
 
 //if (status = 0) commande will be execute by execve
-int	build_cmd(t_bintree *node, t_data *data)
+int	save_build_cmd(t_bintree *node, t_data *data)
 {
 	char	*cmd_name;
 	int		status;
@@ -145,8 +145,9 @@ int	build_cmd(t_bintree *node, t_data *data)
 		return (127);
 	cmd_name = node->cmd->args[0];
 
-
-	if (!data->paths && ft_strncmp("/", cmd_name, 1))
+	if (!ft_strcmp(".", cmd_name)) // ||  ft_strcmp("..", cmd_name))
+		status = 2;
+	else if (!data->paths && ft_strncmp("/", cmd_name, 1))
 	{
 		cmd_name = ft_strjoin("./", cmd_name);
 		free(node->cmd->args[0]);
@@ -165,22 +166,71 @@ int	build_cmd(t_bintree *node, t_data *data)
 		ft_printf(2, "get in 3\n");
 		status = 126;
 	}
-	else 
+	else if (!is_directory(cmd_name)) 
 	{
 		status = find_cmd_in_paths(cmd_name, node, data);
+		ft_printf(2, "get in 4: status: %d\n", status);
 		if (status && !ft_strncmp("./", cmd_name, 2))
 			status = find_cmd_in_pwd(cmd_name, node, data);
+		ft_printf(2, "get in 4: status: %d\n", status);
 		if (!status)
 			free(cmd_name);
 		else
 			node->cmd->args[0] = cmd_name;
-		ft_printf(2, "get in 4\n");
 	}
-	if (status == 126 && !is_directory(node->cmd->args[0]))
+	if (!status && is_directory(cmd_name))
+		status = 127;
+	if (status == 2)
+		ft_printf(2, "msh: %s: filename argument required\n", node->cmd->args[0]);
+	else if (status == 126 && !is_directory(node->cmd->args[0]))
 		perror("msh");
 	else if (status == 127)
 		ft_printf(2, "msh: %s: command not found\n", node->cmd->args[0]);
 	else if (is_directory(node->cmd->args[0]))
 		ft_printf(2, "msh: is a directory\n");
+	return (status);
+}
+
+int	build_cmd(t_bintree *node, t_data *data)
+{
+	char	*cmd_name;
+	int		status;
+
+	status = 0;
+	if (!node->cmd || !node->cmd->args[0] || !node->cmd->args[0][0])
+		return (127);
+	cmd_name = node->cmd->args[0];
+	if (!ft_strcmp(cmd_name, "."))
+		status = 2;
+	else if (!ft_strcmp(cmd_name, ".."))
+		status = 127;	
+	else if (ft_strchr(cmd_name, '/')) 
+	{
+		if (!access(cmd_name, X_OK | F_OK) && !is_directory(cmd_name))
+			status = 0;
+		else if (errno == EACCES || is_directory(cmd_name))
+			status = 126;
+		else
+			status = 127;
+	}
+	else
+	{
+		if (!data->paths)
+			status = find_cmd_in_pwd(cmd_name, node, data);
+		else
+			status = find_cmd_in_paths(cmd_name, node, data);
+	}
+	if (status == 2)
+		ft_printf(2, "msh: %s: filename argument required\n", node->cmd->args[0]);
+	if (errno == ENOENT && ft_strchr(cmd_name, '/'))
+		ft_printf(2, "no such file\n");
+	else if (status == 127)
+		ft_printf(2, "cmd not found\n");
+	else if (status == 126 && !is_directory(cmd_name))
+		ft_printf(2, "perms denied\n");
+	else if (status == 126)
+		ft_printf(2, "is directory\n");
+	if (!status && !ft_strchr(cmd_name, '/') && ft_strcmp(cmd_name, "..") && ft_strcmp(cmd_name, ".."))
+			free(cmd_name);
 	return (status);
 }

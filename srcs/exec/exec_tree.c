@@ -6,14 +6,14 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:10:29 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/25 20:52:27 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 16:20:28 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "exec.h"
 
-int	get_child_status(t_data *data)
+static int	get_child_status(t_data *data)
 {
 	int	save_status;
 	int	status;

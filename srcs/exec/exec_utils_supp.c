@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 19:13:48 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 19:21:23 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/26 16:11:06 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int	open_rdir(t_bintree *node, char *name, t_type_rdir type)
 	int			fd_in;
 	int			fd_out;
 
+	ft_printf(2, "name: %s, type: %d\n", name, type);
 	if (type == R_OUT || type == APPEND)
 	{
 		if (type == APPEND)
@@ -25,6 +26,7 @@ static int	open_rdir(t_bintree *node, char *name, t_type_rdir type)
 			fd_out = open(name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		if (fd_out == -1)
 			return (1);
+		ft_printf(2, "fd out: %d\n", fd_out);
 		dup2(fd_out, node->stdfd[OUT]);
 		close(fd_out);
 	}
@@ -49,6 +51,7 @@ int	redir(t_bintree *node)
 	i = -1;
 	while (node->cmd->rdir[++i].name)
 	{
+		ft_printf(2, "rdir: %s\n", node->cmd->rdir[i].name);
 		type = node->cmd->rdir[i].type;
 		name = node->cmd->rdir[i].name;
 		status = open_rdir(node, name, type);
