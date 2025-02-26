@@ -6,53 +6,12 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 17:29:00 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/19 17:49:22 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:23:45 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parsing.h"
-
-void	init_fd(t_bintree *node)
-{
-	node->stdfd[IN] = -1;
-	node->stdfd[OUT] = -1;
-	node->pipefd[IN] = -1;
-	node->pipefd[OUT] = -1;
-}
-
-void	close_fd(t_bintree *node)
-{
-	if (node->stdfd[IN] != -1 && node->stdfd[IN] != -2)
-	{
-		close(node->stdfd[IN]);
-		node->stdfd[IN] = -1;
-	}
-	if (node->stdfd[OUT] != -1 && node->stdfd[OUT] != -2)
-	{
-		close(node->stdfd[OUT]);
-		node->stdfd[OUT] = -1;
-	}
-	if (node->pipefd[IN] != -1 && node->pipefd[IN] != -2)
-	{
-		close(node->pipefd[IN]);
-		node->pipefd[IN] = -1;
-	}
-	if (node->pipefd[OUT] != -1 && node->pipefd[OUT] != -2)
-	{
-		close(node->pipefd[OUT]);
-		node->pipefd[OUT] = -1;
-	}
-}
-
-void close_fd_tree(t_bintree *node)
-{
-	if (node->left)
-		close_fd_tree(node->left);
-	if (node->right)
-		close_fd_tree(node->right);
-	close_fd(node);
-}
 
 t_bintree	*make_node(t_bintree *left, t_bintree *right, t_token **token)
 {
@@ -86,7 +45,7 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 	current_token = *token;
 	tmp = current_token;
 	if (!current_token)
-		return (-1);
+		return (0);
 	if (!ft_strcmp(current_token->input, "("))
 	{
 		current_token = current_token->next;
@@ -97,7 +56,11 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 		return (1);
 	}
 	else if (!ft_strcmp(current_token->input, ")"))
+	{
+		current_token = current_token->next;
+		*token = current_token;
 		return (-1);
+	}
 	return (0);
 }
 
@@ -121,13 +84,8 @@ t_bintree	*build_tree(t_token **head, int priority)
 		return (NULL);
 	while (curr)
 	{
-		if (handle_parenthesis(&curr, &new_root, &old_root) == 1)
-			continue ;
-		else if (handle_parenthesis(&curr, &new_root, &old_root) == -1)
-		{
-			curr = curr->next;
+		if (handle_parenthesis(&curr, &new_root, &old_root))
 			break ;
-		}
 		else if (curr->type == PIPE && priority == PIPE)
 			break ;
 		else if (curr->type == OPERATOR && priority >= OPERATOR)

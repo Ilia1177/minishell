@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/26 21:13:27 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/26 21:20:28 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ void		print_tree(t_bintree *root, int space, int start, t_data *data);
 /*            BINARY TREE               */
 /****************************************/
 //binary_tree.c
+void		init_fd(t_bintree *node);
 t_bintree	*build_tree(t_token **start, int priority);
 void		close_fd(t_bintree *node);
 void		close_fd_tree(t_bintree *node);
