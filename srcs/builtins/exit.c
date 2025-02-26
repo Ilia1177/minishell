@@ -67,7 +67,10 @@ int	safe_exit(t_data *data, t_bintree *node, int exit_code, int print_code)
 		ft_printf(2, NR_ARG, node->cmd->args[1]);
 	has_pipe = input_has_pipe(data->tree);
 	if (!has_pipe)
+	{
+		close_fd_tree(data->tree);
 		free_minishell(data, exit_code);
+	}
 	return (exit_code);
 }
 
@@ -78,7 +81,7 @@ int	exit_number(t_data *data, t_bintree *node)
 	long long	number;
 
 	error = 0;
-	if (node->cmd->rdir->type != R_OUT)
+	if (node->cmd->rdir == NULL)
 		ft_printf(node->stdfd[OUT], "exit\n");
 	number = ft_atoller(node->cmd->args[1], &error);
 	code = format_exit_code(number);

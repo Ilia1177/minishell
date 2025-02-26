@@ -44,7 +44,7 @@ void	free_minishell(t_data *data, int exit_code)
 		ft_printf(2, "free_minishell with code of exit: %d\n", exit_code);
 	free(data->user_input);
 	data->user_input = NULL;
-	close_fd_tree(data->tree);
+	/* close_fd_tree(data->tree); */
 	free_tree(data->tree);
 	data->tree = NULL;
 	free_tabstr(data->paths);
