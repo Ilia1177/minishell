@@ -32,11 +32,15 @@
 # define OUT 1
 # define TMP 2
 # define WARNING ": not a valid identifier"
-# define SYNTERR "MSH: syntax error. try again\n"
-# define TM_ARG "MSH: %s: too many arguments\n"
-# define NR_ARG "MSH: exit: %s: numeric argument required\n"
+# define SYNTERR "msh: syntax error. try again\n"
+# define TM_ARG "msh: %s: too many arguments\n"
+# define NR_ARG "msh: exit: %s: numeric argument required\n"
 # define NMF_MSG "no matches found\n"
-# define NFD_MSG "MSH: cd : No such file or directory\n"
+# define NOENT_MSG "msh: %s : No such file or directory\n"
+# define ISDIR_MSG "msh: %s : Is a directory\n"
+# define CMDNF_MSG "msh: %s : command not found\n"
+# define PERMD_MSG "msh: %s : Permission denied\n"
+# define FAR_MSG "msh: %s : filename argument required\n"
 
 typedef enum e_type
 {

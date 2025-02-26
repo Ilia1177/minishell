@@ -66,7 +66,7 @@ int	change_dir(t_bintree *node, t_data *data)
 		update_pwds(data);
 	else
 	{
-		ft_printf(2, NFD_MSG);
+		ft_printf(2, NOENT_MSG, "cd");
 		data->status = 1;
 	}
 	free(path);
