@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 09:36:13 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/26 15:52:19 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 18:12:08 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,24 +80,3 @@ int	register_sig2(void)
 	}
 	return (0);
 }
-/* int	listen_to_signal(t_data *data) */
-/* { */
-/* 	if (g_signal_caught == SIGQUIT) */
-/* 	{ */
-/* 		printf("signal %d heard\n", g_signal_caught); */
-/* 		printf("SIGQUIT received"); */
-/* 		kill(0, SIGQUIT); */
-/* 		free_minishell(data); */
-/* 		exit(g_signal_caught); */
-/* 	} */
-/* 	else if (g_signal_caught == SIGINT) */
-/* 	{ */
-/* 		printf("signal %d heard\n", g_signal_caught); */
-/* 		//rl_on_newline(); */
-/* 		printf("SIGINT received"); */
-/* 		free_minishell(data); */
-/* 		init_shell(data); */
-/* 		return (1); */
-/* 	} */
-/* 	return(0); */
-/* } */

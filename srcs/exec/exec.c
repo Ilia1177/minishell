@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 19:23:44 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/25 17:42:22 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 18:12:37 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,5 @@ int	exec_cmd(t_bintree *node, t_data *data)
 	if (!data->pid)
 		child_process(node, data);
 	close_fd(node);
-	return (-1);
+	return (exit_status);
 }
