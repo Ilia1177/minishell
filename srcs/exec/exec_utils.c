@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/26 11:51:51 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/26 12:55:36 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,13 +155,16 @@ int	build_cmd(t_bintree *node, t_data *data)
 			free(cmd_name);
 		ft_printf(2, "get in 1\n");
 	}
-	else if (ft_strchr(cmd_name, '/') && !access(cmd_name, X_OK))
+	else if (ft_strchr(cmd_name, '/') && !access(cmd_name, X_OK) && !is_directory(cmd_name))
 	{
 		ft_printf(2, "get in 2\n");
 		status = 0;
 	}
-	else if (ft_strchr(cmd_name, '/') && !access(cmd_name, F_OK))
+	else if (ft_strchr(cmd_name, '/') && is_directory(cmd_name))
+	{
+		ft_printf(2, "get in 3\n");
 		status = 126;
+	}
 	else 
 	{
 		status = find_cmd_in_paths(cmd_name, node, data);
@@ -171,7 +174,7 @@ int	build_cmd(t_bintree *node, t_data *data)
 			free(cmd_name);
 		else
 			node->cmd->args[0] = cmd_name;
-		ft_printf(2, "get in 3\n");
+		ft_printf(2, "get in 4\n");
 	}
 	if (status == 126 && !is_directory(node->cmd->args[0]))
 		perror("msh");
