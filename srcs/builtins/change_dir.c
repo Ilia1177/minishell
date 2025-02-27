@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:24:42 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 17:59:21 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/27 13:45:24 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,19 @@ static void	update_pwds(t_data *data)
 	char	*old_pwd;
 	char	*new_pwd;
 
-	old_pwd = ft_strjoin("OLDPWD=", catch_expand(data, "PWD"));
-	update_envp(data, old_pwd);
-	free(old_pwd);
-	getcwd(wd, sizeof(wd));
-	new_pwd = ft_strjoin("PWD=", wd);
-	update_envp(data, new_pwd);
-	free(new_pwd);
+	if (exist(data->envp, "OLDPWD") != -1)
+	{
+		old_pwd = ft_strjoin("OLDPWD=", catch_expand(data, "PWD"));
+		update_envp(data, old_pwd);
+		free(old_pwd);
+	}
+	if (exist(data->envp, "PWD") != -1)
+	{
+		getcwd(wd, sizeof(wd));
+		new_pwd = ft_strjoin("PWD=", wd);
+		update_envp(data, new_pwd);
+		free(new_pwd);
+	}
 }
 
 char	*make_cd_path(char *dir_name)
@@ -54,15 +60,11 @@ int	change_dir(t_bintree *node, t_data *data)
 		ft_printf(2, TM_ARG, "cd");
 		return (1);
 	}
-	else if (!node->cmd->args[1] || !ft_strcmp(node->cmd->args[1], "--"))
-		path = ft_strdup(catch_expand(data, "HOME"));
-	else if (!ft_strcmp(node->cmd->args[1], "-"))
-		path = ft_strdup(catch_expand(data, "OLDPWD"));
 	else if (node->cmd->args[1][0] == '/')
 		path = ft_strdup(node->cmd->args[1]);
 	else
 		path = make_cd_path(node->cmd->args[1]);
-	if (!chdir(path))
+	if (path && !chdir(path))
 		update_pwds(data);
 	else
 	{
