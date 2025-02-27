@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:16:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/27 11:25:16 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/27 12:55:47 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	catch_heredoc(t_rdir *rdir, char *str, t_data *data, int num_rdir)
 	return (len + i);
 }
 
-static int	check_lim(char **old_lim)
+int	check_lim(char **old_lim)
 {
 	int		quoted;
 	char	*lim;
@@ -94,6 +94,7 @@ int	event(void)
 {
 	return (0);
 }
+
 /****************************************************
  * main HEREDOC function
  * create a tmp file with a random_name
@@ -108,36 +109,20 @@ char	*get_here_doc(char *lim, t_data *data)
 	int		quoted;
 
 	name = random_name(10);
+	str = NULL;
 	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (NULL);
 	quoted = check_lim(&lim);
 	register_sig_heredoc();
 	rl_event_hook = event;
-	//str = listen_to_user("> ");
 	str = readline("> ");
 	rl_event_hook = 0;
 	if (g_signal_caught == SIGINT)
-	{
-		free(str);
-		str = NULL;
-	}
-	while (str && ft_strcmp(str, lim))
-	{
-		if (!quoted)
-			expand_str(data, &str);
-		ft_printf(fd, "%s\n", str);
-		free(str);
-		str = NULL;
-		rl_event_hook = event;
-		str = readline("> ");
-		rl_event_hook = 0;
-		if (g_signal_caught == SIGINT)
-			break ;
-	}
-	free (str);
+		free_line(&str);
+	get_lines(lim, data, &str, fd);
+	free_line(&str);
 	free (lim);
-	str = NULL;
 	close(fd);
 	return (name);
 }

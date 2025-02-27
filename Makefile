@@ -6,7 +6,7 @@
 #    By: npolack <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/16 16:15:39 by npolack           #+#    #+#              #
-#    Updated: 2025/02/26 21:18:46 by npolack          ###   ########.fr        #
+#    Updated: 2025/02/27 13:01:33 by jhervoch         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ SRCS		=	binary_tree/binary_tree.c\
 				minishell_runtime/minishell.c\
 				minishell_runtime/prompt.c\
 				minishell_runtime/signals.c\
+				minishell_runtime/signals_utils.c\
 				minishell_runtime/utils.c\
 				parsing/lst_iter_func.c\
 				parsing/lst_utils.c\
@@ -65,6 +66,7 @@ SRCS		=	binary_tree/binary_tree.c\
 				rdir_and_arg/expand.c\
 				rdir_and_arg/expand_utils.c\
 				rdir_and_arg/heredoc.c\
+				rdir_and_arg/heredoc_utils.c\
 				rdir_and_arg/redir.c\
 				rdir_and_arg/wildcards.c\
 				rdir_and_arg/wildcards_search.c\

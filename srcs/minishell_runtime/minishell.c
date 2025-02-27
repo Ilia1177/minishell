@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/27 11:31:16 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/27 12:54:25 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "builtins.h"
 #include "exec.h"
 #include "tokenize.h"
+#include "parsing.h"
 
 void	update_pwd_in_envp(t_data *data)
 {
@@ -31,7 +32,7 @@ void	update_pwd_in_envp(t_data *data)
 void	init_shell(t_data *data)
 {
 	rl_catch_signals = 0;
-	//g_signal_caught = 0;
+	g_signal_caught = 0;
 	data->tree = NULL;
 	data->token_list = NULL;
 	data->paths = NULL;
@@ -45,27 +46,34 @@ int	run_shell(t_data *data)
 	data->prompt = "msh-4.2$";
 	update_pwd_in_envp(data);
 	init_shell(data);
-	g_signal_caught = 0;
 	while (1)
 	{
-		g_signal_caught = 0;
+		init_shell(data);
 		if (!get_user_input(data))
 			continue ;
 		if (g_signal_caught)
+		{
 			data->status = 128 + g_signal_caught;
+			g_signal_caught = 0;
+		}
 		if (tokenize(data))
 		{
-			if (g_signal_caught)
-				continue ;
+			if (!g_signal_caught)
+			{
 			register_sig_exec();
 			cpy = data->token_list;
 			print_list(data->token_list, data);
 			data->tree = build_tree(&cpy, CMD);
 			print_tree(data->tree, 0, 0, data);
 			data->status = execute_tree(data);
+			}
+			else
+			{
+				data->status = 128 + g_signal_caught;
+				ft_lstclear_token(&data->token_list, free);	
+			}
 		}
 		free_minishell(data, -1);
-		init_shell(data);
 		register_sig_prompt();
 	}
 	return (data->status);

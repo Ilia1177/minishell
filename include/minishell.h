@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/27 10:56:20 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/27 13:00:53 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,21 +145,19 @@ int			input_has_pipe(t_bintree *tree);
 
 /***********SIGNAL***************/
 //signals.c
-void	handle_signals_heredoc(int sig, siginfo_t *info, void *ctx);
-int	register_sig_heredoc(void);
 int			register_sig_prompt(void);
 void		handle_signals_prompt(int sig, siginfo_t *info, void *ctx);
 void		handle_signals_exec(int sig, siginfo_t *info, void *ctx);
 int			register_sig_exec(void);
+//signals-utils.c
+void		handle_signals_heredoc(int sig, siginfo_t *info, void *ctx);
+int			register_sig_heredoc(void);
 
 /***********FREE AND EXIT****************/
 //cleanup.c
 void		free_elem(void *elem, t_mem_type mem);
 void		free_tabstr(char **tabstr);
 void		free_minishell(t_data *data, int exit_code);
-//void		free_tree(t_bintree *root);
-//void		free_leaf(t_bintree *leaf);
-// void		close_all_fd(t_bintree *root);
 
 //cleanup_supp.c
 void		free_cmd(t_cmd *cmd);

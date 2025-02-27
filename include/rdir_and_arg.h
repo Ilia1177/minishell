@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 15:34:48 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/25 19:40:06 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:43:01 by jhervoch         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@ char	*return_expand(t_data *data, char *new_str, char **str, int *i);
 //heredoc.c
 char	*get_here_doc(char *lim, t_data *data);
 int		catch_heredoc(t_rdir *rdir, char *str, t_data *data, int num_rdir);
+int		check_lim(char **old_lim);
+int		event(void);
+
+//heredoc_utils.c
+void	free_line(char **line);
+void	get_lines(char *lim, t_data *data, char **line, int fd);
 
 /***********RDIR****************/
 //redir.c
