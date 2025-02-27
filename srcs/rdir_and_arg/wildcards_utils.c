@@ -126,6 +126,7 @@ t_list	*build_mf_lst(t_list *list, char **patterns, char *str)
 	nb_pat = 0;
 	while (patterns[nb_pat])
 		nb_pat++;
+	remove_pattern_quote(&patterns);
 	lst_dir = list;
 	match_files_lst = NULL;
 	while (lst_dir)
