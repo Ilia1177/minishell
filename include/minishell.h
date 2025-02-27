@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/26 21:20:28 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/27 10:56:20 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,10 +145,12 @@ int			input_has_pipe(t_bintree *tree);
 
 /***********SIGNAL***************/
 //signals.c
-int			register_signals(void);
-void		handle_signals(int sig, siginfo_t *info, void *ctx);
-int			listen_to_signal(t_data *data);
-int			register_sig2(void);
+void	handle_signals_heredoc(int sig, siginfo_t *info, void *ctx);
+int	register_sig_heredoc(void);
+int			register_sig_prompt(void);
+void		handle_signals_prompt(int sig, siginfo_t *info, void *ctx);
+void		handle_signals_exec(int sig, siginfo_t *info, void *ctx);
+int			register_sig_exec(void);
 
 /***********FREE AND EXIT****************/
 //cleanup.c

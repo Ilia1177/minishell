@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:19:01 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/26 21:25:36 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/27 11:31:16 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ void	update_pwd_in_envp(t_data *data)
 
 void	init_shell(t_data *data)
 {
-	g_signal_caught = 0;
+	rl_catch_signals = 0;
+	//g_signal_caught = 0;
 	data->tree = NULL;
 	data->token_list = NULL;
 	data->paths = NULL;
@@ -44,15 +45,19 @@ int	run_shell(t_data *data)
 	data->prompt = "msh-4.2$";
 	update_pwd_in_envp(data);
 	init_shell(data);
+	g_signal_caught = 0;
 	while (1)
 	{
+		g_signal_caught = 0;
 		if (!get_user_input(data))
 			continue ;
 		if (g_signal_caught)
 			data->status = 128 + g_signal_caught;
 		if (tokenize(data))
 		{
-			register_sig2();
+			if (g_signal_caught)
+				continue ;
+			register_sig_exec();
 			cpy = data->token_list;
 			print_list(data->token_list, data);
 			data->tree = build_tree(&cpy, CMD);
@@ -61,7 +66,7 @@ int	run_shell(t_data *data)
 		}
 		free_minishell(data, -1);
 		init_shell(data);
-		register_signals();
+		register_sig_prompt();
 	}
 	return (data->status);
 }
@@ -80,7 +85,7 @@ int	main(int ac, char **argv, char **envp)
 		ft_printf(2, "invalid options\n");
 		return (2);
 	}
-	register_signals();
+	register_sig_prompt();
 	data.envp = tab_dup(envp);
 	run_shell(&data);
 	free_minishell(&data, data.status);

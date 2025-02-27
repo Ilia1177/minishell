@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:16:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 17:50:04 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/27 11:25:16 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,10 @@ static int	check_lim(char **old_lim)
 	return (quoted);
 }
 
+int	event(void)
+{
+	return (0);
+}
 /****************************************************
  * main HEREDOC function
  * create a tmp file with a random_name
@@ -108,7 +112,16 @@ char	*get_here_doc(char *lim, t_data *data)
 	if (fd == -1)
 		return (NULL);
 	quoted = check_lim(&lim);
-	str = listen_to_user("> ");
+	register_sig_heredoc();
+	rl_event_hook = event;
+	//str = listen_to_user("> ");
+	str = readline("> ");
+	rl_event_hook = 0;
+	if (g_signal_caught == SIGINT)
+	{
+		free(str);
+		str = NULL;
+	}
 	while (str && ft_strcmp(str, lim))
 	{
 		if (!quoted)
@@ -116,7 +129,11 @@ char	*get_here_doc(char *lim, t_data *data)
 		ft_printf(fd, "%s\n", str);
 		free(str);
 		str = NULL;
-		str = listen_to_user("> ");
+		rl_event_hook = event;
+		str = readline("> ");
+		rl_event_hook = 0;
+		if (g_signal_caught == SIGINT)
+			break ;
 	}
 	free (str);
 	free (lim);
