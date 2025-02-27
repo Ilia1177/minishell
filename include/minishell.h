@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/27 10:56:20 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/27 12:55:24 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,8 +145,8 @@ int			input_has_pipe(t_bintree *tree);
 
 /***********SIGNAL***************/
 //signals.c
-void	handle_signals_heredoc(int sig, siginfo_t *info, void *ctx);
-int	register_sig_heredoc(void);
+void		handle_signals_heredoc(int sig, siginfo_t *info, void *ctx);
+int			register_sig_heredoc(void);
 int			register_sig_prompt(void);
 void		handle_signals_prompt(int sig, siginfo_t *info, void *ctx);
 void		handle_signals_exec(int sig, siginfo_t *info, void *ctx);
@@ -175,6 +175,7 @@ void		print_tree(t_bintree *root, int space, int start, t_data *data);
 /*            BINARY TREE               */
 /****************************************/
 //binary_tree.c
+void		close_n_init_fd(int *fd);
 void		init_fd(t_bintree *node);
 t_bintree	*build_tree(t_token **start, int priority);
 void		close_fd(t_bintree *node);
