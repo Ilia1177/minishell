@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 22:14:26 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/26 20:07:09 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/27 12:01:08 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ static void	print_status(t_bintree *node, char *cmd_name, int status)
 {
 	if (status == 2)
 		ft_printf(2, FAR_MSG, node->cmd->args[0]);
-	else if (errno == ENOENT && ft_strchr(cmd_name, '/'))
+	else if (cmd_name && errno == ENOENT && ft_strchr(cmd_name, '/'))
 		ft_printf(2, NOENT_MSG, node->cmd->args[0]);
 	else if (status == 127)
 		ft_printf(2, CMDNF_MSG, node->cmd->args[0]);
-	else if (status == 126 && !is_directory(cmd_name))
+	else if (cmd_name && status == 126 && !is_directory(cmd_name))
 		ft_printf(2, PERMD_MSG, node->cmd->args[0]);
 	else if (status == 126)
 		ft_printf(2, ISDIR_MSG, node->cmd->args[0]);
@@ -62,6 +62,10 @@ static void	find_cmd(t_bintree *node, t_data *data, char *cmd_name, int *status)
 		*status = find_cmd_in_pwd(cmd_name, node, data);
 	else
 		*status = find_cmd_in_paths(cmd_name, node, data);
+	if (*status == 0)
+		free(cmd_name);
+	else
+		node->cmd->args[0] = cmd_name;
 }
 
 static void	access_command(char *cmd_name, int *status)
@@ -90,10 +94,11 @@ int	build_cmd(t_bintree *node, t_data *data)
 	else if (ft_strchr(cmd_name, '/'))
 		access_command(cmd_name, &status);
 	else
+	{
 		find_cmd(node, data, cmd_name, &status);
+		if (!status)
+			cmd_name = NULL;
+	}
 	print_status(node, cmd_name, status);
-	if (!status && !ft_strchr(cmd_name, '/')
-		&& ft_strcmp(cmd_name, "..") && ft_strcmp(cmd_name, ".."))
-		free(cmd_name);
 	return (status);
 }

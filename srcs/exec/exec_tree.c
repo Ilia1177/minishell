@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:10:29 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/26 23:52:45 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/27 12:42:19 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int	make_pipe(t_bintree *node, t_data *data)
 	node->left->stdfd[IN] = dup(node->stdfd[IN]);
 	node->left->pipefd[IN] = -2;
 	node->left->pipefd[OUT] = -2;
+	close_n_init_fd(&node->stdfd[IN]);
+	close_n_init_fd(&node->pipefd[OUT]);
 	exit_status = execute_node(node->left, data);
 	if (node->right)
 	{
@@ -78,6 +80,8 @@ int	make_pipe(t_bintree *node, t_data *data)
 		node->right->pipefd[OUT] = -2;
 		node->right->stdfd[OUT] = dup(node->stdfd[OUT]);
 		node->right->stdfd[IN] = dup(node->pipefd[IN]);
+		close_n_init_fd(&node->stdfd[OUT]);
+		close_n_init_fd(&node->pipefd[IN]);
 		exit_status = execute_node(node->right, data);
 	}
 	close_fd(node);
@@ -90,7 +94,7 @@ int	make_operation(t_bintree *node, t_data *data)
 
 	connect_stdio(node, node->left);
 	exit_status = execute_node(node->left, data);
-	if (!exit_status)
+	if (!exit_status && data->pid != -2)
 		exit_status = get_child_status(data);
 	if (!ft_strcmp(node->input, "||"))
 	{
