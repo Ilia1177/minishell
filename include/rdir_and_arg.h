@@ -52,6 +52,7 @@ void	sort_list_dir(t_list **list);
 int		middle_search(char **file_str, char *pattern_str, int *nb_find);
 int		end_search(char **file_str, char *pattern_str, int *nb_find);
 int		begin_search(char **file_str, char *pattern_str, int *nb_find);
+void	remove_pattern_quote(char ***pattern_ptr);
 
 //wildcards_utils.c
 int		replacing_wildcards(t_token *token, int index, t_list *mfl);

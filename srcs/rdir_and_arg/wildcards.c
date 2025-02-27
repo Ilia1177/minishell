@@ -61,8 +61,19 @@ static int	only_wild(char *str)
 
 static int	is_wildcard(char *str)
 {
+	int	quoted;
+
+	quoted = -1;
 	if (!str || !ft_strchr(str, '*') || !ft_strcmp(str, "*."))
 		return (0);
+	while (*str)
+	{
+		if (*str == '\'' || *str == '\"')
+			quoted *= -1;
+		if (quoted == 1 && *str == '*')
+			return (0);
+		str++;
+	}
 	return (1);
 }
 

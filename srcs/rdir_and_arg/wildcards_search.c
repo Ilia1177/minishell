@@ -81,3 +81,34 @@ int	begin_search(char **file_str, char *pattern_str, int *nb_find)
 	}
 	return (0);
 }
+
+void	remove_pattern_quote(char ***pattern_ptr)
+{
+	char	**pattern;
+	char	*pattern_str;
+	int		i;
+	int		j;
+	int		k;
+
+	i = 0;
+	pattern = *pattern_ptr;
+	while (pattern[i])
+	{
+		j = 0;
+		k = 0;
+		pattern_str = pattern[i];
+		while (pattern[i][j])
+		{
+			if (pattern[i][j] != '\'' && pattern[i][j] != '\"')
+			{
+				pattern_str[k] = pattern[i][j];
+				k++;
+			}
+			j++;
+		}
+		pattern_str[k] = '\0';
+		pattern[i] = pattern_str;
+		i++;
+	}
+	*pattern_ptr = pattern;
+}
