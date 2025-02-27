@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 12:56:57 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/27 12:58:16 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:26:26 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	handle_signals_heredoc(int sig, siginfo_t *info, void *ctx)
 	(void)ctx;
 	if (sig == SIGINT)
 	{
-		ft_printf(2, "^C");
 		g_signal_caught = sig;
+		ft_printf(2, "^C");
 		rl_done = 1;
 	}
 	if (sig == SIGQUIT)

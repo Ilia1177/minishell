@@ -6,7 +6,7 @@
 /*   By: ilia <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 09:36:13 by ilia              #+#    #+#             */
-/*   Updated: 2025/02/27 12:58:39 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:25:30 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ void	handle_signals_exec(int sig, siginfo_t *info, void *ctx)
 	if (sig == SIGINT)
 		ft_printf(2, "\n");
 	else if (sig == SIGQUIT)
-	{
 		ft_printf(2, "Quit\n");
-		return ;
-	}
 }
 
 int	register_sig_prompt(void)

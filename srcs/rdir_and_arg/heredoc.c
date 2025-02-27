@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:16:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/27 12:55:47 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/02/27 14:33:55 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,11 +116,10 @@ char	*get_here_doc(char *lim, t_data *data)
 	quoted = check_lim(&lim);
 	register_sig_heredoc();
 	rl_event_hook = event;
-	str = readline("> ");
+	str = readline("> "); 
 	rl_event_hook = 0;
-	if (g_signal_caught == SIGINT)
-		free_line(&str);
-	get_lines(lim, data, &str, fd);
+	if (!g_signal_caught)
+		get_lines(lim, data, &str, fd);
 	free_line(&str);
 	free (lim);
 	close(fd);
