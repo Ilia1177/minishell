@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:43:06 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 16:59:32 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/01 21:05:20 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,25 +90,34 @@ void	remove_pattern_quote(char ***pattern_ptr)
 	int		j;
 	int		k;
 
-	i = 0;
+	i = -1;
 	pattern = *pattern_ptr;
-	while (pattern[i])
+	while (pattern[++i])
 	{
-		j = 0;
-		k = 0;
+		j = -1;
+		k = -1;
 		pattern_str = pattern[i];
-		while (pattern[i][j])
+		while (pattern[i][++j])
 		{
 			if (pattern[i][j] != '\'' && pattern[i][j] != '\"')
-			{
-				pattern_str[k] = pattern[i][j];
-				k++;
-			}
-			j++;
+				pattern_str[++k] = pattern[i][j];
 		}
 		pattern_str[k] = '\0';
 		pattern[i] = pattern_str;
-		i++;
 	}
 	*pattern_ptr = pattern;
+}
+
+t_list	*build_from_pattern(t_list *lad, t_list *ld, char *argument)
+{
+	char	**patterns;
+	t_list	*mfl;
+
+	patterns = ft_split(argument, '*');
+	if (argument[0] == '.')
+		mfl = build_mf_lst(lad, patterns, argument);
+	else
+		mfl = build_mf_lst(ld, patterns, argument);
+	free_tabstr(patterns);
+	return (mfl);
 }

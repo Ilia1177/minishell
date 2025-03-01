@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 15:34:48 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/27 12:43:01 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/01 22:21:40 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 //expand.c
 int		insert_expand(char **input, int pos, char *exp);
 char	*catch_expand(t_data *data, char *str);
-void	expand_str(t_data *data, char **str);
+void	expand_str(t_data *data, char **str, int heredoc);
 
 //expand_utils.c
 char	*return_expand(t_data *data, char *new_str, char **str, int *i);
@@ -30,7 +30,7 @@ char	*return_expand(t_data *data, char *new_str, char **str, int *i);
 //heredoc.c
 char	*get_here_doc(char *lim, t_data *data);
 int		catch_heredoc(t_rdir *rdir, char *str, t_data *data, int num_rdir);
-int		check_lim(char **old_lim);
+int		check_lim(char **lim);
 int		event(void);
 
 //heredoc_utils.c
@@ -47,6 +47,7 @@ void	seek_rdir(char *str, t_rdir **s_rdir, t_data *data);
 //wildcards.c
 void	wildcards(t_token *token, t_data *data);
 void	sort_list_dir(t_list **list);
+t_list	*build_from_pattern(t_list *lad, t_list *ld, char *argument);
 
 //wildcards_search.c
 int		middle_search(char **file_str, char *pattern_str, int *nb_find);

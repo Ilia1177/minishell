@@ -6,12 +6,13 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:10:42 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/01 14:40:18 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 21:02:00 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "rdir_and_arg.h"
+#include "parsing.h"
 
 /****************************************************
  * replacing wildcards args with matching files
@@ -26,12 +27,8 @@ int	replacing_wildcards(t_token *token, int index, t_list *mfl)
 
 	ref_mfl = mfl;
 	old_args = token->cmd->args;
-	nb_arg = 0;
-	while (token->cmd->args[nb_arg])
-		nb_arg++;
-	nb_arg += ft_lstsize(mfl);
-	nb_arg++;
-	new_args = ft_calloc(sizeof (char *), nb_arg);
+	nb_arg = count_args(token->cmd->args) + ft_lstsize(mfl);
+	new_args = ft_calloc(sizeof (char *), nb_arg + 1);
 	nb_arg = -1;
 	while (++nb_arg < index)
 		new_args[nb_arg] = ft_strdup(old_args[nb_arg]);
@@ -161,7 +158,7 @@ t_list	*build_list_dir(t_list *list)
 	match_files_lst = NULL;
 	while (lst_dir)
 	{
-		if (*(char *)lst_dir->content != '.') //&& *(char *)lst_dir->content != '*')
+		if (*(char *)lst_dir->content != '.')
 		{
 			file_name = ft_strdup((char *)lst_dir->content);
 			elem = ft_lstnew((void *)file_name);

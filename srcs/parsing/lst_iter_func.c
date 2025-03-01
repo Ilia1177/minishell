@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 16:31:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/01 15:46:00 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 22:30:45 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,7 @@ void	unquote(t_token *token, t_data *data)
 
 void	get_expand(t_token *token, t_data *data)
 {
-	//token->input = ft_strdup(token->input);
-	expand_str(data, &token->input);
+	expand_str(data, &token->input, 0);
 }
 
 // working

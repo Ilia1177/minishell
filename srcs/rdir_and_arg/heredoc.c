@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 20:16:10 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/27 14:33:55 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 22:29:00 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,23 @@ int	check_lim(char **old_lim)
 {
 	int		quoted;
 	char	*lim;
-	char	*tmp;
 
 	lim = *old_lim;
 	quoted = 0;
-	if (*lim == '\"' || *lim == '\'')
+	while (*lim)
 	{
-		quoted = 1;
-		tmp = remove_quote(lim);
-		free(lim);
-		lim = tmp;
+		if (*lim == '\"' || *lim == '\'')
+			quoted++;
+		lim++;
 	}
-	*old_lim = lim;
-	return (quoted);
+	if (quoted > 0 && quoted % 2 == 0)
+	{
+		lim = remove_quote(*old_lim);
+		free(*old_lim);
+		*old_lim = lim;
+		return (1);
+	}
+	return (0);
 }
 
 int	event(void)
@@ -106,22 +110,21 @@ char	*get_here_doc(char *lim, t_data *data)
 	char	*str;
 	int		fd;
 	char	*name;
-	int		quoted;
 
 	name = random_name(10);
 	str = NULL;
 	fd = open(name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		return (NULL);
-	quoted = check_lim(&lim);
 	register_sig_heredoc();
 	rl_event_hook = event;
-	str = readline("> "); 
+	str = readline("> ");
 	rl_event_hook = 0;
 	if (!g_signal_caught)
 		get_lines(lim, data, &str, fd);
+	else
+		free(lim);
 	free_line(&str);
-	free (lim);
 	close(fd);
 	return (name);
 }

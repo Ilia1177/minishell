@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:06:48 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/01 17:49:05 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 22:46:13 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,14 @@ static int	is_wildcard(char *str)
 	return (1);
 }
 
+void	print_lst(t_list *lst)
+{
+	while (lst)
+	{
+		ft_printf(2, "lst: %s\n", (char *)lst->content);
+		lst =lst->next;
+	}
+}
 /****************************************************
  * loop each args
  * @param mfl - match_files_lst
@@ -85,29 +93,31 @@ static int	is_wildcard(char *str)
  * *************************************************/
 static void	wild_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 {
-	char	**patterns;
 	int		i;
+	char	**patterns;
 
 	i = 0;
 	if (!token->cmd->args[0] || !token->cmd->args[1])
 		return ;
 	while (token->cmd->args[++i])
 	{
-		if (g_signal_caught)
-			return ;	
 		if (!is_wildcard(token->cmd->args[i]))
 			continue ;
 		else if (only_wild(token->cmd->args[i]))
 			mfl = build_list_dir(lad);
 		else
 		{
+			//t_list	*mfl;
 			patterns = ft_split(token->cmd->args[i], '*');
 			if (token->cmd->args[i][0] == '.')
 				mfl = build_mf_lst(lad, patterns, token->cmd->args[i]);
 			else
 				mfl = build_mf_lst(ld, patterns, token->cmd->args[i]);
 			free_tabstr(patterns);
+			print_lst(mfl);
+			//return (mfl);
 		}
+		//	mfl = build_from_pattern(lad, ld, token->cmd->args[i]);
 		if (mfl)
 		{
 			i += replacing_wildcards(token, i, mfl);
@@ -115,15 +125,7 @@ static void	wild_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 		}
 	}
 }
-void print_lst(t_list *lst, t_data *data)
-{
-	(void)data;
-	while (lst)
-	{
-		ft_printf(2, "%s\n", (char *)lst->content);
-		lst = lst->next;
-	}
-}
+
 /****************************************************
  * main wildcards function
  * *************************************************/
@@ -134,18 +136,15 @@ void	wildcards(t_token *token, t_data *data)
 	t_list	*match_files_lst;
 
 	(void)data;
-	data->flag = 1;
 	if (!token->cmd)
 		return ;
 	match_files_lst = NULL;
 	list_all_dir = NULL;
 	list_dir = NULL;
-
 	build_list_all_dir(&list_all_dir);
 	list_dir = build_list_dir(list_all_dir);
 	wild_arg_loop(token, match_files_lst, list_all_dir, list_dir);
 	ft_lstclear(&match_files_lst, free);
 	ft_lstclear(&list_dir, free);
 	ft_lstclear(&list_all_dir, free);
-	data->flag = 0;
 }

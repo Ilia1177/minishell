@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:21:45 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 17:48:38 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/01 21:00:18 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,18 @@ void	ft_lstiter_token(t_data *data, void (*f)(t_token *, t_data *))
 		(*f)(iterator, data);
 		iterator = iterator->next;
 	}
+}
+
+int	count_args(char **str)
+{
+	int	len;
+
+	if (!str)
+		return (0);
+	len = 0;
+	while (str[len])
+		len++;
+	return (len);
 }
 
 int	arg_len(char *str)

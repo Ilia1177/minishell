@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:13:53 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/01 17:24:10 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 22:08:52 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,18 @@ int	insert_expand(char **input, int pos, char *exp)
  * seek the $ in *str and return his index
  * return -1 if not found
  * *****************************************************/
-static int	find_expand(char *str)
+static int	find_expand(char *str, int heredoc)
 {
 	int	i;
 	int	quoted;
 
-	i = -1;
+	i = 0;
 	quoted = -1;
-	while (str[++i])
+	while (str[i])
 	{
 		if (str[i] == '\"')
 			quoted *= -1;
-		else if (str[i] == '\'' && quoted < 0)
+		else if (str[i] == '\'' && quoted < 0 && !heredoc)
 		{
 			i++;
 			i += ft_strnlen(&str[i], '\'');
@@ -77,6 +77,8 @@ static int	find_expand(char *str)
 		else if (str[i] == '$' && str[i + 1] && (ft_isalnum(str[i + 1])
 				|| str[i + 1] == '?' || (ft_isquote(str[i + 1]) && quoted < 0)))
 			return (i);
+		if (str[i])
+			i++;
 	}
 	return (-1);
 }
@@ -111,7 +113,7 @@ char	*catch_expand(t_data *data, char *str)
  	* expand ENV value of token->input
  	* realloc the str input
 ******************************************************/
-void	expand_str(t_data *data, char **str)
+void	expand_str(t_data *data, char **str, int heredoc)
 {
 	char	*new_str;
 	int		i;
@@ -120,7 +122,7 @@ void	expand_str(t_data *data, char **str)
 	new_str = *str;
 	while (*new_str)
 	{
-		i = find_expand(new_str);
+		i = find_expand(new_str, heredoc);
 		if (i == -1 || is_space(new_str[i + 1]) || !new_str[i + 1])
 			return ;
 		if ((new_str[i + 1] == '\'' || new_str[i + 1] == '\"'))

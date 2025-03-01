@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 17:46:14 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/26 21:07:18 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/01 21:00:10 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 void		ft_lstiter_token(t_data *data, void (*f)(t_token *, t_data *));
 int			ft_nb_args(const char *s);
 int			arg_len(char *str);
+int			count_args(char **str);
 
 //lst_utils.c
 void		ft_lstdelone_token(t_token *lst, void (*del)(void*));
