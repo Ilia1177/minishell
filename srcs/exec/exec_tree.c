@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 11:10:29 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/27 12:42:19 by npolack          ###   ########.fr       */
+/*   Updated: 2025/02/28 15:20:14 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	execute_tree(t_data *data)
 	close_fd(data->tree);
 	if (data->flag)
 		ft_printf(2, "execute_tree: status: %d\n", status);
-	if (data->pid == -2)
+	if (data->pid == -2 || g_signal_caught)
 	{
 		while (waitpid(-1, NULL, WUNTRACED) != -1)
 			;
@@ -117,6 +117,11 @@ int	execute_node(t_bintree *node, t_data *data)
 {
 	int	exit_status;
 
+	if (g_signal_caught == SIGINT)
+	{
+		close_fd(node);
+		return (128 + g_signal_caught);
+	}
 	if (data->flag)
 		ft_printf(2, "--> execute_node: %s\n", node->input);
 	if (node->left)
