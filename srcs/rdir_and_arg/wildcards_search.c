@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 18:43:06 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/01 21:05:20 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 23:23:00 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	remove_pattern_quote(char ***pattern_ptr)
 			if (pattern[i][j] != '\'' && pattern[i][j] != '\"')
 				pattern_str[++k] = pattern[i][j];
 		}
-		pattern_str[k] = '\0';
+		pattern_str[++k] = '\0';
 		pattern[i] = pattern_str;
 	}
 	*pattern_ptr = pattern;

@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:24:42 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/01 12:24:28 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 23:31:19 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,14 @@ static void	update_pwds(t_data *data)
 	}
 	if (exist(data->envp, "PWD") != -1)
 	{
-		getcwd(wd, sizeof(wd));
-		new_pwd = ft_strjoin("PWD=", wd);
-		update_envp(data, new_pwd);
-		free(new_pwd);
+		if (getcwd(wd, sizeof(wd)))
+		{
+			new_pwd = ft_strjoin("PWD=", wd);
+			if (!new_pwd)
+				return ;
+			update_envp(data, new_pwd);
+			free(new_pwd);
+		}
 	}
 }
 
@@ -43,10 +47,14 @@ char	*make_cd_path(char *dir_name)
 
 	path = NULL;
 	tmp = NULL;
-	getcwd(wd, sizeof(wd));
-	tmp = ft_strjoin(wd, "/");
-	path = ft_strjoin(tmp, dir_name);
-	free(tmp);
+	if (getcwd(wd, sizeof(wd)))
+	{
+		tmp = ft_strjoin(wd, "/");
+		if (!tmp)
+			return (NULL);
+		path = ft_strjoin(tmp, dir_name);
+		free(tmp);
+	}
 	return (path);
 }
 

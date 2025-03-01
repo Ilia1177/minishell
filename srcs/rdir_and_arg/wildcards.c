@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:06:48 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/01 22:46:13 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 23:12:59 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,14 +77,6 @@ static int	is_wildcard(char *str)
 	return (1);
 }
 
-void	print_lst(t_list *lst)
-{
-	while (lst)
-	{
-		ft_printf(2, "lst: %s\n", (char *)lst->content);
-		lst =lst->next;
-	}
-}
 /****************************************************
  * loop each args
  * @param mfl - match_files_lst
@@ -94,7 +86,6 @@ void	print_lst(t_list *lst)
 static void	wild_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 {
 	int		i;
-	char	**patterns;
 
 	i = 0;
 	if (!token->cmd->args[0] || !token->cmd->args[1])
@@ -106,18 +97,7 @@ static void	wild_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 		else if (only_wild(token->cmd->args[i]))
 			mfl = build_list_dir(lad);
 		else
-		{
-			//t_list	*mfl;
-			patterns = ft_split(token->cmd->args[i], '*');
-			if (token->cmd->args[i][0] == '.')
-				mfl = build_mf_lst(lad, patterns, token->cmd->args[i]);
-			else
-				mfl = build_mf_lst(ld, patterns, token->cmd->args[i]);
-			free_tabstr(patterns);
-			print_lst(mfl);
-			//return (mfl);
-		}
-		//	mfl = build_from_pattern(lad, ld, token->cmd->args[i]);
+			mfl = build_from_pattern(lad, ld, token->cmd->args[i]);
 		if (mfl)
 		{
 			i += replacing_wildcards(token, i, mfl);
