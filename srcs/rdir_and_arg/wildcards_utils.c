@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:10:42 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 16:59:32 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:47:58 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	build_list_all_dir(t_list **list)
 	struct dirent	*dr;
 	char			*file_name;
 
+	if (access(".", F_OK))
+		return ;
 	dir = opendir(".");
 	if (!dir)
 	{

@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 14:18:29 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 17:59:31 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:37:12 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	exit_minishell(t_bintree *node, t_data *data)
 
 	error = 0;
 	if (!node->cmd->args[1])
-		return (safe_exit(data, node, 0, 1));
+		return (safe_exit(data, node, data->status, 1));
 	if (ft_isnumber(node->cmd->args[1]) && !node->cmd->args[2])
 		return (exit_number(data, node));
 	else if (ft_isnumber(node->cmd->args[1]) && node->cmd->args[2])

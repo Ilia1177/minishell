@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 16:24:42 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/27 13:45:24 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/01 12:24:28 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int	change_dir(t_bintree *node, t_data *data)
 	char	*path;
 
 	path = NULL;
+	if (!node->cmd->args[1])
+		return (0);
 	if (node->cmd->args[1] && node->cmd->args[2])
 	{
 		ft_printf(2, TM_ARG, "cd");
