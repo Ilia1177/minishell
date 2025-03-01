@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 14:10:42 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/01 12:47:58 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 14:40:18 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ int	replacing_wildcards(t_token *token, int index, t_list *mfl)
 	char	**new_args;
 	char	**old_args;
 	int		nb_arg;
+	t_list	*ref_mfl;
 
+	ref_mfl = mfl;
 	old_args = token->cmd->args;
 	nb_arg = 0;
 	while (token->cmd->args[nb_arg])
@@ -33,17 +35,17 @@ int	replacing_wildcards(t_token *token, int index, t_list *mfl)
 	nb_arg = -1;
 	while (++nb_arg < index)
 		new_args[nb_arg] = ft_strdup(old_args[nb_arg]);
-	while (mfl)
+	while (ref_mfl)
 	{
-		new_args[nb_arg] = ft_strdup((char *)mfl->content);
+		new_args[nb_arg] = ft_strdup((char *)ref_mfl->content);
 		nb_arg++;
-		mfl = mfl->next;
+		ref_mfl = ref_mfl->next;
 	}
 	while (old_args[++index])
 		new_args[nb_arg++] = ft_strdup(old_args[index]);
 	free_tabstr(token->cmd->args);
 	token->cmd->args = new_args;
-	return (ft_lstsize(mfl));
+	return (ft_lstsize(mfl) - 1);
 }
 
 /****************************************************
@@ -159,7 +161,7 @@ t_list	*build_list_dir(t_list *list)
 	match_files_lst = NULL;
 	while (lst_dir)
 	{
-		if (*(char *)lst_dir->content != '.')
+		if (*(char *)lst_dir->content != '.') //&& *(char *)lst_dir->content != '*')
 		{
 			file_name = ft_strdup((char *)lst_dir->content);
 			elem = ft_lstnew((void *)file_name);

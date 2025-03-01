@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 16:47:30 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/19 18:50:54 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/01 15:45:06 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	ft_lstdelone_token(t_token *lst, void (*del)(void*))
 	lst->input = NULL;
 	if (lst->cmd)
 		free_cmd(lst->cmd);
+	//free(lst->input); //added
 	free(lst);
 }
 

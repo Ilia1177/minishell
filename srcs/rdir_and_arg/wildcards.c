@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:06:48 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/01 13:27:11 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 14:37:31 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,16 +93,12 @@ static void	wild_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 		return ;
 	while (token->cmd->args[++i])
 	{
-		
-		ft_printf(2, "%s->cmd->args[%d]: %s\n", token->input, i, token->cmd->args[i]);
+		if (g_signal_caught)
+			return ;	
 		if (!is_wildcard(token->cmd->args[i]))
-		{
 			continue ;
-		}
 		else if (only_wild(token->cmd->args[i]))
-		{
 			mfl = build_list_dir(lad);
-		}
 		else
 		{
 			patterns = ft_split(token->cmd->args[i], '*');
@@ -114,9 +110,7 @@ static void	wild_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 		}
 		if (mfl)
 		{
-
 			i += replacing_wildcards(token, i, mfl);
-			ft_printf(2, "replacing_wildcard i=%d\n", i);
 			ft_lstclear(&mfl, free);
 		}
 	}
@@ -149,14 +143,7 @@ void	wildcards(t_token *token, t_data *data)
 
 	build_list_all_dir(&list_all_dir);
 	list_dir = build_list_dir(list_all_dir);
-	ft_printf(2, "list all dir ==\n");
-	print_lst(list_all_dir, data);
-	ft_printf(2, "list dir ==\n");
-	print_lst(list_dir, data);
-	ft_printf(2, "match_files_lst ==\n");
-	print_lst(match_files_lst, data);
 	wild_arg_loop(token, match_files_lst, list_all_dir, list_dir);
-	ft_printf(2, "after wild_arg_loop\n");
 	ft_lstclear(&match_files_lst, free);
 	ft_lstclear(&list_dir, free);
 	ft_lstclear(&list_all_dir, free);

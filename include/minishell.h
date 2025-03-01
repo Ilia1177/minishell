@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/16 16:20:18 by npolack           #+#    #+#             */
-/*   Updated: 2025/02/27 12:55:24 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 14:05:45 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ void		print_list(t_token *list, t_data *data);
 void		print_rdir(t_token *token, t_data *data);
 void		print_args(char **list);
 void		print_tree(t_bintree *root, int space, int start, t_data *data);
+void print_lst(t_list *lst, t_data *data);
 
 /****************************************/
 /*            BINARY TREE               */
