@@ -6,7 +6,7 @@
 /*   By: npolack <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/17 00:21:43 by npolack           #+#    #+#             */
-/*   Updated: 2025/03/01 15:42:57 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 17:44:48 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ int	tokenize(t_data *data)
 		data->status = 2;
 		return (0);
 	}
-	ft_lstiter_token(data, &get_redir);
 	ft_lstiter_token(data, &get_expand);
+	ft_lstiter_token(data, &get_redir);
 	ft_lstiter_token(data, &split_args);
 	ft_lstiter_token(data, &wildcards);
 	ft_lstiter_token(data, &unquote_rdir);

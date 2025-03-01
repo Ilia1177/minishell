@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 14:06:48 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/01 14:37:31 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 17:49:05 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void	wild_arg_loop(t_token *token, t_list *mfl, t_list *lad, t_list *ld)
 	int		i;
 
 	i = 0;
-	if (!token->cmd->args[1])
+	if (!token->cmd->args[0] || !token->cmd->args[1])
 		return ;
 	while (token->cmd->args[++i])
 	{

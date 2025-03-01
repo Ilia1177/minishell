@@ -6,12 +6,13 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 18:13:53 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/03/01 15:56:20 by npolack          ###   ########.fr       */
+/*   Updated: 2025/03/01 17:24:10 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "rdir_and_arg.h"
+#include "builtins.h"
 
 static int	expand_size(char *str, int pos)
 {
@@ -106,29 +107,6 @@ char	*catch_expand(t_data *data, char *str)
 	return (expand);
 }
 
-void	add_quote(char **str)
-{
-	char	*requoted;
-	char	*tmp;
-	char	*old_str;
-
-	old_str = *str;
-	tmp = ft_strdup("'");
-	if (!tmp)
-		return ;
-	requoted = ft_strjoin(tmp, old_str);
-	free(tmp);
-	if (!requoted)
-		return ;
-	tmp = requoted;
-	requoted = ft_strjoin(requoted, "'");
-	free(tmp);
-	if (!requoted)
-		return ;
-	free(old_str);
-	*str = requoted;
-}
-
 /*******************************************************
  	* expand ENV value of token->input
  	* realloc the str input
@@ -152,10 +130,6 @@ void	expand_str(t_data *data, char **str)
 			ft_strlcat(new_str, new_str + i + 1, size);
 		}
 		else
-		{
 			new_str = return_expand(data, &new_str[i + 1], str, &i);
-			//add_quote(&new_str);
-			ft_printf(2, "new_str = %s\n", new_str);
-		}
 	}
 }

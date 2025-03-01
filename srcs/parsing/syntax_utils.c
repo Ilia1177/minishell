@@ -6,7 +6,7 @@
 /*   By: jhervoch <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 18:42:26 by jhervoch          #+#    #+#             */
-/*   Updated: 2025/02/25 21:20:01 by jhervoch         ###   ########.fr       */
+/*   Updated: 2025/03/01 17:45:41 by npolack          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	check_rdir_name(char *str, int *error, int iterator)
 		*error = 2;
 	while (isspace(str[i]))
 		i++;
-	if (ft_ischarset(str[i], "<>#$!?"))
+	if (ft_ischarset(str[i], "<>#!?"))
 		*error = 2;
 	if (ft_isquote(str[i]))
 		i += skip_quote(str + i, str[i]);
