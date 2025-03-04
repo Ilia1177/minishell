@@ -66,8 +66,11 @@ void	free_tabstr(char **tabstr)
 	while (tabstr[i])
 	{
 		free(tabstr[i]);
+		tabstr[i] = NULL;
 		i++;
 	}
 	free(tabstr[i]);
+	tabstr[i] = NULL;
 	free (tabstr);
+	tabstr = NULL;
 }

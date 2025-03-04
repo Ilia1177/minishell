@@ -106,5 +106,6 @@ int	find_cmd_in_paths(char *str, t_bintree *node, t_data *data)
 			break ;
 	}
 	free(cmd);
+	cmd = NULL;
 	return (status);
 }

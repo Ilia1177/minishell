@@ -36,6 +36,7 @@ char	*get_user_input(t_data *data)
 	{
 		if (data->flag)
 			ft_printf(2, "msh: [Ctrl-D]: signal_caught: %d\n", g_signal_caught);
+		ft_printf(2, "exit\n");
 		free_minishell(data, data->status);
 	}
 	else if (input[0] == 0)

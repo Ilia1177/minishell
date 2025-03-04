@@ -62,9 +62,9 @@ int	safe_exit(t_data *data, t_bintree *node, int exit_code, int print_code)
 	if (print_code == 1 || print_code == 3)
 	{
 		if (has_pipe)
-			ft_printf(node->stdfd[OUT], "exit\n");
+			ft_printf(node->pipefd[OUT], "exit\n");
 		else
-			ft_printf(1, "exit\n");
+			ft_printf(2, "exit\n");
 	}
 	if (print_code == 2 || print_code == 3)
 		ft_printf(2, NR_ARG, node->cmd->args[1]);
@@ -83,8 +83,6 @@ int	exit_number(t_data *data, t_bintree *node)
 	long long	number;
 
 	error = 0;
-	if (node->cmd->rdir == NULL)
-		ft_printf(node->stdfd[OUT], "exit\n");
 	number = ft_atoller(node->cmd->args[1], &error);
 	code = format_exit_code(number);
 	if (error)
@@ -92,7 +90,7 @@ int	exit_number(t_data *data, t_bintree *node)
 		safe_exit(data, node, 2, 2);
 		return (2);
 	}
-	safe_exit(data, node, code, 0);
+	safe_exit(data, node, code, 1);
 	return (code);
 }
 

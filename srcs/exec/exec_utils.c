@@ -63,7 +63,10 @@ static void	find_cmd(t_bintree *node, t_data *data, char *cmd_name, int *status)
 	else
 		*status = find_cmd_in_paths(cmd_name, node, data);
 	if (*status == 0)
+	{
 		free(cmd_name);
+		cmd_name = NULL;
+	}
 	else
 		node->cmd->args[0] = cmd_name;
 }

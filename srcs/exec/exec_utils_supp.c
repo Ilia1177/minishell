@@ -96,6 +96,8 @@ char	**get_paths(char **env)
 			if (!env[i][5])
 				return (NULL);
 			paths = ft_split(env[i] + 5, ':');
+			if (!*paths)
+				return (NULL);
 			return (paths);
 		}
 		i++;
