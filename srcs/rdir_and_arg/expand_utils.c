@@ -40,12 +40,10 @@ static void	add_quote(char **str, int quote)
 char	*return_expand(t_data *data, char *new_str, char **str, int *i)
 {
 	char	*value;
-	int		flag_free;
 	int		j;
 	int		quote_inside;
 
 	quote_inside = 0;
-	flag_free = 0;
 	value = NULL;
 	if (*new_str == '?')
 		value = catch_expand(data, new_str);
@@ -57,8 +55,6 @@ char	*return_expand(t_data *data, char *new_str, char **str, int *i)
 			quote_inside = value[j];
 	if (quote_inside)
 		add_quote(&value, quote_inside);
-	if (*new_str == '?')
-		flag_free = 1;
 	*i = insert_expand(str, *i + 1, value);
 	free(value);
 	return (*str);
