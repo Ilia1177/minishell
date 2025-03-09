@@ -45,7 +45,7 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 	current_token = *token;
 	tmp = current_token;
 	if (!current_token)
-		return (0);
+		return (1);
 	if (!ft_strcmp(current_token->input, "("))
 	{
 		current_token = current_token->next;
@@ -53,14 +53,14 @@ int	handle_parenthesis(t_token **token, t_bintree **root, t_bintree **old_root)
 		*old_root = *root;
 		*token = current_token;
 		ft_lstdelone_token(tmp, &free);
-		return (1);
+		return (0);
 	}
 	else if (!ft_strcmp(current_token->input, ")"))
 	{
 		tmp = current_token;
 		*token = current_token->next;
 		ft_lstdelone_token(tmp, &free);
-		return (-1);
+		return (1);
 	}
 	return (0);
 }
@@ -87,13 +87,13 @@ t_bintree	*build_tree(t_token **head, int priority)
 	{
 		if (handle_parenthesis(&curr, &new_root, &old_root))
 			break ;
-		else if (curr->type == PIPE && priority == PIPE)
+		else if (curr && curr->type == PIPE && priority >= PIPE)
 			break ;
-		else if (curr->type == OPERATOR && priority >= OPERATOR)
+		else if (curr && curr->type == OPERATOR && priority >= OPERATOR)
 			break ;
-		else if (curr->type == CMD)
+		else if (curr && curr->type == CMD)
 			new_root = make_node(NULL, NULL, &curr);
-		else
+		else if (curr)
 			new_root = make_operator(&curr, old_root);
 		old_root = new_root;
 	}
